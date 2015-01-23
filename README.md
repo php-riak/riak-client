@@ -166,7 +166,7 @@ $fetch     = FetchValue::builder($location)
     ->withOption(RiakOption::R, 1)
     ->build();
 
-/** @var $domain \MySimpleResolver */
+/** @var $domain \MyDomainObject */
 $result = $client->execute($fetch);
 $domain = $result->getValue('MyDomainObject');
 ```
