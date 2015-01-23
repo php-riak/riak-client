@@ -4,6 +4,7 @@ namespace RiakClientFunctionalTest\Command\DataType;
 
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Cap\RiakOption;
+use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\DataType\FetchMap;
@@ -13,31 +14,50 @@ use Riak\Client\Command\Bucket\StoreBucketProperties;
 
 abstract class MapTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    protected $key;
+
+    /**
+     * @var \Riak\Client\Core\Query\RiakLocation
+     */
+    protected $location;
+
     protected function setUp()
     {
         parent::setUp();
 
         $namespace = new RiakNamespace('maps', 'maps');
-        $store     = StoreBucketProperties::builder()
+        $command   = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
             ->withNamespace($namespace)
             ->build();
 
-        $this->client->execute($store);
+        $this->client->execute($command);
+
+        $this->key      = uniqid();
+        $this->location = new RiakLocation($namespace, $this->key);
+    }
+
+    protected function tearDown()
+    {
+        $this->client->execute(DeleteValue::builder($this->location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->build());
+
+        parent::tearDown();
     }
 
     public function testStoreAndFetchSimpleMap()
     {
-        $key      = uniqid();
-        $location = new RiakLocation(new RiakNamespace('maps', 'maps'), $key);
-
         $store = StoreMap::builder()
             ->withOption(RiakOption::RETURN_BODY, true)
             ->withOption(RiakOption::PW, 2)
             ->withOption(RiakOption::DW, 1)
             ->withOption(RiakOption::W, 3)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->updateRegister('url', 'google.com')
             ->updateCounter('clicks', 100)
             ->updateFlag('active', true)
@@ -48,7 +68,7 @@ abstract class MapTest extends TestCase
             ->withOption(RiakOption::NOTFOUND_OK, true)
             ->withOption(RiakOption::PR, 1)
             ->withOption(RiakOption::R, 1)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->build();
 
         $storeResponse = $this->client->execute($store);
@@ -61,20 +81,17 @@ abstract class MapTest extends TestCase
         $this->assertEquals('google.com', $fetchResponse->getDatatype()->get('url'));
         $this->assertEquals(100, $fetchResponse->getDatatype()->get('clicks'));
         $this->assertTrue($fetchResponse->getDatatype()->get('active'));
-        $this->assertEquals($location, $fetchResponse->getLocation());
+        $this->assertEquals($this->location, $fetchResponse->getLocation());
     }
 
     public function testStoreAndFetchSetsWithinMaps()
     {
-        $key      = uniqid();
-        $location = new RiakLocation(new RiakNamespace('maps', 'maps'), $key);
-
         $store = StoreMap::builder()
             ->withOption(RiakOption::RETURN_BODY, true)
             ->withOption(RiakOption::PW, 2)
             ->withOption(RiakOption::DW, 1)
             ->withOption(RiakOption::W, 3)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->updateSet('interests', ['robots', 'opera', 'motorcycles'])
             ->build();
 
@@ -83,7 +100,7 @@ abstract class MapTest extends TestCase
             ->withOption(RiakOption::NOTFOUND_OK, true)
             ->withOption(RiakOption::PR, 1)
             ->withOption(RiakOption::R, 1)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->build();
 
         $this->client->execute($store);
@@ -103,23 +120,17 @@ abstract class MapTest extends TestCase
 
     public function testStoreAndFetchMapsWithinMaps()
     {
-        if ($this instanceof MapProtoTest) {
-            $this->markTestIncomplete();
-        }
-
-        $key      = uniqid();
-        $location = new RiakLocation(new RiakNamespace('maps', 'maps'), $key);
-
         $store = StoreMap::builder()
             ->withOption(RiakOption::RETURN_BODY, true)
             ->withOption(RiakOption::PW, 2)
             ->withOption(RiakOption::DW, 1)
             ->withOption(RiakOption::W, 3)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->updateRegister('username', 'FabioBatSilva')
             ->updateMap('info', [
                 'first_name' => 'Fabio',
                 'last_name'  => 'B. Silva',
+                'interests'  => ['php', 'riak'],
                 'email'      => 'fabio.bat.silva@gmail.com'
             ])
             ->build();
@@ -129,7 +140,7 @@ abstract class MapTest extends TestCase
             ->withOption(RiakOption::NOTFOUND_OK, true)
             ->withOption(RiakOption::PR, 1)
             ->withOption(RiakOption::R, 1)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->build();
 
         $this->client->execute($store);
@@ -145,8 +156,11 @@ abstract class MapTest extends TestCase
 
         $this->assertEquals('FabioBatSilva', $userName);
         $this->assertArrayHasKey('email', $userInfo);
-        $this->assertArrayHasKey('first_name', $userInfo);
         $this->assertArrayHasKey('last_name', $userInfo);
+        $this->assertArrayHasKey('first_name', $userInfo);
+        $this->assertArrayHasKey('interests', $userInfo);
+        $this->assertContains('riak', $userInfo['interests']);
+        $this->assertContains('php', $userInfo['interests']);
         $this->assertEquals('Fabio', $userInfo['first_name']);
         $this->assertEquals('B. Silva', $userInfo['last_name']);
         $this->assertEquals('fabio.bat.silva@gmail.com', $userInfo['email']);

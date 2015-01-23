@@ -2,6 +2,7 @@
 
 namespace Riak\Client\Core\Adapter\Http\Kv;
 
+use GuzzleHttp\Exception\RequestException;
 use Riak\Client\Core\Message\Request;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
 use Riak\Client\Core\Message\Kv\DeleteResponse;

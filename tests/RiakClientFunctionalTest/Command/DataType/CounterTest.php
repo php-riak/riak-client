@@ -6,6 +6,7 @@ use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Cap\RiakOption;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
+use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Command\DataType\FetchCounter;
 use Riak\Client\Command\DataType\StoreCounter;
 use Riak\Client\Core\Query\BucketProperties;
@@ -13,28 +14,51 @@ use Riak\Client\Command\Bucket\StoreBucketProperties;
 
 abstract class CounterTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    protected $key;
+
+    /**
+     * @var \Riak\Client\Core\Query\RiakLocation
+     */
+    protected $location;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->client->execute(StoreBucketProperties::builder()
-            ->withNamespace(new RiakNamespace('counters', 'counters'))
+        $namespace = new RiakNamespace('counters', 'counters');
+        $command   = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
+            ->withNamespace($namespace)
+            ->build();
+
+        $this->client->execute($command);
+
+        $this->key      = uniqid();
+        $this->location = new RiakLocation($namespace, $this->key);
+    }
+
+    protected function tearDown()
+    {
+        $this->client->execute(DeleteValue::builder($this->location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
+
+        parent::tearDown();
     }
 
     public function testStoreAndFetchCounter()
     {
-        $key      = uniqid();
-        $location = new RiakLocation(new RiakNamespace('counters', 'counters'), $key);
 
         $store = StoreCounter::builder()
             ->withOption(RiakOption::RETURN_BODY, true)
             ->withOption(RiakOption::PW, 2)
             ->withOption(RiakOption::DW, 1)
             ->withOption(RiakOption::W, 3)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->withDelta(10)
             ->build();
 
@@ -43,7 +67,7 @@ abstract class CounterTest extends TestCase
             ->withOption(RiakOption::NOTFOUND_OK, true)
             ->withOption(RiakOption::PR, 1)
             ->withOption(RiakOption::R, 1)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->build();
 
         $fetchResponse1 = $this->client->execute($fetch);
@@ -58,7 +82,7 @@ abstract class CounterTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Core\Query\Crdt\RiakCounter', $storeResponse->getDatatype());
         $this->assertInstanceOf('Riak\Client\Core\Query\Crdt\RiakCounter', $fetchResponse2->getDatatype());
 
-        $this->assertEquals($location, $fetchResponse2->getLocation());
+        $this->assertEquals($this->location, $fetchResponse2->getLocation());
         $this->assertEquals(10, $storeResponse->getDatatype()->getValue());
         $this->assertEquals(10, $fetchResponse2->getDatatype()->getValue());
     }

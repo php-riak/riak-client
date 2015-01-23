@@ -141,68 +141,73 @@ class CrdtOpConverter
     /**
      * @param \Riak\Client\Core\Query\Crdt\Op\MapOp $op
      *
-     * @return \Riak\Client\ProtoBuf\SetOp
+     * @return \Riak\Client\ProtoBuf\MapOp
      */
     protected function convertMap(Op\MapOp $op)
     {
-        $setOp   = new ProtoBuf\MapOp();
+        $mapOp   = new ProtoBuf\MapOp();
+        $updates = [];
+        $removes = [];
 
         foreach ($op->getMapUpdates() as $key => $value) {
             $map    = $this->convertMap($value);
             $update = $this->createMapUpdate($key, MapFieldType::MAP, $map);
 
-            $setOp->addUpdates($update);
+            $updates[] = $update;
         }
 
         foreach ($op->getSetUpdates() as $key => $value) {
             $set    = $this->convertSet($value);
             $update = $this->createMapUpdate($key, MapFieldType::SET, $set);
 
-            $setOp->addUpdates($update);
+            $updates[] = $update;
         }
 
         foreach ($op->getFlagUpdates() as $key => $value) {
             $flag   = $this->convertFlag($value);
             $update = $this->createMapUpdate($key, MapFieldType::FLAG, $flag);
 
-            $setOp->addUpdates($update);
+            $updates[] = $update;
         }
 
         foreach ($op->getCounterUpdates() as $key => $value) {
             $counter = $this->convertCounter($value);
             $update  = $this->createMapUpdate($key, MapFieldType::COUNTER, $counter);
 
-            $setOp->addUpdates($update);
+            $updates[] = $update;
         }
 
         foreach ($op->getRegisterUpdates() as $key => $value) {
             $register = $value->getValue();
             $update   = $this->createMapUpdate($key, MapFieldType::REGISTER, $register);
 
-            $setOp->addUpdates($update);
+            $updates[] = $update;
         }
 
         foreach ($op->getMapRemoves() as $key => $value) {
-            $setOp->addRemoves($this->createMapField($key, MapFieldType::MAP));
+            $removes[] = $this->createMapField($key, MapFieldType::MAP);
         }
 
         foreach ($op->getSetRemoves() as $key => $value) {
-            $setOp->addRemoves($this->createMapField($key, MapFieldType::SET));
+            $removes[] = $this->createMapField($key, MapFieldType::SET);
         }
 
         foreach ($op->getFlagRemoves() as $key => $value) {
-            $setOp->addRemoves($this->createMapField($key, MapFieldType::FLAG));
+            $removes[] = $this->createMapField($key, MapFieldType::FLAG);
         }
 
         foreach ($op->getCounterRemoves() as $key => $value) {
-            $setOp->addRemoves($this->createMapField($key, MapFieldType::COUNTER));
+            $removes[] = $this->createMapField($key, MapFieldType::COUNTER);
         }
 
         foreach ($op->getRegisterRemoves() as $key => $value) {
-            $setOp->addRemoves($this->createMapField($key, MapFieldType::REGISTER));
+            $removes[] = $this->createMapField($key, MapFieldType::REGISTER);
         }
 
-        return $setOp;
+        $mapOp->setUpdates($updates);
+        $mapOp->setRemoves($removes);
+
+        return $mapOp;
     }
 
     /**

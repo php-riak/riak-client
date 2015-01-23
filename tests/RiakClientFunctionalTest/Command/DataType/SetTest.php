@@ -4,6 +4,7 @@ namespace RiakClientFunctionalTest\Command\DataType;
 
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Cap\RiakOption;
+use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\DataType\FetchSet;
@@ -13,31 +14,50 @@ use Riak\Client\Command\Bucket\StoreBucketProperties;
 
 abstract class SetTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    protected $key;
+
+    /**
+     * @var \Riak\Client\Core\Query\RiakLocation
+     */
+    protected $location;
+
     protected function setUp()
     {
         parent::setUp();
 
         $namespace = new RiakNamespace('sets', 'sets');
-        $store     = StoreBucketProperties::builder()
+        $command   = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
             ->withNamespace($namespace)
             ->build();
 
-        $this->client->execute($store);
+        $this->client->execute($command);
+
+        $this->key      = uniqid();
+        $this->location = new RiakLocation($namespace, $this->key);
+    }
+
+    protected function tearDown()
+    {
+        $this->client->execute(DeleteValue::builder($this->location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->build());
+
+        parent::tearDown();
     }
 
     public function testStoreAndFetchSet()
     {
-        $key      = uniqid();
-        $location = new RiakLocation(new RiakNamespace('sets', 'sets'), $key);
-
         $store = StoreSet::builder()
             ->withOption(RiakOption::RETURN_BODY, true)
             ->withOption(RiakOption::PW, 2)
             ->withOption(RiakOption::DW, 1)
             ->withOption(RiakOption::W, 3)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->add("Ottawa")
             ->add("Toronto")
             ->build();
@@ -47,7 +67,7 @@ abstract class SetTest extends TestCase
             ->withOption(RiakOption::NOTFOUND_OK, true)
             ->withOption(RiakOption::PR, 1)
             ->withOption(RiakOption::R, 1)
-            ->withLocation($location)
+            ->withLocation($this->location)
             ->build();
 
         $storeResponse = $this->client->execute($store);
@@ -57,7 +77,7 @@ abstract class SetTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\DataType\Response\StoreSetResponse', $storeResponse);
         $this->assertInstanceOf('Riak\Client\Command\DataType\Response\FetchSetResponse', $fetchResponse);
         $this->assertInstanceOf('Riak\Client\Core\Query\Crdt\RiakSet', $set);
-        $this->assertEquals($location, $fetchResponse->getLocation());
+        $this->assertEquals($this->location, $fetchResponse->getLocation());
         $this->assertEquals(["Ottawa","Toronto"], $set->getValue());
     }
 }
