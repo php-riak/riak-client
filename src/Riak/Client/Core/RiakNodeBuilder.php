@@ -99,7 +99,7 @@ class RiakNodeBuilder
     }
 
     /**
-     * @return \Riak\Client\Core\RiakHttpAdpter
+     * @return \Riak\Client\Core\RiakHttpAdapter
      */
     private function buildHttpAdapter()
     {
@@ -111,7 +111,7 @@ class RiakNodeBuilder
             'defaults'  => $defaults,
         ]);
 
-        return new RiakHttpAdpter($client);
+        return new RiakHttpAdapter($client);
     }
 
     /**
@@ -120,7 +120,7 @@ class RiakNodeBuilder
     private function buildProtoAdapter()
     {
         $rpbClient    = new ProtoClient($this->host, $this->port, $this->user, $this->pass);
-        $riakPbAdpter = new RiakProtoAdpter($rpbClient);
+        $riakPbAdpter = new RiakProtoAdapter($rpbClient);
 
         return $riakPbAdpter;
     }

@@ -24,7 +24,7 @@ class StoreBucketPropertiesBuilder extends Builder
 
     /**
      * @param \Riak\Client\Core\Query\RiakNamespace $namespace
-     * @param array                                $properties
+     * @param array                                 $properties
      */
     public function __construct(RiakNamespace $namespace = null, array $properties = [])
     {

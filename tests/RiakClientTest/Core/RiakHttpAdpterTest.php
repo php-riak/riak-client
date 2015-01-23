@@ -3,7 +3,7 @@
 namespace RiakClientTest\Core;
 
 use RiakClientTest\TestCase;
-use Riak\Client\Core\RiakHttpAdpter;
+use Riak\Client\Core\RiakHttpAdapter;
 use Riak\Client\Core\Message\Kv\GetRequest;
 use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
@@ -16,7 +16,7 @@ class RiakHttpAdpterTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\RiakHttpAdpter
+     * @var \Riak\Client\Core\RiakHttpAdapter
      */
     private $instance;
 
@@ -25,7 +25,7 @@ class RiakHttpAdpterTest extends TestCase
         parent::setUp();
 
         $this->client   = $this->getMock('GuzzleHttp\ClientInterface');
-        $this->instance = new RiakHttpAdpter($this->client);
+        $this->instance = new RiakHttpAdapter($this->client);
     }
 
     public function testCreateAdapterStrategy()

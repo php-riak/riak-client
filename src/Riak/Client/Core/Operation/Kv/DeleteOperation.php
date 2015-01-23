@@ -40,7 +40,7 @@ class DeleteOperation implements RiakOperation
     /**
      * @param \Riak\Client\RiakConfig                    $config
      * @param \Riak\Client\Core\Query\RiakLocation       $location
-     * @param array                                     $options
+     * @param array                                      $options
      * @param \Riak\Client\Cap\VClock                    $vClock
      */
     public function __construct(RiakConfig $config, RiakLocation $location, array $options, VClock $vClock = null)

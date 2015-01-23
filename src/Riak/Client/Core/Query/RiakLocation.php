@@ -21,7 +21,7 @@ class RiakLocation
 
     /**
      * @param \Riak\Client\Core\Query\RiakNamespace $namespace
-     * @param string                               $key
+     * @param string                                $key
      */
     public function __construct(RiakNamespace $namespace, $key)
     {

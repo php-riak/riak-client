@@ -22,7 +22,7 @@ class DomainObjectReference
     private $location;
 
     /**
-     * @param mixed                               $domainObject
+     * @param mixed                                $domainObject
      * @param \Riak\Client\Core\Query\RiakLocation $location
      */
     public function __construct($domainObject, RiakLocation $location)

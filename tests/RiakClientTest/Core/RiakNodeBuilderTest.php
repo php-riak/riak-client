@@ -25,7 +25,7 @@ class RiakNodeBuilderTest extends TestCase
             ->build();
 
         $this->assertInstanceOf('Riak\Client\Core\RiakNode', $node);
-        $this->assertInstanceOf('Riak\Client\Core\RiakHttpAdpter', $node->getAdapter());
+        $this->assertInstanceOf('Riak\Client\Core\RiakHttpAdapter', $node->getAdapter());
         $this->assertInstanceOf('GuzzleHttp\Client', $node->getAdapter()->getClient());
 
         $adpter  = $node->getAdapter();
@@ -46,7 +46,7 @@ class RiakNodeBuilderTest extends TestCase
             ->build();
 
         $this->assertInstanceOf('Riak\Client\Core\RiakNode', $node);
-        $this->assertInstanceOf('Riak\Client\Core\RiakProtoAdpter', $node->getAdapter());
+        $this->assertInstanceOf('Riak\Client\Core\RiakProtoAdapter', $node->getAdapter());
         $this->assertInstanceOf('Riak\Client\Core\Adapter\Proto\ProtoClient', $node->getAdapter()->getClient());
     }
 
@@ -61,7 +61,7 @@ class RiakNodeBuilderTest extends TestCase
             ->build();
 
         $this->assertInstanceOf('Riak\Client\Core\RiakNode', $node);
-        $this->assertInstanceOf('Riak\Client\Core\RiakHttpAdpter', $node->getAdapter());
+        $this->assertInstanceOf('Riak\Client\Core\RiakHttpAdapter', $node->getAdapter());
         $this->assertInstanceOf('GuzzleHttp\Client', $node->getAdapter()->getClient());
 
         $adpter  = $node->getAdapter();

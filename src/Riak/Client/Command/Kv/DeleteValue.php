@@ -33,7 +33,7 @@ class DeleteValue implements RiakCommand
 
     /**
      * @param \Riak\Client\Command\Kv\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      */
     public function __construct(RiakLocation $location, $options)
     {

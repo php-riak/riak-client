@@ -34,7 +34,7 @@ abstract class FetchDataTypeOperation implements RiakOperation
     /**
      * @param \Riak\Client\Converter\CrdtResponseConverter $converter
      * @param \Riak\Client\Core\Query\RiakLocation         $location
-     * @param array                                       $options
+     * @param array                                        $options
      */
     public function __construct(CrdtResponseConverter $converter, RiakLocation $location, array $options)
     {

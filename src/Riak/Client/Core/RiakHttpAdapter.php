@@ -11,7 +11,7 @@ use Riak\Client\Core\Message\Request;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class RiakHttpAdpter implements RiakAdapter
+class RiakHttpAdapter implements RiakAdapter
 {
     private $strategyMap = [
         // kv

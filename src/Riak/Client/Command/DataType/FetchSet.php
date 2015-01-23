@@ -29,7 +29,7 @@ class FetchSet extends FetchDataType
 
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      *
      * @return \Riak\Client\Command\DataType\Builder\FetchSetBuilder
      */

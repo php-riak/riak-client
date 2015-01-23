@@ -60,7 +60,7 @@ class ConverterFactory
     }
 
     /**
-     * @param string                          $type
+     * @param string                           $type
      * @param \Riak\Client\Converter\Converter $converter
      */
     public function addConverter($type, Converter $converter)

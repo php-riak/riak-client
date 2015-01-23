@@ -58,7 +58,7 @@ class ResolverFactory
     }
 
     /**
-     * @param string                                $type
+     * @param string                                 $type
      * @param \Riak\Client\Resolver\ConflictResolver $resolver
      */
     public function addResolver($type, ConflictResolver $resolver)

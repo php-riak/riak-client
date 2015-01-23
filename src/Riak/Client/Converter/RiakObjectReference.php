@@ -30,7 +30,7 @@ class RiakObjectReference
     /**
      * @param \Riak\Client\Core\Query\RiakObject   $riakObject
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param string                              $type
+     * @param string                               $type
      */
     public function __construct(RiakObject $riakObject, RiakLocation $location, $type = null)
     {

@@ -106,7 +106,7 @@ class StoreMapBuilder extends Builder
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string                                       $key
+     * @param string                                        $key
      * @param \Riak\Client\Command\DataType\MapUpdate|array $value
      *
      * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
@@ -121,7 +121,7 @@ class StoreMapBuilder extends Builder
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string                                       $key
+     * @param string                                        $key
      * @param \Riak\Client\Command\DataType\SetUpdate|array $value
      *
      * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder

@@ -23,7 +23,7 @@ abstract class Builder
 
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      */
     public function __construct(RiakLocation $location = null, array $options = [])
     {

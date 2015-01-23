@@ -26,7 +26,7 @@ class DomainHydrator
     }
 
     /**
-     * @param object                              $domainObject
+     * @param object                               $domainObject
      * @param \Riak\Client\Core\Query\RiakObject   $riakObject
      * @param \Riak\Client\Core\Query\RiakLocation $location
      */
@@ -64,7 +64,7 @@ class DomainHydrator
 
     /**
      * @param \Riak\Client\Core\Query\RiakObject   $riakObject
-     * @param object                              $domainObject
+     * @param object                               $domainObject
      * @param \Riak\Client\Core\Query\RiakLocation $location
      */
     public function setRiakObjectValues(RiakObject $riakObject, $domainObject, RiakLocation $location)

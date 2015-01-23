@@ -115,7 +115,7 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                               $key
+     * @param string                                $key
      * @param \Riak\Client\Core\Query\Crdt\Op\SetOp $op
      *
      * @return \Riak\Client\Command\DataType\MapUpdate
@@ -126,7 +126,7 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                                   $key
+     * @param string                                    $key
      * @param \Riak\Client\Core\Query\Crdt\Op\CounterOp $op
      *
      * @return \Riak\Client\Command\DataType\MapUpdate
@@ -137,7 +137,7 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                                 $key
+     * @param string                                  $key
      * @param \Riak\Client\Command\DataType\MapUpdate $op
      *
      * @return \Riak\Client\Command\DataType\MapUpdate
@@ -148,7 +148,7 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                                    $key
+     * @param string                                     $key
      * @param \Riak\Client\Core\Query\Crdt\Op\RegisterOp $op
      *
      * @return \Riak\Client\Command\DataType\MapUpdate
@@ -159,7 +159,7 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                                $key
+     * @param string                                 $key
      * @param \Riak\Client\Core\Query\Crdt\Op\FlagOp $op
      *
      * @return \Riak\Client\Command\DataType\MapUpdate
@@ -170,8 +170,8 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                                $key
-     * @param string                                $type
+     * @param string                                 $key
+     * @param string                                 $type
      * @param \Riak\Client\Core\Query\Crdt\Op\CrdtOp $op
      *
      * @return \Riak\Client\Command\DataType\MapUpdate

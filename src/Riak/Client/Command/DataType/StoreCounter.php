@@ -16,8 +16,8 @@ use Riak\Client\Core\Operation\DataType\StoreCounterOperation;
 class StoreCounter extends StoreDataType
 {
     /**
-     * @param \Riak\Client\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Riak\Client\Command\Kv\RiakLocation $location
+     * @param array                                $options
      */
     public function __construct(RiakLocation $location, array $options = [])
     {
@@ -51,8 +51,8 @@ class StoreCounter extends StoreDataType
     }
 
     /**
-     * @param \Riak\Client\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Riak\Client\Command\Kv\RiakLocation $location
+     * @param array                                $options
      *
      * @return \Riak\Client\Command\DataType\Builder\StoreCounterBuilder
      */

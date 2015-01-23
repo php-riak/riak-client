@@ -41,7 +41,7 @@ abstract class StoreDataTypeOperation implements RiakOperation
      * @param \Riak\Client\Converter\CrdtResponseConverter $converter
      * @param \Riak\Client\Core\Query\RiakLocation         $location
      * @param \Riak\Client\Core\Query\Crdt\Op\CrdtOp       $op
-     * @param array                                       $options
+     * @param array                                        $options
      */
     public function __construct(CrdtResponseConverter $converter, RiakLocation $location, CrdtOp $op, array $options)
     {

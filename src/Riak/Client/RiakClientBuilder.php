@@ -314,7 +314,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param string                                $type
+     * @param string                                 $type
      * @param \Riak\Client\Resolver\ConflictResolver $resolver
      *
      * @return \Riak\Client\RiakClientBuilder
@@ -327,7 +327,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param string                          $type
+     * @param string                           $type
      * @param \Riak\Client\Converter\Converter $converter
      *
      * @return \Riak\Client\RiakClientBuilder

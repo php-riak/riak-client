@@ -27,7 +27,7 @@ class FetchMap implements RiakCommand
 
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      */
     public function __construct(RiakLocation $location = null, array $options = [])
     {
@@ -50,7 +50,7 @@ class FetchMap implements RiakCommand
 
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      *
      * @return \Riak\Client\Command\DataType\Builder\FetchMapBuilder
      */

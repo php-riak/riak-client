@@ -39,10 +39,10 @@ class StoreOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Riak\Client\RiakConfig                    $config
-     * @param \Riak\Client\Core\Query\RiakLocation       $location
-     * @param \Riak\Client\Core\Query\RiakObject|mixed   $value
-     * @param array                                     $options
+     * @param \Riak\Client\RiakConfig                  $config
+     * @param \Riak\Client\Core\Query\RiakLocation     $location
+     * @param \Riak\Client\Core\Query\RiakObject|mixed $value
+     * @param array                                    $options
      */
     public function __construct(RiakConfig $config, RiakLocation $location, $value, array $options)
     {

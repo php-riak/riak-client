@@ -6,7 +6,7 @@ use RiakClientTest\TestCase;
 use Riak\Client\Core\Message\Kv\GetRequest;
 use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
-use Riak\Client\Core\RiakProtoAdpter;
+use Riak\Client\Core\RiakProtoAdapter;
 
 class RiakProtoAdpterTest extends TestCase
 {
@@ -16,7 +16,7 @@ class RiakProtoAdpterTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\RiakProtoAdpter
+     * @var \Riak\Client\Core\RiakProtoAdapter
      */
     private $instance;
 
@@ -25,7 +25,7 @@ class RiakProtoAdpterTest extends TestCase
         parent::setUp();
 
         $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
-        $this->instance = new RiakProtoAdpter($this->client);
+        $this->instance = new RiakProtoAdapter($this->client);
     }
 
     public function testCreateAdapterStrategy()

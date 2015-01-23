@@ -5,7 +5,7 @@ namespace RiakClientTest\Core;
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakCluster;
 
-class RiakCusterTest extends TestCase
+class RiakClusterTest extends TestCase
 {
     /**
      * @var \Riak\Client\RiakConfig

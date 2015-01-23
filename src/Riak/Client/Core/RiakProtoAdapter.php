@@ -11,7 +11,7 @@ use InvalidArgumentException;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class RiakProtoAdpter implements RiakAdapter
+class RiakProtoAdapter implements RiakAdapter
 {
     private $strategyMap = [
         // kv

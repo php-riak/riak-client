@@ -32,9 +32,9 @@ class FetchOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Riak\Client\RiakConfig                    $config
-     * @param \Riak\Client\Core\Query\RiakLocation       $location
-     * @param array                                     $options
+     * @param \Riak\Client\RiakConfig              $config
+     * @param \Riak\Client\Core\Query\RiakLocation $location
+     * @param array                                $options
      */
     public function __construct(RiakConfig $config, RiakLocation $location, array $options)
     {

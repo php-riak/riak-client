@@ -18,8 +18,8 @@ use Riak\Client\Core\Operation\DataType\StoreMapOperation;
 class StoreMap extends StoreDataType
 {
     /**
-     * @param \Riak\Client\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Riak\Client\Command\Kv\RiakLocation $location
+     * @param array                                $options
      */
     public function __construct(RiakLocation $location, array $options = [])
     {
@@ -99,7 +99,7 @@ class StoreMap extends StoreDataType
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string                                       $key
+     * @param string                                        $key
      * @param \Riak\Client\Command\DataType\MapUpdate|array $value
      *
      * @return \Riak\Client\Command\DataType\StoreMap
@@ -118,7 +118,7 @@ class StoreMap extends StoreDataType
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string                                       $key
+     * @param string                                        $key
      * @param \Riak\Client\Command\DataType\SetUpdate|array $value
      *
      * @return \Riak\Client\Command\DataType\StoreMap
@@ -195,7 +195,7 @@ class StoreMap extends StoreDataType
 
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      *
      * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
      */

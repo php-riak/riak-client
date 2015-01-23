@@ -15,8 +15,8 @@ use Riak\Client\Core\Operation\DataType\StoreSetOperation;
 class StoreSet extends StoreDataType
 {
     /**
-     * @param \Riak\Client\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Riak\Client\Command\Kv\RiakLocation $location
+     * @param array                                $options
      */
     public function __construct(RiakLocation $location, array $options = [])
     {
@@ -67,7 +67,7 @@ class StoreSet extends StoreDataType
 
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
-     * @param array                               $options
+     * @param array                                $options
      *
      * @return \Riak\Client\Command\DataType\Builder\FetchSetBuilder
      */
