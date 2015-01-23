@@ -1,4 +1,4 @@
-# Riak Client for PHP [![Build Status](https://secure.travis-ci.org/FabioBatSilva/riak-client.png?branch=develop)](http://travis-ci.org/FabioBatSilva/riak-client)
+# Riak Client for PHP [![Build Status](https://travis-ci.org/FabioBatSilva/riak-client.svg?branch=master)](https://travis-ci.org/FabioBatSilva/riak-client)
 
 A PHP client for [Riak](http://basho.com/riak/).
 
