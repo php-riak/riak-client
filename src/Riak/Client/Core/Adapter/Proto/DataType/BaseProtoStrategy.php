@@ -24,10 +24,11 @@ abstract class BaseProtoStrategy implements Strategy
 
     /**
      * @param \Riak\Client\Core\Adapter\Proto\ProtoClient $client
+     * @param \Riak\Client\ProtoBuf\DtFetchReq            $opConverter
      */
-    public function __construct(ProtoClient $client)
+    public function __construct(ProtoClient $client, $opConverter = null)
     {
         $this->client       = $client;
-        $this->opConverter  = new CrdtOpConverter();
+        $this->opConverter  = $opConverter ?: new CrdtOpConverter();
     }
 }

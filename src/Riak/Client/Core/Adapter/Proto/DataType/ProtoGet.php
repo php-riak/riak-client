@@ -64,20 +64,24 @@ class ProtoGet extends BaseProtoStrategy
             return $response;
         }
 
-        $dtType  = $rpbResponse->getType();
-        $dtValue = $rpbResponse->getValue()->getOrElse(null);
+        $dtType  = $rpbResponse->type;
+        $dtValue = $rpbResponse->hasValue() ? $rpbResponse->value : null;
 
-        if (DataType::COUNTER == $dtType && $dtValue != null) {
+        if ($dtValue == null) {
+            return $response;
+        }
+
+        if (DataType::COUNTER == $dtType) {
             $response->value = $dtValue->counter_value;
             $response->type  = 'counter';
         }
 
-        if (DataType::SET == $dtType && $dtValue != null) {
+        if (DataType::SET == $dtType) {
             $response->value = $dtValue->set_value;
             $response->type  = 'set';
         }
 
-        if (DataType::MAP == $dtType && $dtValue != null) {
+        if (DataType::MAP == $dtType) {
             $response->value = $this->opConverter->fromProtoBuf($dtValue->map_value);
             $response->type  = 'map';
         }

@@ -77,7 +77,7 @@ class ProtoPut extends BaseProtoStrategy
         }
 
         if ($rpbPutResp->hasMapValue()) {
-            $response->value = $rpbPutResp->map_value;
+            $response->value = $this->opConverter->fromProtoBuf($rpbPutResp->map_value);
             $response->type  = 'map';
         }
 
