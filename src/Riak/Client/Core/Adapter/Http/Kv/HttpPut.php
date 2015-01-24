@@ -84,13 +84,15 @@ class HttpPut extends BaseHttpStrategy
         $code         = $httpResponse->getStatusCode();
         $response     = new PutResponse();
 
-        if (isset($this->validResponseCodes[$code])) {
-            $contentList = $this->getRiakContentList($httpResponse);
-            $vClock      = $httpResponse->getHeader('X-Riak-Vclock');
-
-            $response->vClock = $vClock;
-            $response->contentList = $contentList;
+        if ( ! isset($this->validResponseCodes[$code])) {
+            throw new \RuntimeException("Unexpected status code : $code");
         }
+
+        $contentList = $this->getRiakContentList($httpResponse);
+        $vClock      = $httpResponse->getHeader('X-Riak-Vclock');
+
+        $response->vClock = $vClock;
+        $response->contentList = $contentList;
 
         return $response;
     }

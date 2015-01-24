@@ -67,12 +67,16 @@ class HttpPut extends BaseHttpStrategy
         $httpResponse = $this->client->send($httpRequest);
         $code         = $httpResponse->getStatusCode();
 
-        if (isset($this->validResponseCodes[$code])) {
-            $json = $httpResponse->json();
-
-            $response->value = $json['value'];
-            $response->type  = $json['type'];
+        if ( ! isset($this->validResponseCodes[$code])) {
+            throw new \RuntimeException("Unexpected status code : $code");
         }
+
+        $json  = $httpResponse->json();
+        $type  = $json['type'];
+        $value = $json['value'];
+
+        $response->type  = $type;
+        $response->value = $this->opConverter->fromArray($type, $value);
 
         return $response;
     }

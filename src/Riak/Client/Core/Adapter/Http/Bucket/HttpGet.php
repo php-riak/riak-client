@@ -29,7 +29,7 @@ class HttpGet extends BaseHttpStrategy
     {
         $request = $this->createRequest('GET', $getRequest->type, $getRequest->bucket);
 
-        $request->setHeader('Accept', ['multipart/mixed', 'application/json']);
+        $request->setHeader('Accept', 'application/json');
 
         return $request;
     }
@@ -45,14 +45,14 @@ class HttpGet extends BaseHttpStrategy
         $httpResponse = $this->client->send($httpRequest);
         $code         = $httpResponse->getStatusCode();
 
-        if (isset($this->validResponseCodes[$code])) {
-            $json  = $httpResponse->json();
-            $props = $json['props'];
-
-            return $this->createGetResponse($props);
+        if ( ! isset($this->validResponseCodes[$code])) {
+            throw new \RuntimeException("Unexpected status code : $code");
         }
 
-        return $this->createGetResponse([]);
+        $json  = $httpResponse->json();
+        $props = $json['props'];
+
+        return $this->createGetResponse($props);
     }
 
     /**

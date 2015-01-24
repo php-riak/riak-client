@@ -73,14 +73,16 @@ class HttpGet extends BaseHttpStrategy
             throw $e;
         }
 
-        if (isset($this->validResponseCodes[$code])) {
-            $json  = $httpResponse->json();
-            $type  = $json['type'];
-            $value = $json['value'];
-
-            $response->type  = $type;
-            $response->value = $this->opConverter->fromArray($type, $value);
+        if ( ! isset($this->validResponseCodes[$code])) {
+            throw new \RuntimeException("Unexpected status code : $code");
         }
+
+        $json  = $httpResponse->json();
+        $type  = $json['type'];
+        $value = $json['value'];
+
+        $response->type  = $type;
+        $response->value = $this->opConverter->fromArray($type, $value);
 
         return $response;
     }

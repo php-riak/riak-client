@@ -15,6 +15,14 @@ use GuzzleHttp\Stream\Stream;
 class HttpPut extends BaseHttpStrategy
 {
     /**
+     * @var array
+     */
+    protected $validResponseCodes = [
+        200 => true,
+        204 => true,
+    ];
+
+    /**
      * @param \Riak\Client\Core\Message\DataType\PutRequest $putRequest
      *
      * @return \GuzzleHttp\Message\RequestInterface
@@ -42,8 +50,12 @@ class HttpPut extends BaseHttpStrategy
     {
         $response     = new PutResponse();
         $httpRequest  = $this->createHttpRequest($request);
+        $httpResponse = $this->client->send($httpRequest);
+        $code         = $httpResponse->getStatusCode();
 
-        $this->client->send($httpRequest);
+        if ( ! isset($this->validResponseCodes[$code])) {
+            throw new \RuntimeException("Unexpected status code : $code");
+        }
 
         return $response;
     }
