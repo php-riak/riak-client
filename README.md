@@ -24,7 +24,7 @@ Alternately, manually add the following to your `composer.json`, in the `require
 ```
 
 ## Documentation
-API documentation for this library can be found on [Wiki](https://github.com/FabioBatSilva/riak-php-client/wiki)
+API documentation for this library can be found on [readthedocs](http://riak-client.readthedocs.org/en/latest/)
 
 ## Overview
 
