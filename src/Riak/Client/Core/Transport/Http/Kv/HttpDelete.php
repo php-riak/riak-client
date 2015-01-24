@@ -2,10 +2,11 @@
 
 namespace Riak\Client\Core\Transport\Http\Kv;
 
-use GuzzleHttp\Exception\RequestException;
 use Riak\Client\Core\Message\Request;
+use GuzzleHttp\Exception\RequestException;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
 use Riak\Client\Core\Message\Kv\DeleteResponse;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * Http delete implementation.
@@ -34,6 +35,10 @@ class HttpDelete extends BaseHttpStrategy
         $query    = $request->getQuery();
 
         $request->setHeader('Accept', ['multipart/mixed', '*/*']);
+
+        if ($deleteRequest->vClock) {
+            $request->setHeader('X-Riak-Vclock', $deleteRequest->vClock);
+        }
 
         if ($deleteRequest->r !== null) {
             $query->add('r', $deleteRequest->r);
@@ -71,11 +76,6 @@ class HttpDelete extends BaseHttpStrategy
     {
         $httpRequest = $this->createHttpRequest($request);
         $response    = new DeleteResponse();
-        $vClock      = $request->vClock;
-
-        if ($vClock) {
-            $httpRequest->setHeader('X-Riak-Vclock', $vClock);
-        }
 
         try {
             $httpResponse = $this->client->send($httpRequest);
@@ -89,7 +89,7 @@ class HttpDelete extends BaseHttpStrategy
         }
 
         if ( ! isset($this->validResponseCodes[$code])) {
-            throw new \RuntimeException("Unexpected status code : $code");
+            throw RiakTransportException::unexpectedStatusCode($code);
         }
 
         $contentList = $this->getRiakContentList($httpResponse);

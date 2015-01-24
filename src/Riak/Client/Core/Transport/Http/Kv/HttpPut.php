@@ -6,6 +6,7 @@ use GuzzleHttp\Stream\Stream;
 use Riak\Client\Core\Message\Request;
 use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Message\Kv\PutResponse;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * Http put implementation.
@@ -85,7 +86,7 @@ class HttpPut extends BaseHttpStrategy
         $response     = new PutResponse();
 
         if ( ! isset($this->validResponseCodes[$code])) {
-            throw new \RuntimeException("Unexpected status code : $code");
+            throw RiakTransportException::unexpectedStatusCode($code);
         }
 
         $contentList = $this->getRiakContentList($httpResponse);

@@ -2,10 +2,10 @@
 
 namespace Riak\Client\Core\Transport\Proto;
 
-use Riak\Client\RiakException;
 use DrSlump\Protobuf\Message;
 use DrSlump\Protobuf\Protobuf;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * RPB socket connection
@@ -121,7 +121,7 @@ class ProtoClient
      * @param integer $actualCode
      * @param string  $respBody
      *
-     * @throws \Riak\Client\RiakException
+     * @throws \Riak\Client\Core\Transport\RiakTransportException
      */
     protected function throwResponseException($actualCode, $respBody)
     {
@@ -143,7 +143,7 @@ class ProtoClient
             }
         }
 
-        throw new RiakException($exceptionMessage, $exceptionCode);
+        throw new RiakTransportException($exceptionMessage, $exceptionCode);
     }
 
     /**
@@ -161,7 +161,7 @@ class ProtoClient
         $resource = stream_socket_client($uri, $errno, $errstr);
 
         if ( ! is_resource($resource)) {
-            throw new RiakException(sprintf('Fail to connect to : %s [%s %s]', $uri, $errno, $errstr));
+            throw new RiakTransportException(sprintf('Fail to connect to : %s [%s %s]', $uri, $errno, $errstr));
         }
 
         if ($this->timeout !== null) {
@@ -202,7 +202,7 @@ class ProtoClient
             $fwrite = fwrite($resource, substr($payload, $written));
 
             if ($fwrite === false) {
-                throw new RiakException('Failed to write message');
+                throw new RiakTransportException('Failed to write message');
             }
         }
 
@@ -219,11 +219,11 @@ class ProtoClient
         $header   = fread($resource, 4);
 
         if ($header === false) {
-            throw new RiakException('Fail to read response headers');
+            throw new RiakTransportException('Fail to read response headers');
         }
 
         if (strlen($header) !== 4) {
-            throw new RiakException('Short read on header, read ' . strlen($header) . ' bytes');
+            throw new RiakTransportException('Short read on header, read ' . strlen($header) . ' bytes');
         }
 
         $unpackHeaders = array_values(unpack("N", $header));
@@ -234,7 +234,7 @@ class ProtoClient
             $buffer = fread($resource, min(8192, $length - strlen($message)));
 
             if ( ! strlen($buffer) || $buffer === false) {
-                throw new RiakException('Fail to read socket response');
+                throw new RiakTransportException('Fail to read socket response');
             }
 
             $message .= $buffer;

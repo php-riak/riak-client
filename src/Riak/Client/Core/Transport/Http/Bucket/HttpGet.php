@@ -5,6 +5,7 @@ namespace Riak\Client\Core\Transport\Http\Bucket;
 use Riak\Client\Core\Message\Request;
 use Riak\Client\Core\Message\Bucket\GetRequest;
 use Riak\Client\Core\Message\Bucket\GetResponse;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * Http get implementation.
@@ -46,7 +47,7 @@ class HttpGet extends BaseHttpStrategy
         $code         = $httpResponse->getStatusCode();
 
         if ( ! isset($this->validResponseCodes[$code])) {
-            throw new \RuntimeException("Unexpected status code : $code");
+            throw RiakTransportException::unexpectedStatusCode($code);
         }
 
         $json  = $httpResponse->json();

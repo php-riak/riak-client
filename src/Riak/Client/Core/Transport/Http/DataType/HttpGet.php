@@ -3,9 +3,10 @@
 namespace Riak\Client\Core\Transport\Http\DataType;
 
 use Riak\Client\Core\Message\Request;
+use GuzzleHttp\Exception\RequestException;
 use Riak\Client\Core\Message\DataType\GetRequest;
 use Riak\Client\Core\Message\DataType\GetResponse;
-use GuzzleHttp\Exception\RequestException;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * Http get implementation.
@@ -74,7 +75,7 @@ class HttpGet extends BaseHttpStrategy
         }
 
         if ( ! isset($this->validResponseCodes[$code])) {
-            throw new \RuntimeException("Unexpected status code : $code");
+            throw RiakTransportException::unexpectedStatusCode($code);
         }
 
         $json  = $httpResponse->json();

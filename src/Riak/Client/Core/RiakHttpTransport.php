@@ -5,6 +5,8 @@ namespace Riak\Client\Core;
 use InvalidArgumentException;
 use GuzzleHttp\ClientInterface;
 use Riak\Client\Core\Message\Request;
+use GuzzleHttp\Exception\RequestException;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * Http transport for riak.
@@ -71,6 +73,10 @@ class RiakHttpTransport implements RiakTransport
      */
     public function send(Request $request)
     {
-        return $this->createAdapterStrategyFor($request)->send($request);
+        try {
+            return $this->createAdapterStrategyFor($request)->send($request);
+        } catch (RequestException $exc) {
+            throw RiakTransportException::httpRequestException($exc);
+        }
     }
 }

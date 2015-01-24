@@ -2,10 +2,11 @@
 
 namespace Riak\Client\Core\Transport\Http\DataType;
 
+use GuzzleHttp\Stream\Stream;
 use Riak\Client\Core\Message\Request;
 use Riak\Client\Core\Message\DataType\PutRequest;
 use Riak\Client\Core\Message\DataType\PutResponse;
-use GuzzleHttp\Stream\Stream;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * Http put implementation.
@@ -68,7 +69,7 @@ class HttpPut extends BaseHttpStrategy
         $code         = $httpResponse->getStatusCode();
 
         if ( ! isset($this->validResponseCodes[$code])) {
-            throw new \RuntimeException("Unexpected status code : $code");
+            throw RiakTransportException::unexpectedStatusCode($code);
         }
 
         $json  = $httpResponse->json();
