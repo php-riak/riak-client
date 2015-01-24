@@ -43,9 +43,11 @@ abstract class MapTest extends TestCase
 
     protected function tearDown()
     {
-        $this->client->execute(DeleteValue::builder($this->location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->build());
+        if ($this->client) {
+            $this->client->execute(DeleteValue::builder($this->location)
+                ->withOption(RiakOption::NOTFOUND_OK, true)
+                ->build());
+        }
 
         parent::tearDown();
     }

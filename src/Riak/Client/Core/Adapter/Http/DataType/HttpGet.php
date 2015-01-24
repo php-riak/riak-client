@@ -2,7 +2,6 @@
 
 namespace Riak\Client\Core\Adapter\Http\DataType;
 
-use GuzzleHttp\ClientInterface;
 use Riak\Client\Core\Message\Request;
 use Riak\Client\Core\Message\DataType\GetRequest;
 use Riak\Client\Core\Message\DataType\GetResponse;
@@ -19,8 +18,7 @@ class HttpGet extends BaseHttpStrategy
      * @var array
      */
     protected $validResponseCodes = [
-        200 => true,
-        300 => true
+        200 => true
     ];
 
     /**
@@ -33,7 +31,7 @@ class HttpGet extends BaseHttpStrategy
         $request = $this->createRequest('GET', $getRequest->type, $getRequest->bucket, $getRequest->key);
         $query   = $request->getQuery();
 
-        $request->setHeader('Accept', ['multipart/mixed', 'application/json']);
+        $request->setHeader('Accept', 'application/json');
 
         if ($getRequest->r !== null) {
             $query->add('r', $getRequest->r);
@@ -76,11 +74,12 @@ class HttpGet extends BaseHttpStrategy
         }
 
         if (isset($this->validResponseCodes[$code])) {
-            $json = $httpResponse->json();
+            $json  = $httpResponse->json();
+            $type  = $json['type'];
+            $value = $json['value'];
 
-            $response->type  = $json['type'];
-            $response->value = $this->opConverter->fromArray($response->type, $json['value']);
-
+            $response->type  = $type;
+            $response->value = $this->opConverter->fromArray($type, $value);
         }
 
         return $response;
