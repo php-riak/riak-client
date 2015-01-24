@@ -7,20 +7,10 @@ A PHP client for [Riak](http://basho.com/riak/).
 
 ## Installation
 
-### Composer Install (recommended)
-
 Run the following `composer` command:
 
 ```console
 $ composer require "fbs/riak-client"
-```
-
-Alternately, manually add the following to your `composer.json`, in the `require` section:
-
-```javascript
-"require": {
-    "FabioBatSilva/riak-client": "dev-master"
-}
 ```
 
 ## Documentation

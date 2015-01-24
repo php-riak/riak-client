@@ -3,8 +3,9 @@
 .idea/
 nbproject
 
-## phpunit
+## build
 build
+docs/build
 phpunit.xml
 
 ## File-based project format
