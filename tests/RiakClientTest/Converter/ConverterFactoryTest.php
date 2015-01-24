@@ -4,7 +4,7 @@ namespace RiakClientTest\Converter;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Converter\ConverterFactory;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 
 class ConverterFactoryTest extends TestCase
 {

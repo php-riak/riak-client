@@ -4,7 +4,7 @@ namespace RiakClientTest\Converter\Hydrator;
 
 use RiakClientTest\TestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 use Riak\Client\Converter\Hydrator\DomainMetadataReader;
 
 class DomainMetadataReaderTest extends TestCase

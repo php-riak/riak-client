@@ -1,6 +1,6 @@
 <?php
 
-namespace RiakClientFunctionalTest\DomainFixture;
+namespace RiakClientFixture\Domain;
 
 use Riak\Client\Annotation as Riak;
 

@@ -8,7 +8,7 @@ use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Doctrine\Common\Annotations\AnnotationReader;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 use Riak\Client\Converter\Hydrator\DomainHydrator;
 use Riak\Client\Converter\Hydrator\DomainMetadataReader;
 

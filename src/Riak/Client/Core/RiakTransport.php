@@ -15,6 +15,8 @@ interface RiakTransport
      * @param \Riak\Client\Core\Message\Request $request
      *
      * @return \Riak\Client\Core\Message\Response
+     *
+     * @throws \Riak\Client\Core\Transport\RiakTransportException
      */
     public function send(Request $request);
 }

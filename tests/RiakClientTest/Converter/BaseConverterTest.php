@@ -8,7 +8,7 @@ use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Converter\RiakObjectReference;
 use Riak\Client\Converter\DomainObjectReference;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 
 
 class BaseConverterTest extends TestCase

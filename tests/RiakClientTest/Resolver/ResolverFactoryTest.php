@@ -4,7 +4,7 @@ namespace RiakClientTest\Resolver;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Resolver\ResolverFactory;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 
 class ResolverFactoryTest extends TestCase
 {

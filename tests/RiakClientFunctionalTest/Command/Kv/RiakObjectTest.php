@@ -12,7 +12,7 @@ use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 
 abstract class RiakObjectTest extends TestCase
 {

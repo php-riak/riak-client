@@ -10,7 +10,7 @@ use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\Query\RiakObjectList;
 use Riak\Client\Converter\ConverterFactory;
 use Riak\Client\Resolver\ResolverFactory;
-use RiakClientFunctionalTest\DomainFixture\SimpleObject;
+use RiakClientFixture\Domain\SimpleObject;
 
 class AbstractResponseTest extends TestCase
 {/**

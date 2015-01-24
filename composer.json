@@ -31,6 +31,7 @@
     },
     "autoload-dev": {
         "psr-0": {
+            "RiakClientFixture\\": "tests",
             "RiakClientTest\\": "tests",
             "RiakClientFunctionalTest\\": "tests"
         }
