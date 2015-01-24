@@ -155,6 +155,9 @@ class CrdtOpConverterTest extends TestCase
         $setEntry = new ProtoBuf\MapEntry();
         $setField = new ProtoBuf\MapField();
 
+        $mapEntry = new ProtoBuf\MapEntry();
+        $mapField = new ProtoBuf\MapField();
+
         $flagEntry = new ProtoBuf\MapEntry();
         $flagField = new ProtoBuf\MapField();
 
@@ -163,6 +166,17 @@ class CrdtOpConverterTest extends TestCase
 
         $registerEntry = new ProtoBuf\MapEntry();
         $registerField = new ProtoBuf\MapField();
+
+        $mapEntryValues[0] = new ProtoBuf\MapEntry();
+        $mapEntryValues[0]->setField(new ProtoBuf\MapField());
+        $mapEntryValues[0]->field->setName('sub_map_field');
+        $mapEntryValues[0]->field->setType(MapFieldType::REGISTER);
+        $mapEntryValues[0]->setRegisterValue('sub-map-register-val');
+
+        $mapEntry->setField($mapField);
+        $mapEntry->setMapValue($mapEntryValues);
+        $mapField->setName('map_field');
+        $mapField->setType(MapFieldType::MAP);
 
         $setEntry->setField($setField);
         $setEntry->setSetValue([1,2,3]);
@@ -184,6 +198,7 @@ class CrdtOpConverterTest extends TestCase
         $registerField->setName('register_field');
         $registerField->setType(MapFieldType::REGISTER);
 
+        $mapResult      = $this->instance->convertMapEntry($mapEntry);
         $setResult      = $this->instance->convertMapEntry($setEntry);
         $flagResult     = $this->instance->convertMapEntry($flagEntry);
         $counterResult  = $this->instance->convertMapEntry($counterEntry);
@@ -193,6 +208,8 @@ class CrdtOpConverterTest extends TestCase
         $this->assertEquals(10, $counterResult);
         $this->assertEquals([1,2,3], $setResult);
         $this->assertEquals('register-val', $registerResult);
+        $this->assertArrayHasKey('sub_map_field', $mapResult);
+        $this->assertEquals('sub-map-register-val', $mapResult['sub_map_field']);
     }
 
     /**

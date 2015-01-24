@@ -15,9 +15,4 @@ class MapProtoTest extends MapTest
     {
         return $this->createRiakProtoClient();
     }
-
-    public function testStoreAndFetchMapsWithinMaps()
-    {
-        $this->markTestIncomplete();
-    }
 }

@@ -45,7 +45,7 @@ class CrdtOpConverter
         $type  = $field->getType();
 
         if ($type === MapFieldType::MAP) {
-            return $this->fromProtoBuf($entry->getMapValue());
+            return $this->fromProtoBuf($entry->map_value);
         }
 
         if ($type === MapFieldType::SET) {
