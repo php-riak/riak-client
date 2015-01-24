@@ -8,12 +8,12 @@ use Riak\Client\Core\Query\Crdt\Op\SetOp;
 use Riak\Client\Core\Query\Crdt\Op\FlagOp;
 use Riak\Client\Core\Query\Crdt\Op\CounterOp;
 use Riak\Client\Core\Query\Crdt\Op\RegisterOp;
-use Riak\Client\Core\Adapter\Http\DataType\CrdtOpConverter;
+use Riak\Client\Core\Transport\Http\DataType\CrdtOpConverter;
 
 class CrdtOpConverterTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Http\DataType\CrdtOpConverter
+     * @var \Riak\Client\Core\Transport\Http\DataType\CrdtOpConverter
      */
     private $instance;
 

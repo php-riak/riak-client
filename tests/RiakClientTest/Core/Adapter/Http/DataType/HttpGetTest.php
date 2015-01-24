@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Http\DataType;
 
-use Riak\Client\Core\Adapter\Http\DataType\HttpGet;
+use Riak\Client\Core\Transport\Http\DataType\HttpGet;
 use Riak\Client\Core\Message\DataType\GetRequest;
 use GuzzleHttp\Exception\ClientException;
 use RiakClientTest\TestCase;
@@ -15,7 +15,7 @@ class HttpGetTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\DataType\HttpGet
+     * @var \Riak\Client\Core\Transport\Http\DataType\HttpGet
      */
     private $instance;
 

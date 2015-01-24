@@ -11,12 +11,12 @@ namespace Riak\Client\Core;
 class RiakNode
 {
     /**
-     * @var \Riak\Client\Core\RiakAdapter
+     * @var \Riak\Client\Core\RiakTransport
      */
     private $adapter;
 
     /**
-     * @return \Riak\Client\Core\RiakAdapter
+     * @return \Riak\Client\Core\RiakTransport
      */
     public function getAdapter()
     {
@@ -24,9 +24,9 @@ class RiakNode
     }
 
     /**
-     * @param \Riak\Client\Core\RiakAdapter $adapter
+     * @param \Riak\Client\Core\RiakTransport $adapter
      */
-    public function __construct(RiakAdapter $adapter)
+    public function __construct(RiakTransport $adapter)
     {
         $this->adapter = $adapter;
     }

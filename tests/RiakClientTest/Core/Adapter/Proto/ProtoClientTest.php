@@ -10,7 +10,7 @@ use RiakClientTest\TestCase;
 class ProtoClientTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $instance;
 
@@ -18,7 +18,7 @@ class ProtoClientTest extends TestCase
     {
         parent::setUp();
 
-        $this->instance = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->instance = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
     }
 
     /**

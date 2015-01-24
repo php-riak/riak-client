@@ -24,7 +24,7 @@ class FetchMapTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\RiakAdapter
+     * @var \Riak\Client\Core\RiakTransport
      */
     private $adapter;
 
@@ -35,7 +35,7 @@ class FetchMapTest extends TestCase
         $builder = new RiakClientBuilder();
 
         $this->location = new RiakLocation(new RiakNamespace('bucket', 'type'), 'key');
-        $this->adapter  = $this->getMock('Riak\Client\Core\RiakAdapter');
+        $this->adapter  = $this->getMock('Riak\Client\Core\RiakTransport');
         $this->node     = new RiakNode($this->adapter);
         $this->client   = $builder
             ->withNode($this->node)

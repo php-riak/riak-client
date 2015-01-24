@@ -4,7 +4,7 @@ namespace RiakClientTest\Core\Adapter\Http\Kv;
 
 use RiakClientTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Riak\Client\Core\Adapter\Http\Kv\HttpGet;
+use Riak\Client\Core\Transport\Http\Kv\HttpGet;
 use Riak\Client\Core\Message\Kv\GetRequest;
 use GuzzleHttp\Exception\ClientException;
 
@@ -16,7 +16,7 @@ class HttpGetTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\Kv\HttpGet
+     * @var \Riak\Client\Core\Transport\Http\Kv\HttpGet
      */
     private $instance;
 

@@ -3,7 +3,7 @@
 namespace RiakClientTest\Core;
 
 use RiakClientTest\TestCase;
-use Riak\Client\Core\RiakHttpAdapter;
+use Riak\Client\Core\RiakHttpTransport;
 use Riak\Client\Core\Message\Kv\GetRequest;
 use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
@@ -16,7 +16,7 @@ class RiakHttpAdpterTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\RiakHttpAdapter
+     * @var \Riak\Client\Core\RiakHttpTransport
      */
     private $instance;
 
@@ -25,7 +25,7 @@ class RiakHttpAdpterTest extends TestCase
         parent::setUp();
 
         $this->client   = $this->getMock('GuzzleHttp\ClientInterface');
-        $this->instance = new RiakHttpAdapter($this->client);
+        $this->instance = new RiakHttpTransport($this->client);
     }
 
     public function testCreateAdapterStrategy()
@@ -34,9 +34,9 @@ class RiakHttpAdpterTest extends TestCase
         $put    = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new PutRequest()]);
         $delete = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new DeleteRequest()]);
 
-        $this->assertInstanceOf('Riak\Client\Core\Adapter\Http\Kv\HttpGet', $get);
-        $this->assertInstanceOf('Riak\Client\Core\Adapter\Http\Kv\HttpPut', $put);
-        $this->assertInstanceOf('Riak\Client\Core\Adapter\Http\Kv\HttpDelete', $delete);
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Http\Kv\HttpGet', $get);
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Http\Kv\HttpPut', $put);
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Http\Kv\HttpDelete', $delete);
     }
 
     /**

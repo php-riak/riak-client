@@ -4,7 +4,7 @@ namespace RiakClientTest\Core\Adapter\Http\Bucket;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\Query\Crdt\Op\CounterOp;
-use Riak\Client\Core\Adapter\Http\Bucket\HttpPut;
+use Riak\Client\Core\Transport\Http\Bucket\HttpPut;
 use Riak\Client\Core\Message\Bucket\PutRequest;
 
 class HttpPutTest extends TestCase
@@ -15,7 +15,7 @@ class HttpPutTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\Bucket\HttpPut
+     * @var \Riak\Client\Core\Transport\Http\Bucket\HttpPut
      */
     private $instance;
 

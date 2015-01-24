@@ -5,18 +5,18 @@ namespace RiakClientTest\Core\Adapter\Proto\Kv;
 use RiakClientTest\TestCase;
 use Riak\Client\Core\Message\Kv\Content;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
-use Riak\Client\Core\Adapter\Proto\Kv\ProtoPut;
+use Riak\Client\Core\Transport\Proto\Kv\ProtoPut;
 use Riak\Client\Core\Message\Kv\PutRequest;
 
 class ProtoPutTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\Kv\ProtoPut
+     * @var \Riak\Client\Core\Transport\Proto\Kv\ProtoPut
      */
     private $instance;
 
@@ -24,7 +24,7 @@ class ProtoPutTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $this->instance = new ProtoPut($this->client);
     }
 

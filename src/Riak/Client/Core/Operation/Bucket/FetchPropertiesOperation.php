@@ -8,7 +8,7 @@ use Riak\Client\Core\Message\Bucket\GetRequest;
 use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\RiakOperation;
-use Riak\Client\Core\RiakAdapter;
+use Riak\Client\Core\RiakTransport;
 
 /**
  * An operation used to fetch bucket properties from Riak.
@@ -33,7 +33,7 @@ class FetchPropertiesOperation implements RiakOperation
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakAdapter $adapter)
+    public function execute(RiakTransport $adapter)
     {
         $getRequest  = $this->createGetRequest();
         $getResponse = $adapter->send($getRequest);

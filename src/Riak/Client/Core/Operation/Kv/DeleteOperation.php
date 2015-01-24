@@ -6,7 +6,7 @@ use Riak\Client\Command\Kv\Response\DeleteValueResponse;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\RiakOperation;
-use Riak\Client\Core\RiakAdapter;
+use Riak\Client\Core\RiakTransport;
 use Riak\Client\Cap\VClock;
 use Riak\Client\RiakConfig;
 
@@ -54,7 +54,7 @@ class DeleteOperation implements RiakOperation
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakAdapter $adapter)
+    public function execute(RiakTransport $adapter)
     {
         $putRequest       = $this->createDeleteRequest();
         $putResponse      = $adapter->send($putRequest);

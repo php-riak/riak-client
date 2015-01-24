@@ -8,7 +8,7 @@ use Riak\Client\Core\Query\Crdt\Op\CrdtOp;
 use Riak\Client\Core\Query\Crdt\DataType;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\RiakOperation;
-use Riak\Client\Core\RiakAdapter;
+use Riak\Client\Core\RiakTransport;
 
 /**
  * An operation used to store a datatype in Riak.
@@ -54,7 +54,7 @@ abstract class StoreDataTypeOperation implements RiakOperation
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakAdapter $adapter)
+    public function execute(RiakTransport $adapter)
     {
         $putRequest  = $this->createGetRequest();
         $putResponse = $adapter->send($putRequest);

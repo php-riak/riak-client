@@ -4,7 +4,7 @@ namespace Riak\Client\Core;
 
 use GuzzleHttp\Client;
 use Riak\Client\RiakException;
-use Riak\Client\Core\Adapter\Proto\ProtoClient;
+use Riak\Client\Core\Transport\Proto\ProtoClient;
 
 /**
  * Riak Node builder.
@@ -99,9 +99,9 @@ class RiakNodeBuilder
     }
 
     /**
-     * @return \Riak\Client\Core\RiakHttpAdapter
+     * @return \Riak\Client\Core\RiakHttpTransport
      */
-    private function buildHttpAdapter()
+    private function buildHttpTransport()
     {
         $auth     = $this->user ? [$this->user, $this->pass] : null;
         $baseUrl  = "{$this->protocol}://{$this->host}:{$this->port}";
@@ -111,31 +111,31 @@ class RiakNodeBuilder
             'defaults'  => $defaults,
         ]);
 
-        return new RiakHttpAdapter($client);
+        return new RiakHttpTransport($client);
     }
 
     /**
-     * @return \Riak\Client\Core\RiakPbAdpter
+     * @return \Riak\Client\Core\RiakProtoTransport
      */
-    private function buildProtoAdapter()
+    private function buildProtoTransport()
     {
         $rpbClient    = new ProtoClient($this->host, $this->port, $this->user, $this->pass);
-        $riakPbAdpter = new RiakProtoAdapter($rpbClient);
+        $riakPbAdpter = new RiakProtoTransport($rpbClient);
 
         return $riakPbAdpter;
     }
 
     /**
-     * @return \Riak\Client\Core\RiakAdapter
+     * @return \Riak\Client\Core\RiakTransport
      */
     private function buildAdapter()
     {
         if ($this->protocol == 'http' || $this->protocol == 'https') {
-            return $this->buildHttpAdapter();
+            return $this->buildHttpTransport();
         }
 
         if ($this->protocol == 'proto') {
-            return $this->buildProtoAdapter();
+            return $this->buildProtoTransport();
         }
 
         throw new RiakException("Unknown protocol : {$this->protocol}");

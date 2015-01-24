@@ -5,7 +5,7 @@ namespace RiakClientTest\Core\Adapter\Http\Kv;
 use RiakClientTest\TestCase;
 use GuzzleHttp\Stream\Stream;
 use Riak\Client\Core\Message\Kv\Content;
-use Riak\Client\Core\Adapter\Http\Kv\HttpPut;
+use Riak\Client\Core\Transport\Http\Kv\HttpPut;
 use Riak\Client\Core\Message\Kv\PutRequest;
 
 class HttpPutTest extends TestCase
@@ -16,7 +16,7 @@ class HttpPutTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\Kv\HttpPut
+     * @var \Riak\Client\Core\Transport\Http\Kv\HttpPut
      */
     private $instance;
 

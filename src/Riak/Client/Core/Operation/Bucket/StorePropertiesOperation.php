@@ -6,7 +6,7 @@ use Riak\Client\Command\Bucket\Response\StoreBucketPropertiesResponse;
 use Riak\Client\Core\Message\Bucket\PutRequest;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\RiakOperation;
-use Riak\Client\Core\RiakAdapter;
+use Riak\Client\Core\RiakTransport;
 
 /**
  * An operation used to store bucket properties in Riak.
@@ -38,7 +38,7 @@ class StorePropertiesOperation implements RiakOperation
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakAdapter $adapter)
+    public function execute(RiakTransport $adapter)
     {
         $adapter->send($this->createGetRequest());
 

@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Proto\DataType;
 
-use Riak\Client\Core\Adapter\Proto\DataType\ProtoGet;
+use Riak\Client\Core\Transport\Proto\DataType\ProtoGet;
 use Riak\Client\Core\Message\DataType\GetRequest;
 use Riak\Client\ProtoBuf\MapField\MapFieldType;
 use Riak\Client\ProtoBuf\DtFetchResp\DataType;
@@ -16,12 +16,12 @@ use RiakClientTest\TestCase;
 class ProtoGetTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\DataType\ProtoGet
+     * @var \Riak\Client\Core\Transport\Proto\DataType\ProtoGet
      */
     private $instance;
 
@@ -29,7 +29,7 @@ class ProtoGetTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $this->instance = new ProtoGet($this->client);
     }
 

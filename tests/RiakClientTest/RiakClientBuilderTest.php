@@ -35,7 +35,7 @@ class RiakClientBuilderTest extends TestCase
         $this->assertSame($config, $cluster->getRiakConfig());
         $this->assertInstanceOf('Riak\Client\Core\RiakNode', $nodes[0]);
         $this->assertInstanceOf('Riak\Client\Core\RiakCluster', $cluster);
-        $this->assertInstanceOf('Riak\Client\Core\RiakHttpAdapter', $nodes[0]->getAdapter());
+        $this->assertInstanceOf('Riak\Client\Core\RiakHttpTransport', $nodes[0]->getAdapter());
         $this->assertInstanceOf('Riak\Client\Converter\ConverterFactory', $config->getConverterFactory());
         $this->assertInstanceOf('Riak\Client\Converter\Hydrator\DomainHydrator', $config->getDomainHydrator());
         $this->assertInstanceOf('Riak\Client\Converter\RiakObjectConverter', $config->getRiakObjectConverter());

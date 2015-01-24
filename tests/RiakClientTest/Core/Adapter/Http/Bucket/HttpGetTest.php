@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Http\Bucket;
 
-use Riak\Client\Core\Adapter\Http\Bucket\HttpGet;
+use Riak\Client\Core\Transport\Http\Bucket\HttpGet;
 use Riak\Client\Core\Message\Bucket\GetRequest;
 use RiakClientTest\TestCase;
 
@@ -14,7 +14,7 @@ class HttpGetTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\Bucket\HttpGet
+     * @var \Riak\Client\Core\Transport\Http\Bucket\HttpGet
      */
     private $instance;
 

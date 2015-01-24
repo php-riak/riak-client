@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Proto\DataType;
 
-use Riak\Client\Core\Adapter\Proto\DataType\CrdtOpConverter;
+use Riak\Client\Core\Transport\Proto\DataType\CrdtOpConverter;
 use Riak\Client\ProtoBuf\MapField\MapFieldType;
 use Riak\Client\Core\Query\Crdt\Op;
 use RiakClientTest\TestCase;
@@ -11,7 +11,7 @@ use Riak\Client\ProtoBuf;
 class CrdtOpConverterTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\DataType\CrdtOpConverter
+     * @var \Riak\Client\Core\Transport\Proto\DataType\CrdtOpConverter
      */
     private $instance;
 

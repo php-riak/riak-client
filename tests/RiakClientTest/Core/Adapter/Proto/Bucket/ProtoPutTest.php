@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Proto\Bucket;
 
-use Riak\Client\Core\Adapter\Proto\Bucket\ProtoPut;
+use Riak\Client\Core\Transport\Proto\Bucket\ProtoPut;
 use Riak\Client\Core\Message\Bucket\PutRequest;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\ProtoBuf\RpbPutBucketResp;
@@ -12,12 +12,12 @@ use RiakClientTest\TestCase;
 class ProtoPutTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\Bucket\ProtoPut
+     * @var \Riak\Client\Core\Transport\Proto\Bucket\ProtoPut
      */
     private $instance;
 
@@ -25,7 +25,7 @@ class ProtoPutTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $this->instance = new ProtoPut($this->client);
     }
 

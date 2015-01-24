@@ -6,7 +6,7 @@ use Riak\Client\Command\Kv\Response\FetchValueResponse;
 use Riak\Client\Core\Message\Kv\GetRequest;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\RiakOperation;
-use Riak\Client\Core\RiakAdapter;
+use Riak\Client\Core\RiakTransport;
 use Riak\Client\RiakConfig;
 
 /**
@@ -46,7 +46,7 @@ class FetchOperation implements RiakOperation
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakAdapter $adapter)
+    public function execute(RiakTransport $adapter)
     {
         $getRequest       = $this->createGetRequest();
         $getResponse      = $adapter->send($getRequest);

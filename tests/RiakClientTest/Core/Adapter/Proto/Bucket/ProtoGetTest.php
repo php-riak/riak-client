@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Proto\Bucket;
 
-use Riak\Client\Core\Adapter\Proto\Bucket\ProtoGet;
+use Riak\Client\Core\Transport\Proto\Bucket\ProtoGet;
 use Riak\Client\Core\Message\Bucket\GetRequest;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\ProtoBuf\RpbGetBucketResp;
@@ -12,12 +12,12 @@ use RiakClientTest\TestCase;
 class ProtoGetTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\Bucket\ProtoGet
+     * @var \Riak\Client\Core\Transport\Proto\Bucket\ProtoGet
      */
     private $instance;
 
@@ -25,7 +25,7 @@ class ProtoGetTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $this->instance = new ProtoGet($this->client);
     }
 

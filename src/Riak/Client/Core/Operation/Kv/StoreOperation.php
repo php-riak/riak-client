@@ -8,7 +8,7 @@ use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\RiakOperation;
-use Riak\Client\Core\RiakAdapter;
+use Riak\Client\Core\RiakTransport;
 use Riak\Client\RiakConfig;
 
 /**
@@ -55,7 +55,7 @@ class StoreOperation implements RiakOperation
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakAdapter $adapter)
+    public function execute(RiakTransport $adapter)
     {
         $putRequest       = $this->createPutRequest();
         $putResponse      = $adapter->send($putRequest);

@@ -8,12 +8,12 @@ use RiakClientTest\TestCase;
 class BaseProtoStrategyTest extends TestCase
 {
      /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\Kv\BaseProtoStrategy
+     * @var \Riak\Client\Core\Transport\Proto\Kv\BaseProtoStrategy
      */
     private $instance;
 
@@ -21,9 +21,9 @@ class BaseProtoStrategyTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $this->instance = $this->getMockForAbstractClass(
-            'Riak\Client\Core\Adapter\Proto\Kv\BaseProtoStrategy',
+            'Riak\Client\Core\Transport\Proto\Kv\BaseProtoStrategy',
             [$this->client], '', true, true, true, ['send']
         );
     }

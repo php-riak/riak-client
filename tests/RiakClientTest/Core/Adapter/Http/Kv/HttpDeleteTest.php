@@ -4,7 +4,7 @@ namespace RiakClientTest\Core\Adapter\Http\Kv;
 
 use RiakClientTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Riak\Client\Core\Adapter\Http\Kv\HttpDelete;
+use Riak\Client\Core\Transport\Http\Kv\HttpDelete;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
 
 class HttpDeleteTest extends TestCase
@@ -15,7 +15,7 @@ class HttpDeleteTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\Kv\HttpDelete
+     * @var \Riak\Client\Core\Transport\Http\Kv\HttpDelete
      */
     private $instance;
 

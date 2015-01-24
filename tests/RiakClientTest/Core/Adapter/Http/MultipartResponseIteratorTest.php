@@ -4,8 +4,8 @@ namespace RiakClientTest\Core\Adapter;
 
 use RiakClientTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Riak\Client\Core\Adapter\Http\MultipartStreamIterator;
-use Riak\Client\Core\Adapter\Http\MultipartResponseIterator;
+use Riak\Client\Core\Transport\Http\MultipartStreamIterator;
+use Riak\Client\Core\Transport\Http\MultipartResponseIterator;
 
 class MultipartResponseIteratorTest extends TestCase
 {

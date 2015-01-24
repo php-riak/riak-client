@@ -6,17 +6,17 @@ use RiakClientTest\TestCase;
 use Riak\Client\Core\Message\Kv\GetRequest;
 use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Message\Kv\DeleteRequest;
-use Riak\Client\Core\RiakProtoAdapter;
+use Riak\Client\Core\RiakProtoTransport;
 
 class RiakProtoAdpterTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\RiakProtoAdapter
+     * @var \Riak\Client\Core\RiakProtoTransport
      */
     private $instance;
 
@@ -24,8 +24,8 @@ class RiakProtoAdpterTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
-        $this->instance = new RiakProtoAdapter($this->client);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
+        $this->instance = new RiakProtoTransport($this->client);
     }
 
     public function testCreateAdapterStrategy()
@@ -34,9 +34,9 @@ class RiakProtoAdpterTest extends TestCase
         $kvPut    = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new PutRequest()]);
         $kvDelete = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new DeleteRequest()]);
 
-        $this->assertInstanceOf('Riak\Client\Core\Adapter\Proto\Kv\ProtoGet', $kvGet);
-        $this->assertInstanceOf('Riak\Client\Core\Adapter\Proto\Kv\ProtoPut', $kvPut);
-        $this->assertInstanceOf('Riak\Client\Core\Adapter\Proto\Kv\ProtoDelete', $kvDelete);
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Proto\Kv\ProtoGet', $kvGet);
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Proto\Kv\ProtoPut', $kvPut);
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Proto\Kv\ProtoDelete', $kvDelete);
     }
 
     /**

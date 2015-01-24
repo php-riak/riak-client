@@ -12,7 +12,7 @@ class BaseHttpStrategyTest extends TestCase
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Http\DataType\BaseHttpStrategy
+     * @var \Riak\Client\Core\Transport\Http\DataType\BaseHttpStrategy
      */
     private $instance;
 
@@ -22,7 +22,7 @@ class BaseHttpStrategyTest extends TestCase
 
         $this->client   = $this->getMock('GuzzleHttp\ClientInterface');
         $this->instance = $this->getMockForAbstractClass(
-            'Riak\Client\Core\Adapter\Http\DataType\BaseHttpStrategy',
+            'Riak\Client\Core\Transport\Http\DataType\BaseHttpStrategy',
             [$this->client], '', true, true, true, ['send']
         );
     }

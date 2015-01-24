@@ -2,7 +2,7 @@
 
 namespace RiakClientTest\Core\Adapter\Proto\DataType;
 
-use Riak\Client\Core\Adapter\Proto\DataType\ProtoPut;
+use Riak\Client\Core\Transport\Proto\DataType\ProtoPut;
 use Riak\Client\Core\Message\DataType\PutRequest;
 use Riak\Client\ProtoBuf\MapField\MapFieldType;
 use Riak\Client\Core\Query\Crdt\Op\RegisterOp;
@@ -18,12 +18,12 @@ use RiakClientTest\TestCase;
 class ProtoPutTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\ProtoClient
+     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @var \Riak\Client\Core\Adapter\Proto\DataType\ProtoPut
+     * @var \Riak\Client\Core\Transport\Proto\DataType\ProtoPut
      */
     private $instance;
 
@@ -31,7 +31,7 @@ class ProtoPutTest extends TestCase
     {
         parent::setUp();
 
-        $this->client   = $this->getMock('Riak\Client\Core\Adapter\Proto\ProtoClient', [], [], '', false);
+        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $this->instance = new ProtoPut($this->client);
     }
 

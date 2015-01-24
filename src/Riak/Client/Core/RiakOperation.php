@@ -13,9 +13,9 @@ interface RiakOperation
     /**
      * Execute the operation.
      *
-     * @param \Riak\Client\Core\RiakAdapter $adapter
+     * @param \Riak\Client\Core\RiakTransport $adapter
      *
      * @return \Riak\Client\RiakResponse
      */
-    public function execute(RiakAdapter $adapter);
+    public function execute(RiakTransport $adapter);
 }
