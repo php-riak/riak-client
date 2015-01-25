@@ -16,9 +16,10 @@ class GetRequest extends Request
     public $key;
     public $r;
     public $pr;
-    public $basicQuorum;
-    public $notfoundOk;
-    public $timeout;
-    public $sloppyQuorum;
     public $nVal;
+    public $timeout;
+    public $notfoundOk;
+    public $basicQuorum;
+    public $sloppyQuorum;
+    public $includeContext;
 }

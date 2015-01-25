@@ -128,4 +128,5 @@ Contents
 
    client
    kv
+   datatype
    siblings

@@ -118,4 +118,9 @@ class RiakOption
      * ASIS
      */
     const ASIS = 'asis';
+
+    /**
+     * Include context
+     */
+    const INCLUDE_CONTEXT = 'includeContext';
 }
