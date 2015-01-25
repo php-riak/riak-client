@@ -12,4 +12,6 @@ use Riak\Client\Core\Message\Response as BaseResponse;
 class Response extends BaseResponse
 {
     public $type;
+    public $value;
+    public $context;
 }

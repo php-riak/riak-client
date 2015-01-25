@@ -140,6 +140,6 @@ class CrdtOpConverterTest extends TestCase
     {
         $crdtOp = $this->getMock('Riak\Client\Core\Query\Crdt\Op\CrdtOp');
 
-        $this->instance->toJson($crdtOp);
+        $this->instance->convert($crdtOp);
     }
 }

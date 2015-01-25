@@ -18,19 +18,6 @@ use Riak\Client\Core\Query\Crdt\Op\RegisterOp;
 class CrdtOpConverter
 {
     /**
-     * @param \Riak\Client\Core\Query\Crdt\Op\CrdtOp $op
-     *
-     * @return string
-     */
-    public function toJson(CrdtOp $op)
-    {
-        $map  = $this->convert($op);
-        $json = json_encode($map);
-
-        return $json;
-    }
-
-    /**
      * @param string $type
      * @param mixed  $value
      *
@@ -74,7 +61,7 @@ class CrdtOpConverter
      *
      * @return string
      */
-    private function convert(CrdtOp $op)
+    public function convert(CrdtOp $op)
     {
         if ($op instanceof CounterOp) {
             return $this->convertCounter($op);

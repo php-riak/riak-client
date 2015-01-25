@@ -51,7 +51,7 @@ abstract class FetchDataTypeOperation implements RiakOperation
         $getRequest  = $this->createGetRequest();
         $getResponse = $adapter->send($getRequest);
         $datatype    = $this->converter->convert($getResponse);
-        $response    = $this->createDataTypeResponse($datatype);
+        $response    = $this->createDataTypeResponse($datatype, $getResponse->context);
 
         return $response;
     }
@@ -77,8 +77,9 @@ abstract class FetchDataTypeOperation implements RiakOperation
 
     /**
      * @param \Riak\Client\Core\Query\Crdt\DataType $datatype
+     * @param string                                $context
      *
      * @return \Riak\Client\Command\DataType\Response\Response
      */
-    abstract protected function createDataTypeResponse(DataType $datatype);
+    abstract protected function createDataTypeResponse(DataType $datatype, $context = null);
 }

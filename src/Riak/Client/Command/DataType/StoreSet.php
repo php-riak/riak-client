@@ -59,7 +59,7 @@ class StoreSet extends StoreDataType
         $op        = $this->update->getOp();
         $config    = $cluster->getRiakConfig();
         $converter = $config->getCrdtResponseConverter();
-        $operation = new StoreSetOperation($converter, $this->location, $op, $this->options);
+        $operation = new StoreSetOperation($converter, $this->location, $op, $this->context, $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;

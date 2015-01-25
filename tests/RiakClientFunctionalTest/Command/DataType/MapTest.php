@@ -166,4 +166,42 @@ abstract class MapTest extends TestCase
         $this->assertEquals('B. Silva', $userInfo['last_name']);
         $this->assertEquals('fabio.bat.silva@gmail.com', $userInfo['email']);
     }
+
+    public function testUpdateMapUsingContext()
+    {
+        $storeRespose1 = $this->client->execute(StoreMap::builder()
+            ->withOption(RiakOption::INCLUDE_CONTEXT, true)
+            ->withOption(RiakOption::RETURN_BODY, true)
+            ->withLocation($this->location)
+            ->updateRegister('username', 'FabioBatSilva')
+            ->updateFlag('active', false)
+            ->build());
+
+        $this->assertInstanceOf('Riak\Client\Command\DataType\Response\StoreMapResponse', $storeRespose1);
+        $this->assertInstanceOf('Riak\Client\Core\Query\Crdt\RiakMap', $storeRespose1->getDataType());
+        $this->assertInternalType('string', $storeRespose1->getContext());
+
+        $store2Response = $this->client->execute(StoreMap::builder()
+            ->withOption(RiakOption::INCLUDE_CONTEXT, true)
+            ->withOption(RiakOption::RETURN_BODY, true)
+            ->withContext($storeRespose1->getContext())
+            ->withLocation($this->location)
+            ->updateCounter('clicks', 1)
+            ->updateFlag('active', true)
+            ->build());
+
+
+        $this->assertInstanceOf('Riak\Client\Command\DataType\Response\StoreMapResponse', $store2Response);
+        $this->assertInstanceOf('Riak\Client\Core\Query\Crdt\RiakMap', $store2Response->getDataType());
+        $this->assertInternalType('string', $store2Response->getContext());
+
+        $fetchResponse = $this->client->execute(FetchMap::builder()
+            ->withOption(RiakOption::INCLUDE_CONTEXT, true)
+            ->withLocation($this->location)
+            ->build());
+
+        $this->assertInstanceOf('Riak\Client\Command\DataType\Response\FetchMapResponse', $fetchResponse);
+        $this->assertInstanceOf('Riak\Client\Core\Query\Crdt\RiakMap', $fetchResponse->getDataType());
+        $this->assertInternalType('string', $fetchResponse->getContext());
+    }
 }

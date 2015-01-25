@@ -15,8 +15,8 @@ class FetchCounterOperation extends FetchDataTypeOperation
     /**
      * {@inheritdoc}
      */
-    public function createDataTypeResponse(DataType $datatype = null)
+    public function createDataTypeResponse(DataType $datatype = null, $context = null)
     {
-        return new FetchCounterResponse($this->location, $datatype);
+        return new FetchCounterResponse($this->location, $datatype, $context);
     }
 }

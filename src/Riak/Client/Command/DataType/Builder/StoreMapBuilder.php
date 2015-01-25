@@ -187,6 +187,10 @@ class StoreMapBuilder extends Builder
     {
         $command = new StoreMap($this->location, $this->options);
 
+        if ($this->context != null) {
+            $command->withContext($this->context);
+        }
+
         array_map([$command, 'updateRegister'], array_keys($this->updates['register']), $this->updates['register']);
         array_map([$command, 'updateCounter'], array_keys($this->updates['counter']), $this->updates['counter']);
         array_map([$command, 'updateFlag'], array_keys($this->updates['flag']), $this->updates['flag']);

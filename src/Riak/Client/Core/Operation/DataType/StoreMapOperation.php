@@ -15,8 +15,8 @@ class StoreMapOperation extends StoreDataTypeOperation
     /**
      * {@inheritdoc}
      */
-    public function createDataTypeResponse(DataType $datatype = null)
+    public function createDataTypeResponse(DataType $datatype = null, $context = null)
     {
-        return new StoreMapResponse($this->location, $datatype);
+        return new StoreMapResponse($this->location, $datatype, $context);
     }
 }

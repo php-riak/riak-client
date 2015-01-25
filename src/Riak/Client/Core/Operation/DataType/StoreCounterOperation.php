@@ -15,8 +15,8 @@ class StoreCounterOperation extends StoreDataTypeOperation
     /**
      * {@inheritdoc}
      */
-    public function createDataTypeResponse(DataType $datatype = null)
+    public function createDataTypeResponse(DataType $datatype = null, $context = null)
     {
-        return new StoreCounterResponse($this->location, $datatype);
+        return new StoreCounterResponse($this->location, $datatype, $context);
     }
 }

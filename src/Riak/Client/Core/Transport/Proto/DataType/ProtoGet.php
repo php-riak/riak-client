@@ -46,6 +46,10 @@ class ProtoGet extends BaseProtoStrategy
             $rpbRequest->setNotfoundOk($request->notfoundOk);
         }
 
+        if ($request->includeContext !== null) {
+            $rpbRequest->setIncludeContext($request->includeContext);
+        }
+
         return $rpbRequest;
     }
 
@@ -66,6 +70,10 @@ class ProtoGet extends BaseProtoStrategy
 
         $dtType  = $rpbResponse->type;
         $dtValue = $rpbResponse->hasValue() ? $rpbResponse->value : null;
+
+        if ($rpbResponse->hasContext()) {
+            $response->context = $rpbResponse->context;
+        }
 
         if ($dtValue == null) {
             return $response;

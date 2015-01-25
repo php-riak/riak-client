@@ -2,7 +2,6 @@
 
 namespace Riak\Client\Command\DataType\Builder;
 
-use Riak\Client\Core\Query\Crdt\DataType;
 use Riak\Client\Command\DataType\StoreSet;
 
 /**
@@ -58,6 +57,10 @@ class StoreSetBuilder extends Builder
     public function build()
     {
         $command = new StoreSet($this->location, $this->options);
+
+        if ($this->context != null) {
+            $command->withContext($this->context);
+        }
 
         array_walk($this->adds, [$command, 'add']);
         array_walk($this->removes, [$command, 'remove']);

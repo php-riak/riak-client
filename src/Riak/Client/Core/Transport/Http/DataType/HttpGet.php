@@ -50,6 +50,10 @@ class HttpGet extends BaseHttpStrategy
             $query->add('notfound_ok', $getRequest->notfoundOk ? 'true' : 'false');
         }
 
+        if ($getRequest->includeContext !== null) {
+            $query->add('include_context', $getRequest->includeContext ? 'true' : 'false');
+        }
+
         return $request;
     }
 
@@ -78,12 +82,14 @@ class HttpGet extends BaseHttpStrategy
             throw RiakTransportException::unexpectedStatusCode($code);
         }
 
-        $json  = $httpResponse->json();
-        $type  = $json['type'];
-        $value = $json['value'];
+        $json    = $httpResponse->json();
+        $context = isset($json['context']) ? $json['context'] : null;
+        $value   = $json['value'];
+        $type    = $json['type'];
 
-        $response->type  = $type;
-        $response->value = $this->opConverter->fromArray($type, $value);
+        $response->type    = $type;
+        $response->context = $context;
+        $response->value   = $this->opConverter->fromArray($type, $value);
 
         return $response;
     }

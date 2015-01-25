@@ -15,8 +15,8 @@ class FetchMapOperation extends FetchDataTypeOperation
     /**
      * {@inheritdoc}
      */
-    public function createDataTypeResponse(DataType $datatype = null)
+    public function createDataTypeResponse(DataType $datatype = null, $context = null)
     {
-        return new FetchMapResponse($this->location, $datatype);
+        return new FetchMapResponse($this->location, $datatype, $context);
     }
 }

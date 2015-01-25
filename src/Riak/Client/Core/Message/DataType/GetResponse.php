@@ -9,6 +9,5 @@ namespace Riak\Client\Core\Message\DataType;
  */
 class GetResponse extends Response
 {
-    public $type;
-    public $value;
+
 }

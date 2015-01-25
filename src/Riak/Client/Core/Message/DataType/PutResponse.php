@@ -10,6 +10,4 @@ namespace Riak\Client\Core\Message\DataType;
 class PutResponse extends Response
 {
     public $key;
-    public $value;
-    public $context;
 }

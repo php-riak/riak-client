@@ -22,6 +22,11 @@ abstract class Builder
     protected $location;
 
     /**
+     * @var string
+     */
+    protected $context;
+
+    /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
      * @param array                                $options
      */
@@ -55,6 +60,20 @@ abstract class Builder
     public function withOption($option, $value)
     {
         $this->options[$option] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Include the context from a previous fetch.
+     *
+     * @param string $context
+     *
+     * @return \Riak\Client\Command\DataType\Builder
+     */
+    public function withContext($context)
+    {
+        $this->context = $context;
 
         return $this;
     }

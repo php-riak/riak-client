@@ -30,12 +30,12 @@ class HttpPut extends BaseHttpStrategy
     private function createHttpRequest(PutRequest $putRequest)
     {
         $request = $this->createRequest('POST', $putRequest->type, $putRequest->bucket, $putRequest->key);
-        $body    = $this->opConverter->toJson($putRequest->op);
+        $data    = $this->opConverter->convert($putRequest->op);
         $query   = $request->getQuery();
 
-        $request->setHeader('Accept', 'application/json');
-        $request->setHeader('Content-Type', 'application/json');
-        $request->setBody(Stream::factory($body));
+        if ($putRequest->context !== null && is_array($data)) {
+            $data['context'] = $putRequest->context;
+        }
 
         if ($putRequest->w !== null) {
             $query->add('w', $putRequest->w);
@@ -52,6 +52,14 @@ class HttpPut extends BaseHttpStrategy
         if ($putRequest->returnBody !== null) {
             $query->add('returnbody', $putRequest->returnBody ? 'true' : 'false');
         }
+
+        if ($putRequest->includeContext !== null) {
+            $query->add('include_context', $putRequest->includeContext ? 'true' : 'false');
+        }
+
+        $request->setHeader('Accept', 'application/json');
+        $request->setHeader('Content-Type', 'application/json');
+        $request->setBody(Stream::factory(json_encode($data)));
 
         return $request;
     }
@@ -73,11 +81,13 @@ class HttpPut extends BaseHttpStrategy
         }
 
         $json  = $httpResponse->json();
-        $type  = $json['type'];
-        $value = $json['value'];
+        $context = isset($json['context']) ? $json['context'] : null;
+        $value   = $json['value'];
+        $type    = $json['type'];
 
-        $response->type  = $type;
-        $response->value = $this->opConverter->fromArray($type, $value);
+        $response->type    = $type;
+        $response->context = $context;
+        $response->value   = $this->opConverter->fromArray($type, $value);
 
         return $response;
     }

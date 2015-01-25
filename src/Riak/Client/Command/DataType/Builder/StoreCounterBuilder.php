@@ -2,8 +2,6 @@
 
 namespace Riak\Client\Command\DataType\Builder;
 
-use Riak\Client\Core\Query\RiakLocation;
-use Riak\Client\Core\Query\Crdt\RiakCounter;
 use Riak\Client\Command\DataType\StoreCounter;
 
 /**
@@ -16,7 +14,7 @@ class StoreCounterBuilder extends Builder
     /**
      * @var integer
      */
-    private $counter;
+    private $delta;
 
     /**
      * @param integer $delta
@@ -25,7 +23,7 @@ class StoreCounterBuilder extends Builder
      */
     public function withDelta($delta)
     {
-        $this->counter = $delta;
+        $this->delta = $delta;
 
         return $this;
     }
@@ -39,8 +37,12 @@ class StoreCounterBuilder extends Builder
     {
         $command = new StoreCounter($this->location, $this->options);
 
-        if ($this->counter != null) {
-            $command->withDelta($this->counter);
+        if ($this->delta != null) {
+            $command->withDelta($this->delta);
+        }
+
+        if ($this->context != null) {
+            $command->withContext($this->context);
         }
 
         return $command;

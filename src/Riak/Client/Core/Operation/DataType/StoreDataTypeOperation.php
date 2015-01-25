@@ -33,6 +33,11 @@ abstract class StoreDataTypeOperation implements RiakOperation
     protected $options = [];
 
     /**
+     * @var string
+     */
+    protected $context;
+
+    /**
      * @var \Riak\Client\Core\Query\Crdt\Op\CrdtOp
      */
     protected $op;
@@ -41,13 +46,15 @@ abstract class StoreDataTypeOperation implements RiakOperation
      * @param \Riak\Client\Converter\CrdtResponseConverter $converter
      * @param \Riak\Client\Core\Query\RiakLocation         $location
      * @param \Riak\Client\Core\Query\Crdt\Op\CrdtOp       $op
+     * @param string                                       $context
      * @param array                                        $options
      */
-    public function __construct(CrdtResponseConverter $converter, RiakLocation $location, CrdtOp $op, array $options)
+    public function __construct(CrdtResponseConverter $converter, RiakLocation $location, CrdtOp $op, $context, array $options)
     {
         $this->converter = $converter;
         $this->location  = $location;
         $this->options   = $options;
+        $this->context   = $context;
         $this->op        = $op;
     }
 
@@ -58,8 +65,8 @@ abstract class StoreDataTypeOperation implements RiakOperation
     {
         $putRequest  = $this->createGetRequest();
         $putResponse = $adapter->send($putRequest);
-        $datatype    = $this->converter->convertCounter($putResponse);
-        $response    = $this->createDataTypeResponse($datatype);
+        $datatype    = $this->converter->convert($putResponse);
+        $response    = $this->createDataTypeResponse($datatype, $putResponse->context);
 
         return $response;
     }
@@ -72,10 +79,11 @@ abstract class StoreDataTypeOperation implements RiakOperation
         $request   = new PutRequest();
         $namespace = $this->location->getNamespace();
 
-        $request->type   = $namespace->getBucketType();
-        $request->bucket = $namespace->getBucketName();
-        $request->key    = $this->location->getKey();
-        $request->op     = $this->op;
+        $request->type    = $namespace->getBucketType();
+        $request->bucket  = $namespace->getBucketName();
+        $request->key     = $this->location->getKey();
+        $request->context = $this->context;
+        $request->op      = $this->op;
 
         foreach ($this->options as $name => $value) {
             $request->{$name} = $value;
@@ -86,8 +94,9 @@ abstract class StoreDataTypeOperation implements RiakOperation
 
     /**
      * @param \Riak\Client\Core\Query\Crdt\DataType $datatype
+     * @param string                                $context
      *
      * @return \Riak\Client\Command\DataType\Response\Response
      */
-    abstract protected function createDataTypeResponse(DataType $datatype = null);
+    abstract protected function createDataTypeResponse(DataType $datatype = null, $context = null);
 }

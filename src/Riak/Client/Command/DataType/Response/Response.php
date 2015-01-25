@@ -24,13 +24,20 @@ abstract class Response implements RiakResponse
     private $datatype;
 
     /**
+     * @var string
+     */
+    protected $context;
+
+    /**
      * @param \Riak\Client\Core\Query\RiakLocation  $location
      * @param \Riak\Client\Core\Query\Crdt\DataType $datatype
+     * @param string                                $context
      */
-    public function __construct(RiakLocation $location = null, DataType $datatype = null)
+    public function __construct(RiakLocation $location = null, DataType $datatype = null, $context = null)
     {
         $this->datatype = $datatype;
         $this->location = $location;
+        $this->context  = $context;
     }
 
     /**
@@ -49,5 +56,15 @@ abstract class Response implements RiakResponse
     public function getDatatype()
     {
         return $this->datatype;
+    }
+
+    /**
+     * Get the Data Type context.
+     *
+     * @return string
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 }

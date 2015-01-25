@@ -4,7 +4,6 @@ namespace Riak\Client\Command\DataType;
 
 use Riak\Client\Core\RiakCluster;
 use Riak\Client\Core\Query\RiakLocation;
-use Riak\Client\Core\Query\Crdt\Op\CounterOp;
 use Riak\Client\Command\DataType\Builder\StoreCounterBuilder;
 use Riak\Client\Core\Operation\DataType\StoreCounterOperation;
 
@@ -44,7 +43,7 @@ class StoreCounter extends StoreDataType
         $op        = $this->update->getOp();
         $config    = $cluster->getRiakConfig();
         $converter = $config->getCrdtResponseConverter();
-        $operation = new StoreCounterOperation($converter, $this->location, $op, $this->options);
+        $operation = new StoreCounterOperation($converter, $this->location, $op, $this->context, $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;

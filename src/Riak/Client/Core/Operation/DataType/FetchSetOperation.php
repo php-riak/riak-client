@@ -15,8 +15,8 @@ class FetchSetOperation extends FetchDataTypeOperation
     /**
      * {@inheritdoc}
      */
-    public function createDataTypeResponse(DataType $datatype = null)
+    public function createDataTypeResponse(DataType $datatype = null, $context = null)
     {
-        return new FetchSetResponse($this->location, $datatype);
+        return new FetchSetResponse($this->location, $datatype, $context);
     }
 }

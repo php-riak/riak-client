@@ -46,6 +46,14 @@ class ProtoPut extends BaseProtoStrategy
             $rpbPutReq->setReturnBody($request->returnBody);
         }
 
+        if ($request->includeContext !== null) {
+            $rpbPutReq->setIncludeContext($request->includeContext);
+        }
+
+        if ($request->context !== null) {
+            $rpbPutReq->setContext($request->context);
+        }
+
         $rpbPutReq->setOp($crdtOp);
 
         return $rpbPutReq;
@@ -64,6 +72,10 @@ class ProtoPut extends BaseProtoStrategy
 
         if ( ! $rpbPutResp instanceof DtUpdateResp) {
             return $response;
+        }
+
+        if ($rpbPutResp->hasContext()) {
+            $response->context = $rpbPutResp->context;
         }
 
         if ($rpbPutResp->hasCounterValue()) {
