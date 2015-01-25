@@ -21,11 +21,6 @@ class DeleteRequest extends Request
     public $w;
     public $dw;
     public $pw;
-    public $basicQuorum;
-    public $notfoundOk;
-    public $ifModified;
-    public $head;
-    public $deletedvclock;
     public $timeout;
     public $sloppyQuorum;
     public $nVal;

@@ -86,7 +86,6 @@ abstract class RiakIndexTest extends TestCase
         $this->assertEquals(['fabio.bat.silva@gmail.com'], $riakIndexes['email']->getValues());
 
         $this->client->execute(DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
     }
 
@@ -141,7 +140,6 @@ abstract class RiakIndexTest extends TestCase
         $this->assertEquals(['admin'], $riakIndexes2['group']->getValues());
 
         $this->client->execute(DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
     }
 }

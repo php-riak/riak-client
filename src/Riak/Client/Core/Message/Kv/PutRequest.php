@@ -19,8 +19,8 @@ class PutRequest extends Request
     public $content;
     public $w;
     public $dw;
-    public $returnBody;
     public $pw;
+    public $returnBody;
     public $ifNotModified;
     public $ifNoneMatch;
     public $returnHead;

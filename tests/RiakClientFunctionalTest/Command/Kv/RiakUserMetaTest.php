@@ -80,7 +80,6 @@ abstract class RiakUserMetaTest extends TestCase
         $this->assertEquals('content', $riakMeta->get('meta'));
 
         $this->client->execute(DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
     }
 
@@ -130,7 +129,6 @@ abstract class RiakUserMetaTest extends TestCase
         $this->assertEquals('admin', $riakMeta2['group']);
 
         $this->client->execute(DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
     }
 }

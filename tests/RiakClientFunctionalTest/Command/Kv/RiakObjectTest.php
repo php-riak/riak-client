@@ -57,7 +57,6 @@ abstract class RiakObjectTest extends TestCase
         $this->assertEquals('[1,1,1]', $riakObject->getValue());
 
         $this->client->execute(DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
     }
 
@@ -88,7 +87,6 @@ abstract class RiakObjectTest extends TestCase
             ->build();
 
         $delete  = DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build();
 
         $resultFetch1  = $this->client->execute($fetch);
@@ -144,7 +142,6 @@ abstract class RiakObjectTest extends TestCase
         $this->assertEquals('[1,1,1]', $domain->getValue());
 
         $this->client->execute(DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build());
     }
 
@@ -170,7 +167,6 @@ abstract class RiakObjectTest extends TestCase
             ->build();
 
         $delete  = DeleteValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
             ->build();
 
         $resultFetch1  = $this->client->execute($fetch);

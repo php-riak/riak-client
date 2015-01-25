@@ -45,7 +45,6 @@ abstract class MapTest extends TestCase
     {
         if ($this->client) {
             $this->client->execute(DeleteValue::builder($this->location)
-                ->withOption(RiakOption::NOTFOUND_OK, true)
                 ->build());
         }
 

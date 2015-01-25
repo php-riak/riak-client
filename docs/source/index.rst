@@ -127,4 +127,5 @@ Contents
    :maxdepth: 1
 
    client
+   kv
    siblings
