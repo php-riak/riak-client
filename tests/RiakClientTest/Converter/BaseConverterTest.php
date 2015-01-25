@@ -37,7 +37,7 @@ class BaseConverterTest extends TestCase
     public function testFromDomain()
     {
         $domainObject = new SimpleObject();
-        $namespace    = new RiakNamespace('bucket', 'type');
+        $namespace    = new RiakNamespace('type', 'bucket');
         $location     = new RiakLocation($namespace, 'riak-key');
         $reference    = new DomainObjectReference($domainObject, $location);
         $callback     = function($subject){
@@ -63,7 +63,7 @@ class BaseConverterTest extends TestCase
     {
         $riakObject   = new RiakObject();
         $domainObject = new SimpleObject('[1,2,3]');
-        $namespace    = new RiakNamespace('bucket', 'type');
+        $namespace    = new RiakNamespace('type', 'bucket');
         $location     = new RiakLocation($namespace, 'riak-key');
         $reference    = new RiakObjectReference($riakObject, $location, SimpleObject::CLASS_NAME);
 

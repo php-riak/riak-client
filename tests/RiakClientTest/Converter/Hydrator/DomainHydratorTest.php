@@ -43,7 +43,7 @@ class DomainHydratorTest extends TestCase
         $riakObject   = new RiakObject();
         $domainObject = new SimpleObject();
         $vClock       = new VClock('vclock-hash');
-        $namespace    = new RiakNamespace('bucket', 'type');
+        $namespace    = new RiakNamespace('type', 'bucket');
         $location     = new RiakLocation($namespace, 'riak-key');
 
         $riakObject->setVClock($vClock);
@@ -65,7 +65,7 @@ class DomainHydratorTest extends TestCase
         $riakObject   = new RiakObject();
         $domainObject = new SimpleObject();
         $vClock       = new VClock('vclock-hash');
-        $namespace    = new RiakNamespace('bucket', 'type');
+        $namespace    = new RiakNamespace('type', 'bucket');
         $location     = new RiakLocation($namespace, 'riak-key');
 
         $domainObject->setRiakVClock($vClock);

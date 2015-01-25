@@ -32,7 +32,7 @@ class StoreBucketPropertiesTest extends TestCase
         $builder = new RiakClientBuilder();
 
         $this->adapter   = $this->getMock('Riak\Client\Core\RiakTransport');
-        $this->namespace = new RiakNamespace('bucket', 'type');
+        $this->namespace = new RiakNamespace('type', 'bucket');
         $this->node      = new RiakNode($this->adapter);
         $this->client    = $builder
             ->withNode($this->node)

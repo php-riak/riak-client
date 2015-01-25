@@ -22,7 +22,7 @@ Here is the general syntax for setting up a bucket type/bucket/key combination t
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('<bucket_name>', '<bucket_type>');
+    $namespace = new RiakNamespace('<bucket_type>', '<bucket_name>');
     $location  = new RiakLocation($namespace, '<key>');
 
 
@@ -215,7 +215,7 @@ Let's say that we want to use Riak to store information about our company's cust
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('customers', 'maps');
+    $namespace = new RiakNamespace('maps', 'customers');
     $location  = new RiakLocation($namespace, 'ahmed_info');
 
 

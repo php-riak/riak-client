@@ -61,7 +61,7 @@ The first object that we create is a very basic object with a content type of ``
     use Riak\Client\Core\Query\RiakNamespace;
 
     $object    = new RiakObject();
-    $namespace = new RiakNamespace('quotes', 'default');
+    $namespace = new RiakNamespace('default', 'quotes');
     $location  = new RiakLocation($namespace, 'icemand');
 
     $object->setValue("You're dangerous, Maverick");
@@ -95,7 +95,7 @@ After that, we check to make sure that the stored object has the same value as t
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('quotes', 'default');
+    $namespace = new RiakNamespace('default', 'quotes');
     $location  = new RiakLocation($namespace, 'icemand');
 
     // fetch object
@@ -130,7 +130,7 @@ Now that we've stored and then fetched the object, we can delete it by creating 
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('quotes', 'default');
+    $namespace = new RiakNamespace('default', 'quotes');
     $location  = new RiakLocation($namespace, 'icemand');
 
     // delete object
@@ -207,7 +207,7 @@ Now we can store that Object object just like we stored the riak object earlier:
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('books', 'default');
+    $namespace = new RiakNamespace('default', 'books');
     $location  = new RiakLocation($namespace, 'moby_dick');
 
     /** @var $mobyDick \Book */
@@ -229,7 +229,7 @@ If we fetch the object using the same method we showed up above, we should get t
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('books', 'default');
+    $namespace = new RiakNamespace('default', 'books');
     $location  = new RiakLocation($namespace, 'moby_dick');
 
     // fetch object
@@ -259,11 +259,11 @@ If we fetch the object using the same method we showed up above, we should get t
     */
 
 
-.. _reference-development
 
 -----------
 Development
 -----------
+
 
 All development is done on Github_.
 Use Issues_ to report problems or submit contributions.
@@ -286,6 +286,7 @@ Contents
    :maxdepth: 1
 
    client
+   bucket
    kv
    datatype
    siblings

@@ -26,7 +26,7 @@ Once you have a $client, commands from the `Riak\Client\Command*` namespace are 
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
-    $namespace = new RiakNamespace('bucket_name', 'bucket_type');
+    $namespace = new RiakNamespace('bucket_type', 'bucket_name');
     $location  = new RiakLocation($namespace, 'object_key');
 
     // fetch object

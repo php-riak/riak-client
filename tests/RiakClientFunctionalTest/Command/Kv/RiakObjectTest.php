@@ -21,7 +21,7 @@ abstract class RiakObjectTest extends TestCase
         parent::setUp();
 
         $this->client->execute(StoreBucketProperties::builder()
-            ->withNamespace(new RiakNamespace('buckets', 'default'))
+            ->withNamespace(new RiakNamespace('default', 'buckets'))
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
             ->build());
@@ -31,7 +31,7 @@ abstract class RiakObjectTest extends TestCase
     {
         $key      = uniqid();
         $object   = new RiakObject();
-        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $object->setValue('[1,1,1]');
         $object->setContentType('application/json');
@@ -65,7 +65,7 @@ abstract class RiakObjectTest extends TestCase
         $key      = uniqid();
         $object1  = new RiakObject();
         $object2  = new RiakObject();
-        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $object1->setValue('[1,1,1]');
         $object2->setValue('[2,2,2]');
@@ -119,7 +119,7 @@ abstract class RiakObjectTest extends TestCase
     {
         $key      = uniqid();
         $object   = new SimpleObject('[1,1,1]');
-        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $store = StoreValue::builder($location, $object)
             ->withOption(RiakOption::PW, 1)
@@ -150,7 +150,7 @@ abstract class RiakObjectTest extends TestCase
         $key      = uniqid();
         $object1  = new SimpleObject('[1,1,1]');
         $object2  = new SimpleObject('[2,2,2]');
-        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $store1 = StoreValue::builder($location, $object1)
             ->withOption(RiakOption::PW, 1)

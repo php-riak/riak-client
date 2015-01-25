@@ -34,7 +34,7 @@ class DomainValueWithConverterTest extends TestCase
         $builder        = new RiakClientBuilder();
         $converter      = new DomainObjectConverter($domainHydrator);
 
-        $this->location = new RiakLocation(new RiakNamespace('bucket', 'type'), 'key');
+        $this->location = new RiakLocation(new RiakNamespace('type', 'bucket'), 'key');
         $this->transport  = $this->getMock('Riak\Client\Core\RiakTransport');
         $this->node     = new RiakNode($this->transport);
         $this->client   = $builder

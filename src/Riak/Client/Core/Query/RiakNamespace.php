@@ -25,13 +25,13 @@ class RiakNamespace
     private $bucket;
 
     /**
-     * @param type $bucket
      * @param type $type
+     * @param type $bucket
      */
-    public function __construct($bucket, $type = self::DEFAULT_TYPE)
+    public function __construct($type, $bucket)
     {
-        $this->type   = $type;
         $this->bucket = $bucket;
+        $this->type   = $type ?: self::DEFAULT_TYPE;
     }
 
     /**

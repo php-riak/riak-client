@@ -33,7 +33,7 @@ class StoreCounterTest extends TestCase
 
         $builder = new RiakClientBuilder();
 
-        $this->location = new RiakLocation(new RiakNamespace('bucket', 'type'), 'key');
+        $this->location = new RiakLocation(new RiakNamespace('type', 'bucket'), 'key');
         $this->adapter  = $this->getMock('Riak\Client\Core\RiakTransport');
         $this->node     = new RiakNode($this->adapter);
         $this->client   = $builder

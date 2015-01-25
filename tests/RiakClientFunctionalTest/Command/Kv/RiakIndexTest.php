@@ -22,7 +22,7 @@ abstract class RiakIndexTest extends TestCase
     {
         parent::setUp();
 
-        $namespace = new RiakNamespace('buckets', 'default');
+        $namespace = new RiakNamespace('default', 'buckets');
         $store     = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
@@ -37,7 +37,7 @@ abstract class RiakIndexTest extends TestCase
         $key        = uniqid();
         $object     = new RiakObject();
         $indexes    = new RiakIndexList([]);
-        $location   = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location   = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $indexes['key']   = new RiakIndexInt('key');
         $indexes['email'] = new RiakIndexBin('email');
@@ -94,7 +94,7 @@ abstract class RiakIndexTest extends TestCase
         $key        = uniqid();
         $object1    = new RiakObject();
         $object2    = new RiakObject();
-        $location   = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location   = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $object1->addIndex(new RiakIndexBin('group', ['guest']));
         $object1->setContentType('application/json');

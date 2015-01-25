@@ -20,7 +20,7 @@ abstract class RiakUserMetaTest extends TestCase
     {
         parent::setUp();
 
-        $namespace = new RiakNamespace('buckets', 'default');
+        $namespace = new RiakNamespace('default', 'buckets');
         $store     = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
@@ -35,7 +35,7 @@ abstract class RiakUserMetaTest extends TestCase
         $key        = uniqid();
         $object     = new RiakObject();
         $meta       = new RiakUsermeta();
-        $location   = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location   = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $meta['key']    = 'other';
         $meta['meta']   = 'content';
@@ -88,7 +88,7 @@ abstract class RiakUserMetaTest extends TestCase
         $key      = uniqid();
         $object1  = new RiakObject();
         $object2  = new RiakObject();
-        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+        $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $object1->setContentType('application/json');
         $object1->setValue('{"name": "fabio"}');

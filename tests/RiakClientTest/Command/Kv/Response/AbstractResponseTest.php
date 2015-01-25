@@ -40,7 +40,7 @@ class AbstractResponseTest extends TestCase
         $this->hydrator         = $this->getMock('Riak\Client\Converter\Hydrator\DomainHydrator', [], [], '', false);
         $this->resolverFactory  = new ResolverFactory();
         $this->converterFactory = new ConverterFactory($this->hydrator);
-        $this->location         = new RiakLocation(new RiakNamespace('bucket', 'type'), 'key');
+        $this->location         = new RiakLocation(new RiakNamespace('type', 'bucket'), 'key');
     }
 
     public function testResponse()

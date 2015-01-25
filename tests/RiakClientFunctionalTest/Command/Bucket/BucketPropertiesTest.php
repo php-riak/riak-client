@@ -12,7 +12,7 @@ abstract class BucketPropertiesTest extends TestCase
 {
     public function testStoreAndFetchBucketProperties()
     {
-        $namespace = new RiakNamespace('bucket', 'default');
+        $namespace = new RiakNamespace('default', 'buckets');
 
         $store = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
