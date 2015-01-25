@@ -1,5 +1,6 @@
-CRDT commands
-==============
+===========
+Data Types
+===========
 
 This tutorial documentation its based on the `Basho CRDT Docs`_.
 If you are not familiar with crdt in Riak Before you start take a look at `Basho CRDT Docs`_ for  more details.
@@ -9,6 +10,7 @@ If you are not familiar with crdt in Riak Before you start take a look at `Basho
 In versions 2.0 and greater, Riak users can make use of a variety of Riak-specific data types inspired by research on convergent replicated data types, more commonly known as CRDTs.
 
 
+---------
 Location
 ---------
 
@@ -23,10 +25,12 @@ Here is the general syntax for setting up a bucket type/bucket/key combination t
     $namespace = new RiakNamespace('<bucket_name>', '<bucket_type>');
     $location  = new RiakLocation($namespace, '<key>');
 
+
 .. _reference-crdt-counters:
 
+---------
 Counters
---------
+---------
 
 Counters are a bucket-level Riak Data Type that can be used either by themselves, i.e. associated with a bucket/key pair, or within a map. The examples in this section will show you how to use counters on their own.
 
@@ -106,6 +110,7 @@ See :ref:`reference-command-datatype-store-options` and :ref:`reference-command-
 
 .. _reference-crdt-sets:
 
+-----
 Sets
 -----
 
@@ -189,8 +194,11 @@ but if we visit them, we won't have time to visit Montreal, so we need to remove
 
 
 
+See :ref:`reference-command-datatype-store-options` and :ref:`reference-command-datatype-fetch-options` for options avalible.
+
 .. _reference-crdt-maps:
 
+-----
 Maps
 -----
 
@@ -211,6 +219,9 @@ Let's say that we want to use Riak to store information about our company's cust
     $location  = new RiakLocation($namespace, 'ahmed_info');
 
 
+
+Register & Flags Within Maps
+-----------------------------
 
 The first piece of info we want to store in our map is Ahmed's name and phone number, both of which are best stored as registers
 We'll also create an  `enterprise_customer` flag to track whether Ahmed has signed up for the new plan:
@@ -251,11 +262,11 @@ We can retrieve the value of that flag at any time:
     use Riak\Client\Cap\RiakOption;
     use Riak\Client\Command\DataType\FetchMap;
 
-    $store = FetchMap::builder()
+    $fetch = FetchMap::builder()
         ->withLocation($location)
         ->build();
 
-    $result = $client->execute($store);
+    $result = $client->execute($fetch);
     $map    = $result->getDatatype();
     $value  = $map->getValue();
 
@@ -263,6 +274,10 @@ We can retrieve the value of that flag at any time:
     echo $map->get('phone_number');
     echo $map->get('enterprise_customer');
 
+
+
+Counters Within Maps
+---------------------
 
 We also want to know how many times Ahmed has visited our website.
 We'll use a ``page_visits`` counter for that and run the following operation when Ahmed visits our page for the first time:
@@ -282,6 +297,10 @@ We'll use a ``page_visits`` counter for that and run the following operation whe
 
     $client->execute($store);
 
+
+
+Sets Within Maps
+-----------------
 
 We'd also like to know what Ahmed's interests are so that we can better design a user experience for him.
 Through his purchasing decisions, we find out that Ahmed likes robots, opera, and motorcyles. We'll store that information in a set inside of our map:
@@ -308,15 +327,23 @@ He's much more keen on indie pop. Let's change the interests set to reflect that
     <?php
 
     use Riak\Client\Cap\RiakOption;
+    use Riak\Client\Command\DataType\FetchMap;
     use Riak\Client\Command\DataType\StoreMap;
     use Riak\Client\Command\DataType\SetUpdate;
 
-    $setUpdate = new SetUpdate();
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $fetchResult  = $client->execute($fetch);
+    $fetchContext = $fetchResult->getContext();
+    $setUpdate    = new SetUpdate();
 
     $setUpdate->remove('opera');
 
     $store = StoreMap::builder()
         ->withLocation($location)
+        ->withContext($fetchContext)
         ->updateSet('interests', $setUpdate)
         ->withOption(RiakOption::RETURN_BODY, true)
         ->build();
@@ -328,6 +355,10 @@ He's much more keen on indie pop. Let's change the interests set to reflect that
     // ['robots', 'motorcycles']
 
 
+
+Maps Within Maps
+-----------------
+
 We've stored a wide of variety of information—of a wide variety of types—within the ``ahmed_info`` map thus far, but we have yet to explore recursively storing maps within maps (which can be nested as deeply as you wish).
 
 Our company is doing well and we have lots of useful information about Ahmed, but now we want to store information about Ahmed's contacts as well. We'll start with storing some information about Ahmed's colleague Annika inside of a map called ``annika_info``.
@@ -338,10 +369,19 @@ First, we'll store Annika's first name, last name, and phone number in registers
 
     <?php
 
+    use Riak\Client\Command\DataType\FetchMap;
     use Riak\Client\Command\DataType\StoreMap;
+
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $fetchResult  = $client->execute($fetch);
+    $fetchContext = $fetchResult->getContext();
 
     $store = StoreMap::builder()
         ->withOption(RiakOption::RETURN_BODY, true)
+        ->withContext($fetchContext)
         ->withLocation($location)
         ->updateMap('annika_info', [
             'first_name'   => 'Annika',
@@ -356,6 +396,163 @@ First, we'll store Annika's first name, last name, and phone number in registers
 
     echo $annikaInfo['first_name'];
     // Annika
+
+
+Map values can also be removed:
+
+.. code-block:: php
+
+    <?php
+
+    use Riak\Client\Command\DataType\FetchMap;
+    use Riak\Client\Command\DataType\StoreMap;
+    use Riak\Client\Command\DataType\MapUpdate;
+
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $fetchResult  = $client->execute($fetch);
+    $fetchContext = $fetchResult->getContext();
+    $mapUpdate    = new MapUpdate();
+
+    $mapUpdate->removeRegister('first_name');
+
+    $store = StoreMap::builder()
+        ->updateMap('annika_info', $mapUpdate)
+        ->withContext($fetchContext)
+        ->withLocation($location)
+        ->build();
+
+    $client->execute($store);
+
+
+Now, we'll store whether Annika is subscribed to a variety of plans within the company as well:
+
+.. code-block:: php
+
+    <?php
+
+    use Riak\Client\Command\DataType\FetchMap;
+    use Riak\Client\Command\DataType\StoreMap;
+    use Riak\Client\Command\DataType\MapUpdate;
+
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $fetchResult  = $client->execute($fetch);
+    $fetchContext = $fetchResult->getContext();
+    $mapUpdate    = new MapUpdate();
+
+    $mapUpdate
+        ->updateFlag('enterprise_plan', false)
+        ->updateFlag('family_plan', false)
+        ->updateFlag('free_plan', true);
+
+    $store = StoreMap::builder()
+        ->updateMap('annika_info', $mapUpdate)
+        ->withContext($fetchContext)
+        ->withLocation($location)
+        ->build();
+
+    $client->execute($store);
+
+
+The value of a flag can be retrieved at any time:
+
+.. code-block:: php
+
+    <?php
+
+    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\Command\DataType\FetchMap;
+
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $result     = $client->execute($fetch);
+    $map        = $result->getDatatype();
+    $annikaInfo = $map->get('annika_info');
+
+    echo $annikaInfo['enterprise_plan'];
+    // false
+
+
+
+It's also important to track the number of purchases that Annika has made with our company. Annika just made her first widget purchase, w'll also store Annika's interests in a set:
+
+
+.. code-block:: php
+
+    <?php
+
+    use Riak\Client\Command\DataType\FetchMap;
+    use Riak\Client\Command\DataType\StoreMap;
+    use Riak\Client\Command\DataType\MapUpdate;
+    use Riak\Client\Command\DataType\SetUpdate;
+
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $fetchResult  = $client->execute($fetch);
+    $fetchContext = $fetchResult->getContext();
+    $mapUpdate    = new MapUpdate();
+    $setUpdate    = new SetUpdate();
+
+    $setUpdate
+        ->add("tango dancing");
+
+    $mapUpdate
+        ->updateCounter('widget_purchases', 1)
+        ->updateCounter('interests', $setUpdate);
+
+    $store = StoreMap::builder()
+        ->updateMap('annika_info', $mapUpdate)
+        ->withContext($fetchContext)
+        ->withLocation($location)
+        ->build();
+
+    $client->execute($store);
+
+
+If we wanted to add store information about one of Annika's specific purchases, we could do so within a map:
+
+.. code-block:: php
+
+    <?php
+
+    use Riak\Client\Command\DataType\FetchMap;
+    use Riak\Client\Command\DataType\StoreMap;
+    use Riak\Client\Command\DataType\MapUpdate;
+
+    $fetch = FetchMap::builder()
+        ->withLocation($location)
+        ->build();
+
+    $fetchResult  = $client->execute($fetch);
+    $fetchContext = $fetchResult->getContext();
+    $mapUpdate    = new MapUpdate();
+
+    $mapUpdate
+        ->updateMap('purchase', [
+            'first_purchase' => true,             // flag
+            'amount'         => "1271",           // register
+            'items'          => ["large widget"], // set
+        ]);
+
+    $store = StoreMap::builder()
+        ->updateMap('annika_info', $mapUpdate)
+        ->withContext($fetchContext)
+        ->withLocation($location)
+        ->build();
+
+    $client->execute($store);
+
+
+See :ref:`reference-command-datatype-store-options` and :ref:`reference-command-datatype-fetch-options` for options avalible.
 
 .. _reference-command-datatype-store-options:
 
