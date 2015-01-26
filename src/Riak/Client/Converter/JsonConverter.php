@@ -3,7 +3,6 @@
 namespace Riak\Client\Converter;
 
 use ReflectionClass;
-use Riak\Client\Converter\Hydrator\DomainHydrator;
 
 /**
  * The default Converter used when storing and fetching domain objects from Riak.
@@ -12,14 +11,6 @@ use Riak\Client\Converter\Hydrator\DomainHydrator;
  */
 class JsonConverter extends BaseConverter
 {
-    /**
-     * @param \Riak\Client\Converter\Hydrator\DomainHydrator $domainHydrator
-     */
-    public function __construct(DomainHydrator $domainHydrator)
-    {
-        parent::__construct($domainHydrator);
-    }
-
     /**
      * {@inheritdoc}
      */
