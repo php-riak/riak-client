@@ -1,4 +1,4 @@
-# Riak Client for PHP [![Build Status](https://travis-ci.org/FabioBatSilva/riak-client.svg?branch=master)](https://travis-ci.org/FabioBatSilva/riak-client)
+# Riak Client for PHP [![Build Status](https://travis-ci.org/php-riak/riak-client.svg?branch=master)](https://travis-ci.org/php-riak/riak-client)
 
 A PHP client for [Riak](http://basho.com/riak/).
 
@@ -10,7 +10,7 @@ A PHP client for [Riak](http://basho.com/riak/).
 Run the following `composer` command:
 
 ```console
-$ composer require "fbs/riak-client"
+$ composer require "php-riak/riak-client"
 ```
 
 ## Documentation

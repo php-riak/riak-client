@@ -14,7 +14,7 @@ add it to your project's dependencies.
 
 Here is a `Composer`_ example::
 
-    $ composer require "fbs/riak-client"
+    $ composer require "php-riak/riak-client"
 
 
 
@@ -268,8 +268,8 @@ Development
 All development is done on Github_.
 Use Issues_ to report problems or submit contributions.
 
-.. _Github: https://github.com/FabioBatSilva/riak-client
-.. _Issues: https://github.com/FabioBatSilva/riak-client/issues
+.. _Github: https://github.com/php-riak/riak-client
+.. _Issues: https://github.com/php-riak/riak-client/issues
 
 .. _`Basho Taste of Riak Docs`: http://docs.basho.com/riak/latest/dev/taste-of-riak/java
 .. _`Composer`: https://getcomposer.org
