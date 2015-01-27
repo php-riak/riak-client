@@ -2,10 +2,11 @@
 
 namespace Riak\Client\Core\Query;
 
+use Riak\Client\Core\Query\Link\RiakLink;
 use Riak\Client\Core\Query\Index\RiakIndex;
-use Riak\Client\Core\Query\Index\RiakIndexList;
 use Riak\Client\Core\Query\Link\RiakLinkList;
 use Riak\Client\Core\Query\Meta\RiakUsermeta;
+use Riak\Client\Core\Query\Index\RiakIndexList;
 
 /**
  * Represents the data and metadata stored in Riak.
@@ -183,6 +184,18 @@ class RiakObject
     public function setLinks(RiakLinkList $links)
     {
         $this->links = $links;
+    }
+
+    /**
+     * @param \Riak\Client\Core\Query\Link\RiakLink $link
+     */
+    public function addLink(RiakLink $link)
+    {
+        if ($this->links === null) {
+            $this->links = new RiakLinkList();
+        }
+
+        $this->links->addLink($link);
     }
 
     /**

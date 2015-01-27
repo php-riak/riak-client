@@ -45,6 +45,15 @@ abstract class BaseProtoStrategy extends ProtoStrategy
             $content->metas[$key] = $value;
         }
 
+        /** @var $index \Riak\Client\ProtoBuf\RpbLink */
+        foreach ($rpbcontent->getLinksList() as $link) {
+            $content->links[] = [
+                'bucket' => $link->bucket,
+                'key'    => $link->key,
+                'tag'    => $link->tag,
+            ];
+        }
+
         return $content;
     }
 

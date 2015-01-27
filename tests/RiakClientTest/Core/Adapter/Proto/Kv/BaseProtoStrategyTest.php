@@ -81,6 +81,14 @@ class BaseProtoStrategyTest extends TestCase
             ->method('getUsermetaList')
             ->willReturn([]);
 
+        $rpbContent1->expects($this->once())
+            ->method('getLinksList')
+            ->willReturn([]);
+
+        $rpbContent2->expects($this->once())
+            ->method('getLinksList')
+            ->willReturn([]);
+
         $contentList = $this->invokeMethod($this->instance, 'createContentList', [[$rpbContent1, $rpbContent2]]);
 
         $this->assertCount(2, $contentList);

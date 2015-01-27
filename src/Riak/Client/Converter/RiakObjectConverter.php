@@ -5,9 +5,11 @@ namespace Riak\Client\Converter;
 use Riak\Client\Cap\VClock;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Message\Kv\Content;
+use Riak\Client\Core\Query\Link\RiakLink;
 use Riak\Client\Core\Query\RiakObjectList;
 use Riak\Client\Core\Query\Index\RiakIndex;
 use Riak\Client\Core\Query\Meta\RiakUsermeta;
+use Riak\Client\Core\Query\Link\RiakLinkList;
 use Riak\Client\Core\Query\Index\RiakIndexList;
 
 /**
@@ -60,7 +62,9 @@ class RiakObjectConverter
             $object->setUserMeta(new RiakUsermeta($content->metas));
         }
 
-        // links;
+        if ($content->links) {
+            $object->setLinks($this->createRiakLinkList($content->links));
+        }
 
         return $object;
     }
@@ -75,6 +79,7 @@ class RiakObjectConverter
         $content = new Content();
         $metas   = $riakObject->getUserMeta();
         $indexes = $riakObject->getIndexes();
+        $links   = $riakObject->getLinks();
 
         $content->contentType  = $riakObject->getContentType() ?: RiakObject::DEFAULT_CONTENT_TYPE;
         $content->lastModified = $riakObject->getLastModified();
@@ -90,6 +95,10 @@ class RiakObjectConverter
 
         if ($metas != null) {
             $content->metas = $metas->toArray();
+        }
+
+        if ($links != null) {
+            $content->links = $links->toArray();
         }
 
         return $content;
@@ -109,5 +118,17 @@ class RiakObjectConverter
         }
 
         return new RiakIndexList($list);
+    }
+
+    /**
+     * @param array $links
+     *
+     * @return \Riak\Client\Core\Query\Link\RiakLinkList
+     */
+    private function createRiakLinkList(array $links)
+    {
+        return new RiakLinkList(array_map(function (array $l) {
+            return RiakLink::fromArray($l);
+        }, $links));
     }
 }

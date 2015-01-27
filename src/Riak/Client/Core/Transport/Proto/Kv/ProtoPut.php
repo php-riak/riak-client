@@ -9,6 +9,7 @@ use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\ProtoBuf\RpbPutReq;
 use Riak\Client\ProtoBuf\RpbContent;
 use Riak\Client\ProtoBuf\RpbPair;
+use Riak\Client\ProtoBuf\RpbLink;
 
 /**
  * rpb put implementation.
@@ -79,6 +80,16 @@ class ProtoPut extends BaseProtoStrategy
             $value->setValue($meta);
 
             $rpbContent->addUsermeta($value);
+        }
+
+        foreach ($request->content->links as $name => $link) {
+            $rpbLink = new RpbLink();
+
+            $rpbLink->setKey($link['key']);
+            $rpbLink->setTag($link['tag']);
+            $rpbLink->setBucket($link['bucket']);
+
+            $rpbContent->addLinks($rpbLink);
         }
 
         $rpbPutReq->setContent($rpbContent);

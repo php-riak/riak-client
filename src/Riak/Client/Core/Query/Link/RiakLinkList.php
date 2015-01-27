@@ -11,4 +11,21 @@ use Riak\Client\Core\Query\RiakList;
  */
 class RiakLinkList extends RiakList
 {
+    /**
+     * @param \Riak\Client\Core\Query\Link\RiakLink $link
+     */
+    public function addLink(RiakLink $link)
+    {
+        $this->list[] = $link;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_map(function (RiakLink $l) {
+            return $l->toArray();
+        }, $this->list);
+    }
 }
