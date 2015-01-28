@@ -14,6 +14,8 @@ install:
     - sudo sed -i -e "s/storage_backend = bitcask/storage_backend = memory/" /etc/riak/riak.conf
     - sudo cat /etc/riak/riak.conf
     - sudo service riak start
+    - sudo riak version
+    - sudo riak-admin test
     - composer self-update
     - composer --prefer-source --dev install
 
