@@ -168,6 +168,22 @@ It is expected that all pull requests that include new classes or class methods 
 
 #### Running Tests
 
+Before running the functional tests set up your riak cluster:
+
+* Create and activate the following types :
+```
+riak-admin bucket-type create counters '{"props":{"datatype":"counter"}}'
+riak-admin bucket-type create maps '{"props":{"datatype":"map"}}'
+riak-admin bucket-type create sets '{"props":{"datatype":"set"}}'
+riak-admin bucket-type activate counters
+riak-admin bucket-type activate maps
+riak-admin bucket-type activate sets
+```
+
+* Enable search capabilities in your ``riak.conf``:
+search = on
+
+
 We also expect that before submitting a pull request, that you have run the tests to ensure that all of them
 continue to pass after your changes.
 
