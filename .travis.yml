@@ -7,9 +7,11 @@ php:
 
 install:
     - sudo apt-get purge riak
+    - sudo apt-get autoremove
     - sudo curl https://packagecloud.io/install/repositories/basho/riak/script.deb | sudo bash
     - sudo apt-get install riak=2.0.0-1
     - sudo sed -i -e "s/search = off/search = on/g" /etc/riak/riak.conf
+    - sudo sed -i -e "s/storage_backend = bitcask/storage_backend = memory/" /etc/riak/riak.conf
     - sudo cat /etc/riak/riak.conf
     - sudo service riak start
     - composer self-update
