@@ -39,17 +39,18 @@ class ProtoClient
      *
      * @var array
      */
-    private static $respClassMap = array(
-        RiakMessageCodes::DT_FETCH_RESP         => 'Riak\Client\ProtoBuf\DtFetchResp',
-        RiakMessageCodes::DT_UPDATE_RESP        => 'Riak\Client\ProtoBuf\DtUpdateResp',
-        RiakMessageCodes::ERROR_RESP            => 'Riak\Client\ProtoBuf\RpbErrorResp',
-        RiakMessageCodes::GET_BUCKET_RESP       => 'Riak\Client\ProtoBuf\RpbGetBucketResp',
-        RiakMessageCodes::GET_RESP              => 'Riak\Client\ProtoBuf\RpbGetResp',
-        RiakMessageCodes::GET_SERVER_INFO_RESP  => 'Riak\Client\ProtoBuf\RpbGetServerInfoResp',
-        RiakMessageCodes::LIST_BUCKETS_RESP     => 'Riak\Client\ProtoBuf\RpbListBucketsResp',
-        RiakMessageCodes::LIST_KEYS_RESP        => 'Riak\Client\ProtoBuf\RpbListKeysResp',
-        RiakMessageCodes::PUT_RESP              => 'Riak\Client\ProtoBuf\RpbPutResp',
-    );
+    private static $respClassMap = [
+        RiakMessageCodes::DT_FETCH_RESP             => 'Riak\Client\ProtoBuf\DtFetchResp',
+        RiakMessageCodes::DT_UPDATE_RESP            => 'Riak\Client\ProtoBuf\DtUpdateResp',
+        RiakMessageCodes::ERROR_RESP                => 'Riak\Client\ProtoBuf\RpbErrorResp',
+        RiakMessageCodes::GET_BUCKET_RESP           => 'Riak\Client\ProtoBuf\RpbGetBucketResp',
+        RiakMessageCodes::GET_RESP                  => 'Riak\Client\ProtoBuf\RpbGetResp',
+        RiakMessageCodes::GET_SERVER_INFO_RESP      => 'Riak\Client\ProtoBuf\RpbGetServerInfoResp',
+        RiakMessageCodes::LIST_BUCKETS_RESP         => 'Riak\Client\ProtoBuf\RpbListBucketsResp',
+        RiakMessageCodes::LIST_KEYS_RESP            => 'Riak\Client\ProtoBuf\RpbListKeysResp',
+        RiakMessageCodes::PUT_RESP                  => 'Riak\Client\ProtoBuf\RpbPutResp',
+        RiakMessageCodes::YOKOZUNA_SCHEMA_GET_RESP  => 'Riak\Client\ProtoBuf\RpbYokozunaSchemaGetResp'
+    ];
 
     /**
      * @param string $host

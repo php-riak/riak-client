@@ -10,7 +10,7 @@ namespace Riak\Client\Core\Query\Link;
 class RiakLink
 {
     /**
-     * @var typstringe
+     * @var string
      */
     private $bucket;
 
