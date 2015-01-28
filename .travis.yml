@@ -10,6 +10,7 @@ install:
     - sudo curl https://packagecloud.io/install/repositories/basho/riak/script.deb | sudo bash
     - sudo apt-get install riak=2.0.0-1
     - sudo sed -i -e "s/search = off/search = on/g" /etc/riak/riak.conf
+    - sudo ulimit -n 65536
     - sudo service riak start
     - composer self-update
     - composer --prefer-source --dev install
