@@ -29,6 +29,6 @@ class RiakTransportException extends RiakException
      */
     public static function httpRequestException(RequestException $previous)
     {
-        return new self($previous->getCode(), $previous->getMessage(), $previous);
+        return new self($previous->getMessage(), $previous->getCode(), $previous);
     }
 }

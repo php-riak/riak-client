@@ -21,7 +21,7 @@ abstract class RiakObjectTest extends TestCase
         parent::setUp();
 
         $this->client->execute(StoreBucketProperties::builder()
-            ->withNamespace(new RiakNamespace('default', 'buckets'))
+            ->withNamespace(new RiakNamespace('default', 'bucket'))
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
             ->build());

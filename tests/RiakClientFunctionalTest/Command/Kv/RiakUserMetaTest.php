@@ -20,7 +20,7 @@ abstract class RiakUserMetaTest extends TestCase
     {
         parent::setUp();
 
-        $namespace = new RiakNamespace('default', 'buckets');
+        $namespace = new RiakNamespace('default', 'bucket');
         $store     = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
