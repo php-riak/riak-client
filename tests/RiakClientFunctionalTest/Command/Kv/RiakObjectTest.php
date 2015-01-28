@@ -98,7 +98,7 @@ abstract class RiakObjectTest extends TestCase
 
         $this->assertTrue($resultFetch1->getNotFound());
         $this->assertFalse($resultFetch2->getNotFound());
-        //$this->assertTrue($resultFetch3->getNotFound());
+        $this->assertTrue($resultFetch3->getNotFound());
 
         $this->assertInstanceOf('Riak\Client\Command\Kv\Response\StoreValueResponse', $resultStore1);
         $this->assertInstanceOf('Riak\Client\Command\Kv\Response\StoreValueResponse', $resultStore2);
