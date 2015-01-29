@@ -35,7 +35,7 @@ class StoreSchemaOperationTest extends TestCase
     public function testExecuteOperation()
     {
         $response  = new PutSchemaResponse();
-        $index     = new YokozunaSchema('schema-name', 'schema-content');
+        $index     = new YokozunaSchema(null, null);
         $operation = new StoreSchemaOperation($index);
         $callback  = function($subject) {
             $this->assertInstanceOf('Riak\Client\Core\Message\Search\PutSchemaRequest', $subject);
@@ -44,6 +44,9 @@ class StoreSchemaOperationTest extends TestCase
 
             return true;
         };
+
+        $index->setName('schema-name');
+        $index->setContent('schema-content');
 
         $this->adapter->expects($this->once())
             ->method('send')

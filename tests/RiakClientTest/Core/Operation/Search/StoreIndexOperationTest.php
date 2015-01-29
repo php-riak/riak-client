@@ -35,7 +35,7 @@ class StoreIndexOperationTest extends TestCase
     public function testExecuteOperation()
     {
         $response  = new PutIndexResponse();
-        $index     = new YokozunaIndex('index-name', 'schema-name');
+        $index     = new YokozunaIndex(null, null);
         $operation = new StoreIndexOperation($index);
         $callback  = function($subject) {
             $this->assertInstanceOf('Riak\Client\Core\Message\Search\PutIndexRequest', $subject);
@@ -44,6 +44,9 @@ class StoreIndexOperationTest extends TestCase
 
             return true;
         };
+
+        $index->setName('index-name');
+        $index->setSchema('schema-name');
 
         $this->adapter->expects($this->once())
             ->method('send')

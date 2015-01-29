@@ -39,22 +39,6 @@ class MapUpdate implements DataTypeUpdate
     ];
 
     /**
-     * @return array
-     */
-    public function getRemoves()
-    {
-        return $this->removes;
-    }
-
-    /**
-     * @return array
-     */
-    public function getUpdates()
-    {
-        return $this->updates;
-    }
-
-    /**
      * @param string $key
      *
      * @return \Riak\Client\Command\DataType\MapUpdate

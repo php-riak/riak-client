@@ -130,7 +130,7 @@ class RiakClientBuilder
     /**
      * @return \Riak\Client\Converter\Hydrator\DomainHydrator
      */
-    private function getDomainHydrator()
+    public function getDomainHydrator()
     {
         if ($this->domainHydrator === null) {
             $this->domainHydrator = new DomainHydrator($this->getDomainMetadataReader());
@@ -154,7 +154,7 @@ class RiakClientBuilder
     /**
      * @return \Riak\Client\Converter\Hydrator\DomainMetadataReader
      */
-    private function getDomainMetadataReader()
+    public function getDomainMetadataReader()
     {
         if ($this->domainMetadataReader === null) {
             $this->domainMetadataReader = new DomainMetadataReader(new AnnotationReader());
@@ -178,7 +178,7 @@ class RiakClientBuilder
     /**
      * @return \Riak\Client\Converter\ConverterFactory
      */
-    private function getConverterFactory()
+    public function getConverterFactory()
     {
         if ($this->converterFactory === null) {
             $this->converterFactory = new ConverterFactory($this->getDomainHydrator());
@@ -202,7 +202,7 @@ class RiakClientBuilder
     /**
      * @return \Riak\Client\Resolver\ResolverFactory
      */
-    private function getResolverFactoryy()
+    public function getResolverFactory()
     {
         if ($this->resolverFactory === null) {
             $this->resolverFactory = new ResolverFactory();
@@ -216,7 +216,7 @@ class RiakClientBuilder
      *
      * @return \Riak\Client\RiakClientBuilder
      */
-    public function withResolverFactoryy(ConverterFactory $factory)
+    public function withResolverFactory(ResolverFactory $factory)
     {
         $this->resolverFactory = $factory;
 
@@ -238,7 +238,7 @@ class RiakClientBuilder
     /**
      * @return \Riak\Client\Core\RiakCluster
      */
-    private function getCluster()
+    public function getCluster()
     {
         if ($this->cluster === null) {
             $this->cluster = new RiakCluster($this->getConfig());
@@ -262,12 +262,12 @@ class RiakClientBuilder
     /**
      * @return \Riak\Client\RiakConfig
      */
-    private function getConfig()
+    public function getConfig()
     {
         if ($this->config === null) {
             $this->config = new RiakConfig(
                 $this->getConverterFactory(),
-                $this->getResolverFactoryy(),
+                $this->getResolverFactory(),
                 $this->getRiakObjectConverter(),
                 $this->getCrdtResponseConverter(),
                 $this->getDomainMetadataReader(),

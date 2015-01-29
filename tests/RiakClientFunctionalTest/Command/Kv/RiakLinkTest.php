@@ -59,8 +59,16 @@ abstract class RiakLinkTest extends TestCase
 
         $object->setValue('{"name": "fabio"}');
         $object->setContentType('application/json');
-        $object->addLink(new RiakLink('bucket', 'first', 'foo'));
-        $object->addLink(new RiakLink('bucket', 'second', 'bar'));
+        $object->addLink(new RiakLink(null, null, null));
+        $object->addLink(new RiakLink(null, null, null));
+
+        $object->getLinks()->get(0)->setBucket('bucket');
+        $object->getLinks()->get(0)->setKey('first');
+        $object->getLinks()->get(0)->setTag('foo');
+
+        $object->getLinks()->get(1)->setBucket('bucket');
+        $object->getLinks()->get(1)->setKey('second');
+        $object->getLinks()->get(1)->setTag('bar');
 
         $store = StoreValue::builder($this->location, $object)
             ->withOption(RiakOption::PW, 1)

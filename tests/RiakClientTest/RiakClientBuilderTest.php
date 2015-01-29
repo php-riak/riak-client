@@ -110,4 +110,51 @@ class RiakClientBuilderTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Converter\ConverterFactory', $factory);
         $this->assertSame($converter, $factory->getConverter('stdClass'));
     }
+
+    public function testBuildWithCrdtResponseConverter()
+    {
+        $converter = $this->getMock('Riak\Client\Converter\CrdtResponseConverter');
+        $client    = $this->builder
+            ->withCrdtResponseConverter($converter)
+            ->withNodeUri('http://localhost:8098')
+            ->build();
+
+        $this->assertInstanceOf('Riak\Client\RiakClient', $client);
+
+        $config = $client->getConfig();
+        $result = $config->getCrdtResponseConverter();
+
+        $this->assertInstanceOf('Riak\Client\Converter\CrdtResponseConverter', $result);
+        $this->assertSame($converter, $result);
+    }
+
+    public function testBuildWithResolverFactory()
+    {
+        $factory = $this->getMock('Riak\Client\Resolver\ResolverFactory');
+        $client  = $this->builder
+            ->withResolverFactory($factory)
+            ->withNodeUri('http://localhost:8098')
+            ->build();
+
+        $this->assertInstanceOf('Riak\Client\RiakClient', $client);
+
+        $config = $client->getConfig();
+        $result = $config->getResolverFactory();
+
+        $this->assertInstanceOf('Riak\Client\Resolver\ResolverFactory', $result);
+        $this->assertSame($factory, $result);
+    }
+
+    public function testBuildWithConfig()
+    {
+        $bulder  = new RiakClientBuilder();
+        $config  = $bulder->getConfig();
+        $client  = $this->builder
+            ->withConfig($config)
+            ->withNodeUri('http://localhost:8098')
+            ->build();
+
+        $this->assertInstanceOf('Riak\Client\RiakClient', $client);
+        $this->assertSame($config, $client->getConfig());
+    }
 }

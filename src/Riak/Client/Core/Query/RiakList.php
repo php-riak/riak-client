@@ -45,6 +45,16 @@ abstract class RiakList implements IteratorAggregate, Countable, ArrayAccess
     }
 
     /**
+     * @param mixed $key
+     *
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return $this->offsetGet($key);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function count()
