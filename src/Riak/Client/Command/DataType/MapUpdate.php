@@ -2,6 +2,7 @@
 
 namespace Riak\Client\Command\DataType;
 
+use InvalidArgumentException;
 use Riak\Client\Core\Query\Crdt\Op\CrdtOp;
 use Riak\Client\Core\Query\Crdt\Op\SetOp;
 use Riak\Client\Core\Query\Crdt\Op\MapOp;
@@ -225,16 +226,23 @@ class MapUpdate implements DataTypeUpdate
                 continue;
             }
 
-            if (is_array($val)) {
+            if (is_array($val) && ($val === array_values($val))) {
+
                 $update->updateSet($key, new SetOp($val, []));
 
                 continue;
             }
 
-            throw new \InvalidArgumentException(sprintf(
-                'Argument passed to %s() must be of the type (boolean, string, integer, or an array set), %s given',
-                __METHOD__,
-                is_object($val) ? get_class($val) : gettype($val)
+            if (is_array($val)) {
+
+                $update->updateMap($key, self::createFromArray($val)->getOp());
+
+                continue;
+            }
+
+            throw new InvalidArgumentException(sprintf(
+                'Map element "%s" must be of the type (boolean, string, integer, or an array), "%s" given.',
+                $key, (is_object($val) ? get_class($val) : gettype($val))
             ));
         }
 
