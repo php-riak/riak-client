@@ -21,7 +21,7 @@ class StoreSchema implements RiakCommand
     private $schema;
 
     /**
-     * @param \Riak\Client\Core\Query\RiakLocation $schema
+     * @param \Riak\Client\Core\Query\Search\YokozunaSchema $schema
      */
     public function __construct(YokozunaSchema $schema)
     {
