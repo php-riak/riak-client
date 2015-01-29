@@ -45,6 +45,7 @@ class StoreIndexOperation implements RiakOperation
     {
         $request = new PutIndexRequest();
 
+        $request->nVal   = $this->schema->getNVal();
         $request->name   = $this->schema->getName();
         $request->schema = $this->schema->getSchema();
 

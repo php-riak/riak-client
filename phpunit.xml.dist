@@ -19,6 +19,7 @@
     <groups>
         <exclude>
             <group>benchmark</group>
+            <group>deprecated</group>
         </exclude>
     </groups>
 

@@ -15,12 +15,12 @@ use Riak\Client\Core\Message\Search\GetSchemaResponse;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoGet extends ProtoStrategy
+class ProtoGetSchema extends ProtoStrategy
 {
     /**
      * @param \Riak\Client\Core\Message\Search\GetSchemaRequest $request
      *
-     * @return \Riak\Client\ProtoBuf\RpbGetBucketReq
+     * @return \Riak\Client\ProtoBuf\RpbYokozunaSchemaGetReq
      */
     private function createRpbMessage(GetSchemaRequest $request)
     {

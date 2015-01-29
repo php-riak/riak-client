@@ -5,6 +5,7 @@ namespace RiakClientFunctionalTest\Command\Search;
 /**
  * @group proto
  * @group functional
+ * @group deprecated
  */
 class IndexProtoTest extends IndexTest
 {

@@ -15,7 +15,7 @@ use Riak\Client\Core\Message\Search\PutSchemaResponse;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoPut extends ProtoStrategy
+class ProtoPutSchema extends ProtoStrategy
 {
     /**
      * @param \Riak\Client\Core\Message\Search\PutSchemaRequest $request

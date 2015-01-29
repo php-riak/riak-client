@@ -18,14 +18,14 @@ class FetchIndexOperation implements RiakOperation
     /**
      * @var string
      */
-    private $schemaName;
+    private $indexName;
 
     /**
-     * @param string $schemaName
+     * @param string $indexName
      */
-    public function __construct($schemaName)
+    public function __construct($indexName)
     {
-        $this->schemaName = $schemaName;
+        $this->indexName = $indexName;
     }
 
     /**
@@ -52,7 +52,7 @@ class FetchIndexOperation implements RiakOperation
     {
         $request = new GetIndexRequest();
 
-        $request->name = $this->schemaName;
+        $request->name = $this->indexName;
 
         return $request;
     }

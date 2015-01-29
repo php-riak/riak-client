@@ -8,6 +8,9 @@ use Riak\Client\Command\Search\FetchIndex;
 use Riak\Client\Core\Query\Search\YokozunaIndex;
 use Riak\Client\Core\Transport\RiakTransportException;
 
+/**
+ * @group deprecated
+ */
 abstract class IndexTest extends TestCase
 {
     /**
@@ -32,11 +35,14 @@ abstract class IndexTest extends TestCase
         }
     }
 
+    /**
+     * @deprecated
+     *
+     * not worth functional testing
+     * Riak will fail to fetch the index for a couple seconds after store
+     */
     public function testStoreAndFetchIndex()
     {
-        // not worth functional testing
-        $this->markTestSkipped('Riak will fail to fetch the index for a couple seconds after store');
-
         $indexName = 'schedule_' . uniqid();
         $index     = new YokozunaIndex($indexName, '_yz_default');
 
