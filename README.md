@@ -1,4 +1,7 @@
-# Riak Client for PHP [![Build Status](https://travis-ci.org/php-riak/riak-client.svg?branch=master)](https://travis-ci.org/php-riak/riak-client)
+# Riak Client for PHP
+
+[![Build Status](https://travis-ci.org/php-riak/riak-client.svg?branch=master)](https://travis-ci.org/php-riak/riak-client)
+[![Coverage Status](https://coveralls.io/repos/php-riak/riak-client/badge.svg)](https://coveralls.io/r/php-riak/riak-client)
 
 A PHP client for [Riak](http://basho.com/riak/).
 
@@ -181,8 +184,9 @@ riak-admin bucket-type activate sets
 ```
 
 * Enable search capabilities in your ``riak.conf``:
+```
 search = on
-
+```
 
 We also expect that before submitting a pull request, that you have run the tests to ensure that all of them
 continue to pass after your changes.
