@@ -20,6 +20,11 @@ class YokozunaIndex
     private $schema;
 
     /**
+     * @var integer
+     */
+    private $nVal;
+
+    /**
      * @param string $name
      * @param string $schema
      */
@@ -59,5 +64,21 @@ class YokozunaIndex
     public function getSchema()
     {
         return $this->schema;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getNVal()
+    {
+        return $this->nVal;
+    }
+
+    /**
+     * @param integer $nVal
+     */
+    public function setNVal($nVal)
+    {
+        $this->nVal = $nVal;
     }
 }

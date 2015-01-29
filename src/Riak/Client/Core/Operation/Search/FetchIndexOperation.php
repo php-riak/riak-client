@@ -33,10 +33,14 @@ class FetchIndexOperation implements RiakOperation
      */
     public function execute(RiakTransport $adapter)
     {
+        $schema   = null;
         $response = $adapter->send($this->createGetIndexRequest());
-        $schema   = ($response && $response->name)
-            ? new YokozunaIndex($response->name, $response->schema)
-            : null;
+
+        if($response && $response->name) {
+            $schema = new YokozunaIndex($response->name, $response->schema);
+
+            $schema->setNVal($response->nVal);
+        }
 
         return new FetchIndexResponse($schema);
     }
