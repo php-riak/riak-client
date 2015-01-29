@@ -31,9 +31,9 @@ use Riak\Client\RiakClientBuilder;
 
 $builder = new RiakClientBuilder();
 $client  = $builder
-    ->withNodeUri('proto://192.168.1.1:8098')
-    ->withNodeUri('proto://192.168.1.2:8098')
-    ->withNodeUri('proto://192.168.1.3:8098')
+    ->withNodeUri('proto://192.168.1.1:8087')
+    ->withNodeUri('proto://192.168.1.2:8087')
+    ->withNodeUri('proto://192.168.1.3:8087')
     ->build();
 
 ```
