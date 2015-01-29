@@ -1,7 +1,7 @@
 # Riak Client for PHP
 
 [![Build Status](https://travis-ci.org/php-riak/riak-client.svg?branch=master)](https://travis-ci.org/php-riak/riak-client)
-[![Coverage Status](https://coveralls.io/repos/php-riak/riak-client/badge.svg)](https://coveralls.io/r/php-riak/riak-client)
+[![Coverage Status](https://coveralls.io/repos/php-riak/riak-client/badge.svg?branch=master)](https://coveralls.io/r/php-riak/riak-client?branch=master)
 
 A PHP client for [Riak](http://basho.com/riak/).
 
