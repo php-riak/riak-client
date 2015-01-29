@@ -36,7 +36,7 @@ class FetchIndexOperation implements RiakOperation
         $schema   = null;
         $response = $adapter->send($this->createGetIndexRequest());
 
-        if($response && $response->name) {
+        if ($response && $response->name) {
             $schema = new YokozunaIndex($response->name, $response->schema);
 
             $schema->setNVal($response->nVal);
