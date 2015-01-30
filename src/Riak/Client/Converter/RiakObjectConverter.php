@@ -39,7 +39,7 @@ class RiakObjectConverter
 
     /**
      * @param \Riak\Client\Core\Message\Kv\Content $content
-     * @param \Riak\Client\Core\Query\VClock              $vClock
+     * @param \Riak\Client\Core\Query\VClock       $vClock
      *
      * @return \Riak\Client\Core\Query\RiakObject
      */

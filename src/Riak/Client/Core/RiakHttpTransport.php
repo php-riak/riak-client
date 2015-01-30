@@ -17,15 +17,22 @@ class RiakHttpTransport implements RiakTransport
 {
     private $strategyMap = [
         // kv
-        'Riak\Client\Core\Message\Kv\GetRequest'       => 'Riak\Client\Core\Transport\Http\Kv\HttpGet',
-        'Riak\Client\Core\Message\Kv\PutRequest'       => 'Riak\Client\Core\Transport\Http\Kv\HttpPut',
-        'Riak\Client\Core\Message\Kv\DeleteRequest'    => 'Riak\Client\Core\Transport\Http\Kv\HttpDelete',
+        'Riak\Client\Core\Message\Kv\GetRequest'             => 'Riak\Client\Core\Transport\Http\Kv\HttpGet',
+        'Riak\Client\Core\Message\Kv\PutRequest'             => 'Riak\Client\Core\Transport\Http\Kv\HttpPut',
+        'Riak\Client\Core\Message\Kv\DeleteRequest'          => 'Riak\Client\Core\Transport\Http\Kv\HttpDelete',
         // crdt
-        'Riak\Client\Core\Message\DataType\GetRequest' => 'Riak\Client\Core\Transport\Http\DataType\HttpGet',
-        'Riak\Client\Core\Message\DataType\PutRequest' => 'Riak\Client\Core\Transport\Http\DataType\HttpPut',
+        'Riak\Client\Core\Message\DataType\GetRequest'       => 'Riak\Client\Core\Transport\Http\DataType\HttpGet',
+        'Riak\Client\Core\Message\DataType\PutRequest'       => 'Riak\Client\Core\Transport\Http\DataType\HttpPut',
         // bucket
-        'Riak\Client\Core\Message\Bucket\GetRequest'   => 'Riak\Client\Core\Transport\Http\Bucket\HttpGet',
-        'Riak\Client\Core\Message\Bucket\PutRequest'   => 'Riak\Client\Core\Transport\Http\Bucket\HttpPut',
+        'Riak\Client\Core\Message\Bucket\GetRequest'         => 'Riak\Client\Core\Transport\Http\Bucket\HttpGet',
+        'Riak\Client\Core\Message\Bucket\PutRequest'         => 'Riak\Client\Core\Transport\Http\Bucket\HttpPut',
+        // search
+        'Riak\Client\Core\Message\Search\SearchRequest'      => 'Riak\Client\Core\Transport\Http\Search\HttpSearch',
+        'Riak\Client\Core\Message\Search\GetSchemaRequest'   => 'Riak\Client\Core\Transport\Http\Search\HttpGetSchema',
+        'Riak\Client\Core\Message\Search\PutSchemaRequest'   => 'Riak\Client\Core\Transport\Http\Search\HttpPutSchema',
+        'Riak\Client\Core\Message\Search\GetIndexRequest'    => 'Riak\Client\Core\Transport\Http\Search\HttpetIndex',
+        'Riak\Client\Core\Message\Search\PutIndexRequest'    => 'Riak\Client\Core\Transport\Http\Search\HttpPutIndex',
+        'Riak\Client\Core\Message\Search\DeleteIndexRequest' => 'Riak\Client\Core\Transport\Http\Search\HttpDeleteIndex',
     ];
 
     /**

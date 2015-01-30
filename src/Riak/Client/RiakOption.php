@@ -1,6 +1,5 @@
 <?php
 
-//namespace Riak\Client\Cap;
 namespace Riak\Client;
 
 /**
