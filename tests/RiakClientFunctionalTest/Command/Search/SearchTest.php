@@ -76,9 +76,9 @@ abstract class SearchTest extends TestCase
         }
     }
 
-    private function storeThunderCat($key, $name, RiakObject $object)
+    private function storeThunderCat($key, RiakObject $object)
     {
-        if ($this->isThunderCatIndexed($name)) {
+        if ($this->isThunderCatIndexed($key)) {
             return;
         }
 
@@ -89,44 +89,44 @@ abstract class SearchTest extends TestCase
             ->build();
 
         $this->client->execute($command);
-        $this->insureThunderCatIsIndexed($name);
+        $this->insureThunderCatIsIndexed($key);
     }
 
     private function storeThunderCats()
     {
-        $this->storeThunderCat("lion", 'Lion-o', new RiakObject(json_encode([
-            'name_s' => 'Lion-o',
-            'leader' => true,
-            'age'    => 30,
+        $this->storeThunderCat("lion", new RiakObject(json_encode([
+            'name_s'   => 'Lion-o',
+            'leader_b' => true,
+            'age_i'    => 30,
         ]), 'application/json'));
 
-        $this->storeThunderCat("cheetara", 'Cheetara', new RiakObject(json_encode([
-            'name_s' => 'Cheetara',
-            'leader' => false,
-            'age'    => 30,
+        $this->storeThunderCat("cheetara", new RiakObject(json_encode([
+            'name_s'   => 'Cheetara',
+            'leader_b' => false,
+            'age_i'    => 30,
         ]), 'application/json'));
 
-        $this->storeThunderCat("snarf", 'Snarf', new RiakObject(json_encode([
-            'name_s' => 'Snarf',
-            'leader' => false,
-            'age'    => 43,
+        $this->storeThunderCat("snarf", new RiakObject(json_encode([
+            'name_s'   => 'Snarf',
+            'leader_b' => false,
+            'age_i'    => 43,
         ]), 'application/json'));
 
-        $this->storeThunderCat("panthro", 'Panthro', new RiakObject(json_encode([
-            'name_s' => 'Panthro',
-            'leader' => false,
-            'age'    => 36,
+        $this->storeThunderCat("panthro", new RiakObject(json_encode([
+            'name_s'   => 'Panthro',
+            'leader_b' => false,
+            'age_i'    => 36,
         ]), 'application/json'));
     }
 
-    private function isThunderCatIndexed($name)
+    private function isThunderCatIndexed($key)
     {
         $baseUrl = $this->createInternalSolarBucketUri($this->indexName, 'select');
         $client  = $this->createGuzzleClient($baseUrl);
         $request = $client->createRequest('GET');
         $query   = $request->getQuery();
 
-        $query->add('q', "name_s:$name");
+        $query->add('q', "_yz_rk:$key");
         $query->add('wt', 'json');
 
         $response = $client->send($request);
@@ -135,12 +135,12 @@ abstract class SearchTest extends TestCase
         return ($json['response']['numFound'] > 0);
     }
 
-    private function insureThunderCatIsIndexed($name)
+    private function insureThunderCatIsIndexed($key)
     {
         $retry = 10;
 
         do {
-            $isIndexed = $this->isThunderCatIndexed($name);
+            $isIndexed = $this->isThunderCatIndexed($key);
             $retry     = $retry -1;
 
             if ($isIndexed) {
@@ -151,10 +151,10 @@ abstract class SearchTest extends TestCase
 
         } while ($retry < 10);
 
-        $this->fail('Unable to index Thunder Cat : ' . $name);
+        $this->fail('Unable to index Thunder Cat : ' . $key);
     }
 
-    public function testSearch()
+    public function testSimpleSearch()
     {
         $this->storeThunderCats();
 
@@ -175,5 +175,34 @@ abstract class SearchTest extends TestCase
         $this->assertEquals(1, $numResults);
         $this->assertArrayHasKey('name_s', $results[0]);
         $this->assertEquals('Snarf', $results[0]['name_s']);
+    }
+
+    public function testSearchReturnFields()
+    {
+        $this->storeThunderCats();
+
+        $index  = $this->indexName;
+        $search = Search::builder()
+            ->withReturnFields(['name_s', 'age_i'])
+            ->withQuery('age_i:30')
+            ->withIndex($index)
+            ->withNumRows(10)
+            ->build();
+
+        $searchResult = $this->client->execute($search);
+
+        $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchResult);
+
+        $numResults = $searchResult->getNumResults();
+        $results    = $searchResult->getResults();
+
+        $this->assertCount(2, $results);
+        $this->assertEquals(2, $numResults);
+        $this->assertCount(2, $results[0]);
+        $this->assertCount(2, $results[1]);
+        $this->assertEquals(30, $results[0]['age_i']);
+        $this->assertEquals(30, $results[1]['age_i']);
+        $this->assertEquals('Lion-o', $results[0]['name_s']);
+        $this->assertEquals('Cheetara', $results[1]['name_s']);
     }
 }
