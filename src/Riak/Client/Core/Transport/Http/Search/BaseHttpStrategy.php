@@ -16,9 +16,19 @@ abstract class BaseHttpStrategy extends HttpStrategy
      *
      * @return string
      */
-    protected function buildPath($schema)
+    protected function buildSchemaPath($schema)
     {
         return sprintf('/search/schema/%s', $schema);
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return string
+     */
+    protected function buildIndexPath($index)
+    {
+        return sprintf('/search/index/%s', $index);
     }
 
     /**
@@ -27,9 +37,23 @@ abstract class BaseHttpStrategy extends HttpStrategy
      *
      * @return \GuzzleHttp\Message\RequestInterface
      */
-    protected function createRequest($method, $schema)
+    protected function createSchemaRequest($method, $schema)
     {
-        $path    = $this->buildPath($schema);
+        $path    = $this->buildSchemaPath($schema);
+        $httpReq = $this->client->createRequest($method, $path);
+
+        return $httpReq;
+    }
+
+    /**
+     * @param string $method
+     * @param string $schema
+     *
+     * @return \GuzzleHttp\Message\RequestInterface
+     */
+    protected function createIndexRequest($method, $schema)
+    {
+        $path    = $this->buildIndexPath($schema);
         $httpReq = $this->client->createRequest($method, $path);
 
         return $httpReq;

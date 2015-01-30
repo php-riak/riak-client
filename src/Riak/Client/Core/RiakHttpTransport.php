@@ -30,7 +30,7 @@ class RiakHttpTransport implements RiakTransport
         'Riak\Client\Core\Message\Search\SearchRequest'      => 'Riak\Client\Core\Transport\Http\Search\HttpSearch',
         'Riak\Client\Core\Message\Search\GetSchemaRequest'   => 'Riak\Client\Core\Transport\Http\Search\HttpGetSchema',
         'Riak\Client\Core\Message\Search\PutSchemaRequest'   => 'Riak\Client\Core\Transport\Http\Search\HttpPutSchema',
-        'Riak\Client\Core\Message\Search\GetIndexRequest'    => 'Riak\Client\Core\Transport\Http\Search\HttpetIndex',
+        'Riak\Client\Core\Message\Search\GetIndexRequest'    => 'Riak\Client\Core\Transport\Http\Search\HttpGetIndex',
         'Riak\Client\Core\Message\Search\PutIndexRequest'    => 'Riak\Client\Core\Transport\Http\Search\HttpPutIndex',
         'Riak\Client\Core\Message\Search\DeleteIndexRequest' => 'Riak\Client\Core\Transport\Http\Search\HttpDeleteIndex',
     ];

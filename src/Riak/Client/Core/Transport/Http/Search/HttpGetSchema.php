@@ -20,7 +20,7 @@ class HttpGetSchema extends BaseHttpStrategy
      */
     private function createHttpRequest(GetSchemaRequest $getRequest)
     {
-        return $this->createRequest('GET', $getRequest->name);
+        return $this->createSchemaRequest('GET', $getRequest->name);
     }
 
     /**

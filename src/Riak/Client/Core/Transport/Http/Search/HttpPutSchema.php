@@ -21,7 +21,7 @@ class HttpPutSchema extends BaseHttpStrategy
      */
     private function createHttpRequest(PutSchemaRequest $getRequest)
     {
-        $request = $this->createRequest('PUT', $getRequest->name);
+        $request = $this->createSchemaRequest('PUT', $getRequest->name);
         $body    = Stream::factory($getRequest->content);
 
         $request->setBody($body);
