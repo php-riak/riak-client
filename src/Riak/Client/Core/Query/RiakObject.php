@@ -71,6 +71,18 @@ class RiakObject
     private $meta;
 
     /**
+     * @param string                  $value
+     * @param string                  $contentType
+     * @param \Riak\Client\Cap\VClock $vClock
+     */
+    public function __construct($value = null, $contentType = null, VClock $vClock = null)
+    {
+        $this->value       = $value;
+        $this->vClock      = $vClock;
+        $this->contentType = $contentType;
+    }
+
+    /**
      * @return string
      */
     public function getValue()

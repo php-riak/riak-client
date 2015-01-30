@@ -7,35 +7,12 @@ use Riak\Client\Command\Search\StoreIndex;
 use Riak\Client\Command\Search\FetchIndex;
 use Riak\Client\Command\Search\DeleteIndex;
 use Riak\Client\Core\Query\Search\YokozunaIndex;
-use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
  * @group deprecated
  */
 abstract class IndexTest extends TestCase
 {
-    /**
-     * @param \Riak\Client\Command\Search\FetchIndex $fetch
-     * @param integer $retryCount
-     *
-     * @return \Riak\Client\Command\Search\Response\FetchIndexResponse
-     */
-    public function retryFetch(FetchIndex $fetch, $retryCount)
-    {
-        try {
-            return $this->client->execute($fetch);
-        } catch (RiakTransportException $exc) {
-
-            if ($retryCount <= 0) {
-                throw $exc;
-            }
-
-            sleep(1);
-
-            return $this->retryFetch($fetch, -- $retryCount);
-        }
-    }
-
     /**
      * @deprecated
      *
@@ -62,7 +39,7 @@ abstract class IndexTest extends TestCase
             ->build();
 
         $storeResponse  = $this->client->execute($store);
-        $fetchResponse  = $this->retryFetch($fetch, 10);
+        $fetchResponse  = $this->retryCommand($fetch, 10);
         $deleteResponse = $this->client->execute($delete);
 
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\StoreIndexResponse', $storeResponse);

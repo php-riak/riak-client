@@ -26,6 +26,7 @@ class BucketProperties
     const SMALL_VCLOCK = 'smallVclock';
     const BASIC_QUORUM = 'basicQuorum';
     const NOTFOUND_OK = 'notfoundOk';
+    const SEARCH_INDEX = 'searchIndex';
     const BACKEND = 'backend';
     const SEARCH = 'search';
 
@@ -205,5 +206,13 @@ class BucketProperties
     public function getSearch()
     {
         return $this->get(self::SEARCH);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSearchIndex()
+    {
+        return $this->get(self::SEARCH_INDEX);
     }
 }

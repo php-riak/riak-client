@@ -49,6 +49,7 @@ class ProtoClient
         RiakMessageCodes::LIST_BUCKETS_RESP         => 'Riak\Client\ProtoBuf\RpbListBucketsResp',
         RiakMessageCodes::LIST_KEYS_RESP            => 'Riak\Client\ProtoBuf\RpbListKeysResp',
         RiakMessageCodes::PUT_RESP                  => 'Riak\Client\ProtoBuf\RpbPutResp',
+        RiakMessageCodes::SEARCH_QUERY_RESP         => 'Riak\Client\ProtoBuf\RpbSearchQueryResp',
         RiakMessageCodes::YOKOZUNA_INDEX_GET_RESP   => 'Riak\Client\ProtoBuf\RpbYokozunaIndexGetResp',
         RiakMessageCodes::YOKOZUNA_SCHEMA_GET_RESP  => 'Riak\Client\ProtoBuf\RpbYokozunaSchemaGetResp'
     ];

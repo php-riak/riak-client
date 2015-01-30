@@ -2,7 +2,9 @@
 
 namespace RiakClientFunctionalTest;
 
+use Riak\Client\RiakCommand;
 use Riak\Client\RiakClientBuilder;
+use Riak\Client\Core\Transport\RiakTransportException;
 
 abstract class TestCase extends \RiakClientTest\TestCase
 {
@@ -37,6 +39,28 @@ abstract class TestCase extends \RiakClientTest\TestCase
     protected function createRiakHttpClient()
     {
         return $this->createRiakClient('http://127.0.0.1:8098');
+    }
+
+    /**
+     * @param \Riak\Client\RiakCommand $command
+     * @param integer                  $retryCount
+     *
+     * @return \Riak\Client\Command\Search\Response\FetchIndexResponse
+     */
+    protected function retryCommand(RiakCommand $command, $retryCount)
+    {
+        try {
+            return $this->client->execute($command);
+        } catch (RiakTransportException $exc) {
+
+            if ($retryCount <= 0) {
+                throw $exc;
+            }
+
+            sleep(1);
+
+            return $this->retryCommand($command, -- $retryCount);
+        }
     }
 
     /**
