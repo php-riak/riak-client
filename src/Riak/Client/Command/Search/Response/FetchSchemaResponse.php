@@ -5,7 +5,7 @@ namespace Riak\Client\Command\Search\Response;
 use Riak\Client\Core\Query\Search\YokozunaSchema;
 
 /**
- * Store Schema Response.
+ * Fetch Schema Response.
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */

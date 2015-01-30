@@ -240,10 +240,10 @@ class MapUpdate implements DataTypeUpdate
                 continue;
             }
 
-            throw new InvalidArgumentException(sprintf(
-                'Map element "%s" must be of the type (boolean, string, integer, or an array), "%s" given.',
-                $key, (is_object($val) ? get_class($val) : gettype($val))
-            ));
+            $message = 'Map element "%s" must be of the type (boolean, string, integer, or an array), "%s" given.';
+            $type    = is_object($val) ? get_class($val) : gettype($val);
+
+            throw new InvalidArgumentException(sprintf($message, $key, $type));
         }
 
         return $update;

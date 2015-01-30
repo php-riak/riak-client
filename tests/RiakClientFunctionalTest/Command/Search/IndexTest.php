@@ -5,6 +5,7 @@ namespace RiakClientFunctionalTest\Command\Search;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Command\Search\StoreIndex;
 use Riak\Client\Command\Search\FetchIndex;
+use Riak\Client\Command\Search\DeleteIndex;
 use Riak\Client\Core\Query\Search\YokozunaIndex;
 use Riak\Client\Core\Transport\RiakTransportException;
 
@@ -56,14 +57,16 @@ abstract class IndexTest extends TestCase
             ->withIndexName($indexName)
             ->build();
 
-        $storeResponse = $this->client->execute($store);
-        $fetchResponse = $this->retryFetch($fetch, 10);
+        $delete = DeleteIndex::builder()
+            ->withIndexName($indexName)
+            ->build();
+
+        $storeResponse  = $this->client->execute($store);
+        $fetchResponse  = $this->retryFetch($fetch, 10);
+        $deleteResponse = $this->client->execute($delete);
 
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\StoreIndexResponse', $storeResponse);
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\FetchIndexResponse', $fetchResponse);
-        $this->assertInstanceOf('Riak\Client\Core\Query\Search\YokozunaIndex', $fetchResponse->getIndex());
-        $this->assertEquals('_yz_default', $fetchResponse->getIndex()->getSchema());
-        $this->assertEquals($indexName, $fetchResponse->getIndex()->getName());
-        $this->assertEquals(3, $fetchResponse->getIndex()->getNVal());
+        $this->assertInstanceOf('Riak\Client\Command\Search\Response\DeleteIndexResponse', $deleteResponse);
     }
 }

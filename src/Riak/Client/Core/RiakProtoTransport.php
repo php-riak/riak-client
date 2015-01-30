@@ -15,20 +15,21 @@ class RiakProtoTransport implements RiakTransport
 {
     private $strategyMap = [
         // kv
-        'Riak\Client\Core\Message\Kv\GetRequest'            => 'Riak\Client\Core\Transport\Proto\Kv\ProtoGet',
-        'Riak\Client\Core\Message\Kv\PutRequest'            => 'Riak\Client\Core\Transport\Proto\Kv\ProtoPut',
-        'Riak\Client\Core\Message\Kv\DeleteRequest'         => 'Riak\Client\Core\Transport\Proto\Kv\ProtoDelete',
+        'Riak\Client\Core\Message\Kv\GetRequest'             => 'Riak\Client\Core\Transport\Proto\Kv\ProtoGet',
+        'Riak\Client\Core\Message\Kv\PutRequest'             => 'Riak\Client\Core\Transport\Proto\Kv\ProtoPut',
+        'Riak\Client\Core\Message\Kv\DeleteRequest'          => 'Riak\Client\Core\Transport\Proto\Kv\ProtoDelete',
         // crdt
-        'Riak\Client\Core\Message\DataType\GetRequest'      => 'Riak\Client\Core\Transport\Proto\DataType\ProtoGet',
-        'Riak\Client\Core\Message\DataType\PutRequest'      => 'Riak\Client\Core\Transport\Proto\DataType\ProtoPut',
+        'Riak\Client\Core\Message\DataType\GetRequest'       => 'Riak\Client\Core\Transport\Proto\DataType\ProtoGet',
+        'Riak\Client\Core\Message\DataType\PutRequest'       => 'Riak\Client\Core\Transport\Proto\DataType\ProtoPut',
         // bucket
-        'Riak\Client\Core\Message\Bucket\GetRequest'        => 'Riak\Client\Core\Transport\Proto\Bucket\ProtoGet',
-        'Riak\Client\Core\Message\Bucket\PutRequest'        => 'Riak\Client\Core\Transport\Proto\Bucket\ProtoPut',
+        'Riak\Client\Core\Message\Bucket\GetRequest'         => 'Riak\Client\Core\Transport\Proto\Bucket\ProtoGet',
+        'Riak\Client\Core\Message\Bucket\PutRequest'         => 'Riak\Client\Core\Transport\Proto\Bucket\ProtoPut',
         // search
-        'Riak\Client\Core\Message\Search\GetSchemaRequest'  => 'Riak\Client\Core\Transport\Proto\Search\ProtoGetSchema',
-        'Riak\Client\Core\Message\Search\PutSchemaRequest'  => 'Riak\Client\Core\Transport\Proto\Search\ProtoPutSchema',
-        'Riak\Client\Core\Message\Search\GetIndexRequest'   => 'Riak\Client\Core\Transport\Proto\Search\ProtoGetIndex',
-        'Riak\Client\Core\Message\Search\PutIndexRequest'   => 'Riak\Client\Core\Transport\Proto\Search\ProtoPutIndex',
+        'Riak\Client\Core\Message\Search\GetSchemaRequest'   => 'Riak\Client\Core\Transport\Proto\Search\ProtoGetSchema',
+        'Riak\Client\Core\Message\Search\PutSchemaRequest'   => 'Riak\Client\Core\Transport\Proto\Search\ProtoPutSchema',
+        'Riak\Client\Core\Message\Search\GetIndexRequest'    => 'Riak\Client\Core\Transport\Proto\Search\ProtoGetIndex',
+        'Riak\Client\Core\Message\Search\PutIndexRequest'    => 'Riak\Client\Core\Transport\Proto\Search\ProtoPutIndex',
+        'Riak\Client\Core\Message\Search\DeleteIndexRequest' => 'Riak\Client\Core\Transport\Proto\Search\ProtoDeleteIndex',
     ];
 
     /**
