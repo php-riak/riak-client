@@ -278,7 +278,7 @@ class RiakSearchQuery
     /**
      * @return string
      */
-    function getDefaultField()
+    public function getDefaultField()
     {
         return $this->defaultField;
     }
@@ -286,7 +286,7 @@ class RiakSearchQuery
     /**
      * @return string
      */
-    function getDefaultOperation()
+    public function getDefaultOperation()
     {
         return $this->defaultOperation;
     }
