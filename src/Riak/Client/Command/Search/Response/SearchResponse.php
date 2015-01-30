@@ -10,7 +10,7 @@ namespace Riak\Client\Command\Search\Response;
 class SearchResponse extends Response
 {
     /**
-     * @var \Riak\Client\Core\Query\RiakList
+     * @var array
      */
     private $results;
 
@@ -25,11 +25,11 @@ class SearchResponse extends Response
     private $numResults;
 
     /**
-     * @param \Riak\Client\Core\Query\RiakList $results
-     * @param integer                          $maxScore
-     * @param integer                          $numResults
+     * @param array   $results
+     * @param integer $maxScore
+     * @param integer $numResults
      */
-    public function __construct($results, $maxScore, $numResults)
+    public function __construct(array $results, $maxScore, $numResults)
     {
         $this->results    = $results;
         $this->maxScore   = $maxScore;
@@ -37,7 +37,7 @@ class SearchResponse extends Response
     }
 
     /**
-     * @return \Riak\Client\Core\Query\RiakList
+     * @return array
      */
     public function getResults()
     {

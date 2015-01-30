@@ -34,12 +34,28 @@ class ProtoSearch extends ProtoStrategy
             $rpbGetReq->setPresort($request->presort);
         }
 
+        if ($request->sort != null) {
+            $rpbGetReq->setSort($request->sort);
+        }
+
+        if ($request->start != null) {
+            $rpbGetReq->setStart($request->start);
+        }
+
         if ($request->rows != null) {
             $rpbGetReq->setRows($request->rows);
         }
 
+        if ($request->op != null) {
+            $rpbGetReq->setOp($request->op);
+        }
+
         if ($request->fl != null) {
             $rpbGetReq->setFl($request->fl);
+        }
+
+        if ($request->df != null) {
+            $rpbGetReq->setDf($request->df);
         }
 
         if ($request->filter != null) {

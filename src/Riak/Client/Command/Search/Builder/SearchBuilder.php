@@ -18,33 +18,11 @@ class SearchBuilder extends Builder
     private $query;
 
     /**
-     * @var array
-     */
-    private $options = [];
-
-    /**
      * Init Search Builder
      */
     public function __construct()
     {
-        $this->query   = new RiakSearchQuery();
-        $this->options = [];
-    }
-
-    /**
-     * Add an optional setting for this command.
-     * This will be passed along with the request to Riak.
-     *
-     * @param string $option
-     * @param mixed  $value
-     *
-     * @return \Riak\Client\Command\Builder\Builder
-     */
-    public function withOption($option, $value)
-    {
-        $this->options[$option] = $value;
-
-        return $this;
+        $this->query = new RiakSearchQuery();
     }
 
     /**
@@ -173,12 +151,43 @@ class SearchBuilder extends Builder
     }
 
     /**
+     * Use the provided field as the default.
+     * Overrides the “default_field” setting in the schema file.
+     *
+     * @param string $fieldName
+     *
+     * @return \Riak\Client\Core\Query\RiakSearchQuery
+     */
+    public function withDefaultField($fieldName)
+    {
+        $this->query->setDefaultField($fieldName);
+
+        return $this;
+    }
+
+    /**
+     * Set the default operation.
+     * Allowed settings are either “and” or “or”.
+     * Overrides the “default_op” setting in the schema file.
+     *
+     * @param string $op
+     *
+     * @return \Riak\Client\Core\Query\RiakSearchQuery
+     */
+    public function withDefaultOperation($op)
+    {
+        $this->query->setDefaultOperation($op);
+
+        return $this;
+    }
+
+    /**
      * Build a FetchIndex object
      *
      * @return \Riak\Client\Command\Search\FetchIndex
      */
     public function build()
     {
-        return new Search($this->query, $this->options);
+        return new Search($this->query);
     }
 }

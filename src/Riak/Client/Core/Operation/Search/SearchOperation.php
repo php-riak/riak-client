@@ -21,18 +21,11 @@ class SearchOperation implements RiakOperation
     private $query;
 
     /**
-     * @var array
-     */
-    private $options = [];
-
-    /**
      * @param \Riak\Client\Core\Query\RiakSearchQuery $query
-     * @param array                                   $options
      */
-    public function __construct(RiakSearchQuery $query, array $options = [])
+    public function __construct(RiakSearchQuery $query)
     {
         $this->query   = $query;
-        $this->options = $options;
     }
 
     /**
@@ -54,10 +47,14 @@ class SearchOperation implements RiakOperation
 
         $request->q       = $this->query->getQuery();
         $request->index   = $this->query->getIndex();
+        $request->start   = $this->query->getStart();
         $request->presort = $this->query->getPresort();
         $request->rows    = $this->query->getNumRows();
+        $request->sort    = $this->query->getSortField();
         $request->filter  = $this->query->getFilterQuery();
         $request->fl      = $this->query->getReturnFields();
+        $request->df      = $this->query->getDefaultField();
+        $request->op      = $this->query->getDefaultOperation();
 
         return $request;
     }

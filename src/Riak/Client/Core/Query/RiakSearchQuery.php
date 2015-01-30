@@ -45,6 +45,16 @@ class RiakSearchQuery
     private $sortField;
 
     /**
+     * @var string
+     */
+    private $defaultField;
+
+    /**
+     * @var string
+     */
+    private $defaultOperation;
+
+    /**
      * @var array
      */
     private $returnFields;
@@ -62,6 +72,8 @@ class RiakSearchQuery
     /**
      * Sorts all of the results by bucket key, or the search score, before the given rows are chosen.
      * This is useful when paginating to ensure the results are returned in a consistent order.
+     *
+     * 'score' or 'key'
      *
      * @param string $presort
      *
@@ -159,6 +171,37 @@ class RiakSearchQuery
     }
 
     /**
+     * Use the provided field as the default.
+     * Overrides the “default_field” setting in the schema file.
+     *
+     * @param string $fieldName
+     *
+     * @return \Riak\Client\Core\Query\RiakSearchQuery
+     */
+    public function setDefaultField($fieldName)
+    {
+        $this->defaultField = $fieldName;
+
+        return $this;
+    }
+
+    /**
+     * Set the default operation.
+     * Allowed settings are either “and” or “or”.
+     * Overrides the “default_op” setting in the schema file.
+     *
+     * @param string $op
+     *
+     * @return \Riak\Client\Core\Query\RiakSearchQuery
+     */
+    public function setDefaultOperation($op)
+    {
+        $this->defaultOperation = $op;
+
+        return $this;
+    }
+
+    /**
      * @param string $query
      *
      * @return \Riak\Client\Command\Search\Search
@@ -230,5 +273,21 @@ class RiakSearchQuery
     public function getReturnFields()
     {
         return $this->returnFields;
+    }
+
+    /**
+     * @return string
+     */
+    function getDefaultField()
+    {
+        return $this->defaultField;
+    }
+
+    /**
+     * @return string
+     */
+    function getDefaultOperation()
+    {
+        return $this->defaultOperation;
     }
 }

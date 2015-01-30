@@ -21,18 +21,11 @@ class Search implements RiakCommand
     private $query;
 
     /**
-     * @var array
-     */
-    private $options = [];
-
-    /**
      * @param \Riak\Client\Core\Query\RiakSearchQuery $query
-     * @param array                                   $options
      */
-    public function __construct(RiakSearchQuery $query, array $options = [])
+    public function __construct(RiakSearchQuery $query)
     {
-        $this->query   = $query;
-        $this->options = $options;
+        $this->query = $query;
     }
 
     /**
@@ -40,7 +33,7 @@ class Search implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        $operation = new SearchOperation($this->query, $this->options);
+        $operation = new SearchOperation($this->query);
         $response  = $cluster->execute($operation);
 
         return $response;
@@ -51,15 +44,15 @@ class Search implements RiakCommand
      */
     public function getSearchQuery()
     {
-        return $this->options;
+        return $this->query;
     }
 
     /**
-     * @param \Riak\Client\Core\Query\RiakSearchQuery $options
+     * @param \Riak\Client\Core\Query\RiakSearchQuery $query
      */
-    public function setSearchQuery(RiakSearchQuery $options)
+    public function setSearchQuery(RiakSearchQuery $query)
     {
-        $this->options = $options;
+        $this->query = $query;
     }
 
     /**

@@ -2,10 +2,6 @@
 
 namespace Riak\Client\Command\Kv\Response;
 
-use Riak\Client\Core\Query\RiakLocation;
-use Riak\Client\Core\Query\RiakObjectList;
-use Riak\Client\Converter\ConverterFactory;
-
 /**
  * Store Value Response.
  *
@@ -23,7 +19,7 @@ class StoreValueResponse extends Response
      */
     public function getGeneratedKey()
     {
-        return $this->unchanged;
+        return $this->generatedKey;
     }
 
     /**
