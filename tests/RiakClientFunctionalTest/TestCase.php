@@ -2,6 +2,7 @@
 
 namespace RiakClientFunctionalTest;
 
+use GuzzleHttp\Client;
 use Riak\Client\RiakCommand;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Core\Transport\RiakTransportException;
@@ -26,11 +27,22 @@ abstract class TestCase extends \RiakClientTest\TestCase
     }
 
     /**
+     * @param mixed $name
+     * @param mixed $default
+     *
+     * @return string
+     */
+    protected function getEnv($name, $default)
+    {
+        return getenv($name) ?: $default;
+    }
+
+    /**
      * @return \Riak\Client\RiakClient
      */
     protected function createRiakProtoClient()
     {
-        return $this->createRiakClient('proto://127.0.0.1:8087');
+        return $this->createRiakClient($this->getEnv('RIAK_PROTO_URI', 'proto://127.0.0.1:8087'));
     }
 
     /**
@@ -38,7 +50,30 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function createRiakHttpClient()
     {
-        return $this->createRiakClient('http://127.0.0.1:8098');
+        return $this->createRiakClient($this->getEnv('RIAK_HTTP_URI', 'http://127.0.0.1:8098'));
+    }
+
+    /**
+     * @param string $bucket
+     * @param string $action
+     *
+     * @return string
+     */
+    protected function createInternalSolarBucketUri($bucket, $action)
+    {
+        // http://127.0.0.1:8093/internal_solr/test_riak_client_cats/select?q=name_s:Lion-o&wt=json&facet=on&facet.field=name_s
+
+        return sprintf('%s/internal_solr/%s/%s', $this->getEnv('RIAK_SOLR_URI', 'http://127.0.0.1:8093'), $bucket, $action);
+    }
+
+    /**
+     * @param string $baseUrl
+     *
+     * @return \GuzzleHttp\Client
+     */
+    protected function createGuzzleClient($baseUrl)
+    {
+        return new Client(['base_url'  => $baseUrl]);
     }
 
     /**

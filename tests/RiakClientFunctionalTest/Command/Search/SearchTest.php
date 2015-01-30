@@ -20,7 +20,7 @@ abstract class SearchTest extends TestCase
     /**
      * @var string
      */
-    protected $indexName = 'test_riak_client_cats';
+    protected $indexName;
 
     /**
      * @var \Riak\Client\Core\Query\RiakNamespace
@@ -31,19 +31,28 @@ abstract class SearchTest extends TestCase
     {
         parent::setUp();
 
-        $this->setUpIndex();
+        $hash      = hash('crc32', __CLASS__ );
+        $bucket    = sprintf('test_riak_client_%s_cats', $hash);
+        $index     = sprintf('test_riak_client_%s_famous', $hash);
+        $namespace = new RiakNamespace('default', $bucket);
 
-        $namespace = new RiakNamespace('default', 'test_riak_client_cats');
-        $store     = StoreBucketProperties::builder()
+        $this->indexName = $index;
+        $this->namespace = $namespace;
+
+        $this->setUpIndex();
+        $this->setUpBucket();
+    }
+
+    private function setUpBucket()
+    {
+        $store = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::SEARCH_INDEX, $this->indexName)
             ->withProperty(BucketProperties::ALLOW_MULT, false)
             ->withProperty(BucketProperties::N_VAL, 3)
-            ->withNamespace($namespace)
+            ->withNamespace($this->namespace)
             ->build();
 
         $this->client->execute($store);
-
-        $this->namespace = $namespace;
     }
 
     private function setUpIndex()
@@ -63,12 +72,16 @@ abstract class SearchTest extends TestCase
             $this->client->execute($fetch);
         } catch (\Exception $exc) {
             $this->client->execute($store);
-            $this->retryCommand($fetch, 10);
+            $this->retryCommand($fetch, 20);
         }
     }
 
-    private function storeThunderCat($key, RiakObject $object)
+    private function storeThunderCat($key, $name, RiakObject $object)
     {
+        if ($this->isThunderCatIndexed($name)) {
+            return;
+        }
+
         $location = new RiakLocation($this->namespace, $key);
         $command  = StoreValue::builder($location, $object)
             ->withOption(RiakOption::PW, 1)
@@ -76,48 +89,91 @@ abstract class SearchTest extends TestCase
             ->build();
 
         $this->client->execute($command);
+        $this->insureThunderCatIsIndexed($name);
     }
 
-    protected function createThunderCat()
+    private function storeThunderCats()
     {
-        $this->storeThunderCat("lion", new RiakObject(json_encode([
+        $this->storeThunderCat("lion", 'Lion-o', new RiakObject(json_encode([
             'name_s' => 'Lion-o',
             'leader' => true,
             'age'    => 30,
         ]), 'application/json'));
 
-        $this->storeThunderCat("cheetara", new RiakObject(json_encode([
+        $this->storeThunderCat("cheetara", 'Cheetara', new RiakObject(json_encode([
             'name_s' => 'Cheetara',
             'leader' => false,
             'age'    => 30,
         ]), 'application/json'));
 
-        $this->storeThunderCat("snarf", new RiakObject(json_encode([
+        $this->storeThunderCat("snarf", 'Snarf', new RiakObject(json_encode([
             'name_s' => 'Snarf',
             'leader' => false,
             'age'    => 43,
         ]), 'application/json'));
 
-        $this->storeThunderCat("panthro", new RiakObject(json_encode([
+        $this->storeThunderCat("panthro", 'Panthro', new RiakObject(json_encode([
             'name_s' => 'Panthro',
             'leader' => false,
             'age'    => 36,
         ]), 'application/json'));
     }
 
+    private function isThunderCatIndexed($name)
+    {
+        $baseUrl = $this->createInternalSolarBucketUri($this->indexName, 'select');
+        $client  = $this->createGuzzleClient($baseUrl);
+        $request = $client->createRequest('GET');
+        $query   = $request->getQuery();
+
+        $query->add('q', "name_s:$name");
+        $query->add('wt', 'json');
+
+        $response = $client->send($request);
+        $json     = $response->json();
+
+        return ($json['response']['numFound'] > 0);
+    }
+
+    private function insureThunderCatIsIndexed($name)
+    {
+        $retry = 10;
+
+        do {
+            $isIndexed = $this->isThunderCatIndexed($name);
+            $retry     = $retry -1;
+
+            if ($isIndexed) {
+                return;
+            }
+
+            sleep(1);
+
+        } while ($retry < 10);
+
+        $this->fail('Unable to index Thunder Cat : ' . $name);
+    }
+
     public function testSearch()
     {
-        $this->createThunderCat();
+        $this->storeThunderCats();
 
-        $index  = $this->indexName;
-        $search = Search::builder()
-            ->withQuery('name_s:*')
+        $index       = $this->indexName;
+        $searchSnarf = Search::builder()
+            ->withQuery('name_s:Snarf')
             ->withIndex($index)
             ->build();
 
-        $searchResult = $this->client->execute($search);
+        $searchSnarfResult = $this->client->execute($searchSnarf);
 
-        $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchResult);
-        //$this->assertEquals(4, $searchResult->getNumResults());
+        $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchSnarfResult);
+
+        $numResults = $searchSnarfResult->getNumResults();
+        $results    = $searchSnarfResult->getResults();
+
+        $this->assertCount(1, $results);
+        $this->assertEquals(1, $numResults);
+        $this->assertArrayHasKey('name_s', $results[0]);
+        $this->assertEquals('Snarf', $results[0]['name_s']);
     }
 }
