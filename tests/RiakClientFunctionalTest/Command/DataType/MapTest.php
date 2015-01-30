@@ -3,7 +3,7 @@
 namespace RiakClientFunctionalTest\Command\DataType;
 
 use RiakClientFunctionalTest\TestCase;
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;

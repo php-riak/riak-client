@@ -4,7 +4,7 @@ namespace Riak\Client\Command\Kv\Builder;
 
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Command\Kv\DeleteValue;
-use Riak\Client\Cap\VClock;
+use Riak\Client\Core\Query\VClock;
 
 /**
  * Used to construct a DeleteValue command.
@@ -19,7 +19,7 @@ class DeleteValueBuilder extends Builder
     private $location;
 
     /**
-     * @var \Riak\Client\Cap\VClock
+     * @var \Riak\Client\Core\Query\VClock
      */
     private $vClock;
 
@@ -44,7 +44,7 @@ class DeleteValueBuilder extends Builder
     }
 
     /**
-     * @param \Riak\Client\Cap\VClock $vClock
+     * @param \Riak\Client\Core\Query\VClock $vClock
      *
      * @return \Riak\Client\Command\DeleteValue
      */

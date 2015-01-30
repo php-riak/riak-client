@@ -20,7 +20,7 @@ Once you have a $client, commands from the `Riak\Client\Command*` namespace are 
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;

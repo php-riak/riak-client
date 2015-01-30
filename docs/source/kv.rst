@@ -9,7 +9,7 @@ Key/Value commands
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -50,7 +50,7 @@ RiakOption::DW               integer
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -91,7 +91,7 @@ RiakOption::TIMEOUT          integer
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\DeleteValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;

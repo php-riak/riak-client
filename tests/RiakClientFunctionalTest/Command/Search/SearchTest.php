@@ -2,7 +2,7 @@
 
 namespace RiakClientFunctionalTest\Command\Search;
 
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Search\Search;

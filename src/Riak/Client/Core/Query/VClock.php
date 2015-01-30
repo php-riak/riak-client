@@ -1,6 +1,7 @@
 <?php
 
-namespace Riak\Client\Cap;
+namespace Riak\Client\Core\Query;
+//namespace Riak\Client\Cap;
 
 /**
  * Encapsulates a Riak vector clock.

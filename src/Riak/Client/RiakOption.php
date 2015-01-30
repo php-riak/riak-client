@@ -1,6 +1,7 @@
 <?php
 
-namespace Riak\Client\Cap;
+//namespace Riak\Client\Cap;
+namespace Riak\Client;
 
 /**
  * Encapsulates a riak command option.

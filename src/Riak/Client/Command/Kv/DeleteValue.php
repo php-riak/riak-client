@@ -2,7 +2,7 @@
 
 namespace Riak\Client\Command\Kv;
 
-use Riak\Client\Cap\VClock;
+use Riak\Client\Core\Query\VClock;
 use Riak\Client\RiakCommand;
 use Riak\Client\Core\RiakCluster;
 use Riak\Client\Core\Query\RiakLocation;
@@ -27,7 +27,7 @@ class DeleteValue implements RiakCommand
     private $options = [];
 
     /**
-     * @var \Riak\Client\Cap\VClock
+     * @var \Riak\Client\Core\Query\VClock
      */
     private $vClock;
 
@@ -42,7 +42,7 @@ class DeleteValue implements RiakCommand
     }
 
     /**
-     * @param \Riak\Client\Cap\VClock $vClock
+     * @param \Riak\Client\Core\Query\VClock $vClock
      *
      * @return \Riak\Client\Command\DeleteValue
      */

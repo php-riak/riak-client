@@ -3,7 +3,7 @@
 namespace RiakClientTest\Command\Kv\Response;
 
 use RiakClientTest\TestCase;
-use Riak\Client\Cap\VClock;
+use Riak\Client\Core\Query\VClock;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;

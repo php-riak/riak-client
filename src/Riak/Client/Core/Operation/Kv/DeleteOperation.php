@@ -7,7 +7,7 @@ use Riak\Client\Core\Message\Kv\DeleteRequest;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\RiakOperation;
 use Riak\Client\Core\RiakTransport;
-use Riak\Client\Cap\VClock;
+use Riak\Client\Core\Query\VClock;
 use Riak\Client\RiakConfig;
 
 /**
@@ -28,7 +28,7 @@ class DeleteOperation implements RiakOperation
     private $location;
 
     /**
-     * @var \Riak\Client\Cap\VClock
+     * @var \Riak\Client\Core\Query\VClock
      */
     private $vClock;
 
@@ -41,7 +41,7 @@ class DeleteOperation implements RiakOperation
      * @param \Riak\Client\RiakConfig                    $config
      * @param \Riak\Client\Core\Query\RiakLocation       $location
      * @param array                                      $options
-     * @param \Riak\Client\Cap\VClock                    $vClock
+     * @param \Riak\Client\Core\Query\VClock                    $vClock
      */
     public function __construct(RiakConfig $config, RiakLocation $location, array $options, VClock $vClock = null)
     {

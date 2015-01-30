@@ -127,7 +127,7 @@ abstract class Response implements RiakResponse
     /**
      * Get the vector clock returned with this response.
      *
-     * @return \Riak\Client\Cap\VClock
+     * @return \Riak\Client\Core\Query\VClock
      */
     public function getVectorClock()
     {

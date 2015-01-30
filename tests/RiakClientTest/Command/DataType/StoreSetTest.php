@@ -4,7 +4,7 @@ namespace RiakClientTest\Command\DataType;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Core\Query\Crdt\RiakSet;
 use Riak\Client\Core\Query\Crdt\RiakCounter;

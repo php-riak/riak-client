@@ -53,7 +53,7 @@ If we happen to get a ticket that afternoon, we would need to increment the coun
 
 .. code-block:: php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreCounter;
 
     <?php
@@ -76,7 +76,7 @@ If we're curious about how many tickets we have accumulated, we can simply retri
 
 .. code-block:: php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\FetchCounter;
 
     <?php
@@ -136,7 +136,7 @@ Let's add them to our cities set:
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreSet;
 
     // Store new cities and return the current value
@@ -164,7 +164,7 @@ but if we visit them, we won't have time to visit Montreal, so we need to remove
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreSet;
     use Riak\Client\Command\DataType\FecthSet;
 
@@ -231,7 +231,7 @@ We'll also create an  `enterprise_customer` flag to track whether Ahmed has sign
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreMap;
 
     $store = StoreMap::builder()
@@ -259,7 +259,7 @@ We can retrieve the value of that flag at any time:
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\FetchMap;
 
     $fetch = FetchMap::builder()
@@ -287,7 +287,7 @@ We'll use a ``page_visits`` counter for that and run the following operation whe
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreMap;
 
     $store = StoreMap::builder()
@@ -326,7 +326,7 @@ He's much more keen on indie pop. Let's change the interests set to reflect that
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\FetchMap;
     use Riak\Client\Command\DataType\StoreMap;
     use Riak\Client\Command\DataType\SetUpdate;
@@ -465,7 +465,7 @@ The value of a flag can be retrieved at any time:
 
     <?php
 
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\FetchMap;
 
     $fetch = FetchMap::builder()

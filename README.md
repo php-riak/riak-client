@@ -47,7 +47,7 @@ below.
 ## Getting Data In
 
 ```php
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\StoreValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
@@ -72,7 +72,7 @@ $client->execute($store);
 ## Getting Data Out
 
 ```php
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
@@ -94,7 +94,7 @@ $object = $result->getValue();
 ## Removing Data
 
 ```php
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;

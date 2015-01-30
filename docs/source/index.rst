@@ -54,7 +54,7 @@ The first object that we create is a very basic object with a content type of ``
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -90,7 +90,7 @@ After that, we check to make sure that the stored object has the same value as t
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -125,7 +125,7 @@ Now that we've stored and then fetched the object, we can delete it by creating 
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\DeleteValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -202,7 +202,7 @@ Now we can store that Object object just like we stored the riak object earlier:
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -224,7 +224,7 @@ If we fetch the object using the same method we showed up above, we should get t
 .. code-block:: php
 
     <?php
-    use Riak\Client\Cap\RiakOption;
+    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;

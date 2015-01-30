@@ -2,7 +2,7 @@
 
 namespace Riak\Client\Converter;
 
-use Riak\Client\Cap\VClock;
+use Riak\Client\Core\Query\VClock;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Message\Kv\Content;
 use Riak\Client\Core\Query\Link\RiakLink;
@@ -39,7 +39,7 @@ class RiakObjectConverter
 
     /**
      * @param \Riak\Client\Core\Message\Kv\Content $content
-     * @param \Riak\Client\Cap\VClock              $vClock
+     * @param \Riak\Client\Core\Query\VClock              $vClock
      *
      * @return \Riak\Client\Core\Query\RiakObject
      */

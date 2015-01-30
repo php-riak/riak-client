@@ -46,7 +46,7 @@ class RiakObject
     private $isModified;
 
     /**
-     * @var \Riak\Client\Cap\VClock
+     * @var \Riak\Client\Core\Query\VClock
      */
     private $vClock;
 
@@ -73,7 +73,7 @@ class RiakObject
     /**
      * @param string                  $value
      * @param string                  $contentType
-     * @param \Riak\Client\Cap\VClock $vClock
+     * @param \Riak\Client\Core\Query\VClock $vClock
      */
     public function __construct($value = null, $contentType = null, VClock $vClock = null)
     {

@@ -3,7 +3,7 @@
 namespace RiakClientFunctionalTest\Command\Kv;
 
 use RiakClientFunctionalTest\TestCase;
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Command\Kv\StoreValue;
 use Riak\Client\Core\Query\RiakObject;

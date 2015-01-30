@@ -4,7 +4,7 @@ namespace RiakClientTest\Command\Kv;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\Cap\RiakOption;
+use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Command\Kv\StoreValue;
@@ -102,7 +102,7 @@ class DomainValueWithConverterTest extends TestCase
         $result = $this->client->execute($command);
 
         $this->assertInstanceOf('Riak\Client\Command\Kv\Response\FetchValueResponse', $result);
-        $this->assertInstanceOf('Riak\Client\Cap\VClock', $result->getVectorClock());
+        $this->assertInstanceOf('Riak\Client\Core\Query\VClock', $result->getVectorClock());
 
         $this->assertTrue($result->hasValues());
         $this->assertFalse($result->getNotFound());
