@@ -12,23 +12,14 @@ use Riak\Client\Core\Transport\Http\HttpStrategy;
 abstract class BaseHttpStrategy extends HttpStrategy
 {
     /**
-     * @param string $schema
+     * @param string $resource
+     * @param string $path
      *
      * @return string
      */
-    protected function buildSchemaPath($schema)
+    protected function buildPath($resource, $path)
     {
-        return sprintf('/search/schema/%s', $schema);
-    }
-
-    /**
-     * @param string $index
-     *
-     * @return string
-     */
-    protected function buildIndexPath($index)
-    {
-        return sprintf('/search/index/%s', $index);
+        return sprintf('/search/%s/%s', $resource, $path);
     }
 
     /**
@@ -39,7 +30,7 @@ abstract class BaseHttpStrategy extends HttpStrategy
      */
     protected function createSchemaRequest($method, $schema)
     {
-        $path    = $this->buildSchemaPath($schema);
+        $path    = $this->buildPath('schema', $schema);
         $httpReq = $this->client->createRequest($method, $path);
 
         return $httpReq;
@@ -53,7 +44,21 @@ abstract class BaseHttpStrategy extends HttpStrategy
      */
     protected function createIndexRequest($method, $schema)
     {
-        $path    = $this->buildIndexPath($schema);
+        $path    = $this->buildPath('index', $schema);
+        $httpReq = $this->client->createRequest($method, $path);
+
+        return $httpReq;
+    }
+
+    /**
+     * @param string $method
+     * @param string $schema
+     *
+     * @return \GuzzleHttp\Message\RequestInterface
+     */
+    protected function createQueryRequest($method, $schema)
+    {
+        $path    = $this->buildPath('query', $schema);
         $httpReq = $this->client->createRequest($method, $path);
 
         return $httpReq;

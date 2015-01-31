@@ -29,8 +29,9 @@ class BaseHttpStrategyTest extends TestCase
 
     public function testBuildPath()
     {
-        $this->assertEquals('/search/index/index-name', $this->invokeMethod($this->instance, 'buildIndexPath', ['index-name']));
-        $this->assertEquals('/search/schema/schema-name', $this->invokeMethod($this->instance, 'buildSchemaPath', ['schema-name']));
+        $this->assertEquals('/search/index/index-name', $this->invokeMethod($this->instance, 'buildPath', ['index', 'index-name']));
+        $this->assertEquals('/search/schema/schema-name', $this->invokeMethod($this->instance, 'buildPath', ['schema', 'schema-name']));
+        $this->assertEquals('/search/query/search-index', $this->invokeMethod($this->instance, 'buildPath', ['query', 'search-index']));
     }
 
     public function testCreateSchemaRequest()

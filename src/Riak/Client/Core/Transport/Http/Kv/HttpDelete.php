@@ -74,19 +74,10 @@ class HttpDelete extends BaseHttpStrategy
      */
     public function send(Request $request)
     {
-        $httpRequest = $this->createHttpRequest($request);
-        $response    = new DeleteResponse();
-
-        try {
-            $httpResponse = $this->client->send($httpRequest);
-            $code         = $httpResponse->getStatusCode();
-        } catch (RequestException $e) {
-            if ($e->getCode() == 404) {
-                return $response;
-            }
-
-            throw $e;
-        }
+        $httpRequest  = $this->createHttpRequest($request);
+        $response     = new DeleteResponse();
+        $httpResponse = $this->client->send($httpRequest);
+        $code         = $httpResponse->getStatusCode();
 
         if ( ! isset($this->validResponseCodes[$code])) {
             throw RiakTransportException::unexpectedStatusCode($code);

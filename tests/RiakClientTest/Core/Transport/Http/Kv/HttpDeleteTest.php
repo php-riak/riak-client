@@ -47,12 +47,13 @@ class HttpDeleteTest extends TestCase
         $deleteRequest->type   = 'default';
         $deleteRequest->key    = '1';
 
-        $deleteRequest->r  = 1;
-        $deleteRequest->pr = 2;
-        $deleteRequest->rw = 3;
-        $deleteRequest->w  = 3;
-        $deleteRequest->dw = 2;
-        $deleteRequest->pw = 1;
+        $deleteRequest->r       = 1;
+        $deleteRequest->pr      = 2;
+        $deleteRequest->rw      = 3;
+        $deleteRequest->w       = 3;
+        $deleteRequest->dw      = 2;
+        $deleteRequest->pw      = 1;
+        $deleteRequest->vClock  = 'vclock-hash';
 
         $this->client->expects($this->once())
             ->method('createRequest')
@@ -62,6 +63,13 @@ class HttpDeleteTest extends TestCase
         $request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
+
+        $request->expects($this->exactly(2))
+            ->method('setHeader')
+            ->will($this->returnValueMap([
+                ['Accept', ['multipart/mixed', '*/*'], $query],
+                ['X-Riak-Vclock', 'vclock-hash', $query],
+            ]));
 
         $query->expects($this->exactly(6))
             ->method('add')
@@ -115,5 +123,36 @@ class HttpDeleteTest extends TestCase
         $response = $this->instance->send($request);
 
         $this->assertInstanceOf('Riak\Client\Core\Message\Kv\DeleteResponse', $response);
+    }
+
+    /**
+     * @expectedException \Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "999"
+     */
+    public function testUnexpectedStatusCodeException()
+    {
+        $request      = new DeleteRequest();
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->with($this->equalTo('DELETE'), $this->equalTo('/types/default/buckets/test_bucket/keys/1'))
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->with($this->equalTo($httpRequest))
+            ->willReturn($httpResponse);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(999);
+
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+        $request->key    = '1';
+
+        $this->instance->send($request);
     }
 }

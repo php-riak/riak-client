@@ -103,4 +103,33 @@ class MultipartResponseIteratorTest extends TestCase
         $this->assertEquals('Wed, 07 Jan 2015 19:41:52 GMT', $values[0]->getHeader('Last-Modified'));
         $this->assertEquals('Wed, 07 Jan 2015 19:41:52 GMT', $values[1]->getHeader('Last-Modified'));
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unable to parse boundary from content type : 'application/json'
+     */
+    public function testInvalidContentTypeBoundaryException()
+    {
+        $response = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $response->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(200);
+
+        $response->expects($this->once())
+            ->method('getHeader')
+            ->with($this->equalTo('Content-Type'))
+            ->willReturn('application/json');
+
+        new MultipartResponseIterator($response);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Boundary cannot be null
+     */
+    public function testInvalidBoundaryException()
+    {
+        new MultipartStreamIterator(Stream::factory(''), null);
+    }
 }

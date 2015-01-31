@@ -53,7 +53,7 @@ class MultipartResponseIterator implements Iterator
         $header  = $response->getHeader('Content-Type');
 
         if ( ! preg_match('/boundary=(.*)$/', $header, $matches) || ! isset($matches[1])) {
-            throw new InvalidArgumentException("Unable to parse multipart content [Content-Type : $header]");
+            throw new InvalidArgumentException("Unable to parse boundary from content type : '$header'");
         }
 
         $this->response = $response;
