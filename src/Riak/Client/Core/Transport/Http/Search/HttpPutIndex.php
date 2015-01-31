@@ -22,10 +22,10 @@ class HttpPutIndex extends BaseHttpStrategy
     private function createHttpRequest(PutIndexRequest $getRequest)
     {
         $request = $this->createIndexRequest('PUT', $getRequest->name);
-        $data    = [
+        $data    = array_filter([
             'n_val'  => $getRequest->nVal,
             'schema' => $getRequest->schema,
-        ];
+        ]);
 
         $request->setBody(Stream::factory(json_encode($data)));
         $request->setHeader('Content-Type', 'application/json');
