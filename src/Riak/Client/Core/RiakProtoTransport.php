@@ -24,6 +24,8 @@ class RiakProtoTransport implements RiakTransport
         // bucket
         'Riak\Client\Core\Message\Bucket\GetRequest'         => 'Riak\Client\Core\Transport\Proto\Bucket\ProtoGet',
         'Riak\Client\Core\Message\Bucket\PutRequest'         => 'Riak\Client\Core\Transport\Proto\Bucket\ProtoPut',
+        // index
+        'Riak\Client\Core\Message\Index\IndexQueryRequest'   => 'Riak\Client\Core\Transport\Proto\Index\ProtoIndexQuery',
         // search
         'Riak\Client\Core\Message\Search\SearchRequest'      => 'Riak\Client\Core\Transport\Proto\Search\ProtoSearch',
         'Riak\Client\Core\Message\Search\GetSchemaRequest'   => 'Riak\Client\Core\Transport\Proto\Search\ProtoGetSchema',

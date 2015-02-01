@@ -49,6 +49,7 @@ class ProtoClient
         RiakMessageCodes::LIST_BUCKETS_RESP         => 'Riak\Client\ProtoBuf\RpbListBucketsResp',
         RiakMessageCodes::LIST_KEYS_RESP            => 'Riak\Client\ProtoBuf\RpbListKeysResp',
         RiakMessageCodes::PUT_RESP                  => 'Riak\Client\ProtoBuf\RpbPutResp',
+        RiakMessageCodes::INDEX_RESP                => 'Riak\Client\ProtoBuf\RpbIndexResp',
         RiakMessageCodes::SEARCH_QUERY_RESP         => 'Riak\Client\ProtoBuf\RpbSearchQueryResp',
         RiakMessageCodes::YOKOZUNA_INDEX_GET_RESP   => 'Riak\Client\ProtoBuf\RpbYokozunaIndexGetResp',
         RiakMessageCodes::YOKOZUNA_SCHEMA_GET_RESP  => 'Riak\Client\ProtoBuf\RpbYokozunaSchemaGetResp'
@@ -81,6 +82,8 @@ class ProtoClient
     }
 
     /**
+     * Send a Protobuf message and receive the response
+     *
      * @param \DrSlump\Protobuf\Message $message
      * @param integer                   $messageCode
      * @param integer                   $expectedResponseCode
@@ -101,6 +104,42 @@ class ProtoClient
 
         if ($class == null) {
             return;
+        }
+
+        return Protobuf::decode($class, $respBody);
+    }
+
+    /**
+     * Send a Protobuf message but does not receive the response
+     *
+     * @param \DrSlump\Protobuf\Message $message
+     * @param integer                   $messageCode
+     */
+    public function emit(Message $message, $messageCode)
+    {
+        $this->sendPayload($this->encodeMessage($message, $messageCode));
+    }
+
+    /**
+     * Receive a protobuf reponse message
+     *
+     * @param integer $messageCode
+     *
+     * @return \DrSlump\Protobuf\Message
+     */
+    public function receiveMessage($messageCode)
+    {
+        $class    = $this->classForCode($messageCode);
+        $response = $this->receive();
+        $respCode = $response[0];
+        $respBody = $response[1];
+
+        if ($respCode != $messageCode) {
+            $this->throwResponseException($respCode, $respBody);
+        }
+
+        if ($class == null) {
+            throw new \InvalidArgumentException("Invalid response class for message code : $messageCode");
         }
 
         return Protobuf::decode($class, $respBody);
@@ -192,10 +231,20 @@ class ProtoClient
      * @param string $payload
      *
      * @return array
-     *
-     * @throws \Exception
      */
     private function sendData($payload)
+    {
+        $this->sendPayload($payload);
+
+        return $this->receive();
+    }
+
+    /**
+     * @param string $payload
+     *
+     * @return array
+     */
+    private function sendPayload($payload)
     {
         $resource = $this->getConnection();
         $lenght   = strlen($payload);
@@ -208,8 +257,6 @@ class ProtoClient
                 throw new RiakTransportException('Failed to write message');
             }
         }
-
-        return $this->receive();
     }
 
     /**
