@@ -17,6 +17,11 @@ class ProtoIndexQueryIteratorTest extends TestCase
     private $client;
 
     /**
+     * @var \GuzzleHttp\Stream\Stream
+     */
+    private $stream;
+
+    /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
      */
     private $request;
@@ -31,8 +36,9 @@ class ProtoIndexQueryIteratorTest extends TestCase
         parent::setUp();
 
         $this->request  = new IndexQueryRequest();
+        $this->stream   = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
         $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
-        $this->instance = new ProtoIndexQueryResponseIterator($this->request, $this->client);
+        $this->instance = new ProtoIndexQueryResponseIterator($this->request, $this->client, $this->stream);
     }
 
     public function testIteratorFromResults()
@@ -118,7 +124,7 @@ class ProtoIndexQueryIteratorTest extends TestCase
         $this->client->expects($this->once())
             ->method('receiveMessage')
             ->willReturn($rpbResp)
-            ->with($this->equalTo(RiakMessageCodes::INDEX_RESP));
+            ->with($this->equalTo($this->stream), $this->equalTo(RiakMessageCodes::INDEX_RESP));
 
         $this->instance->rewind();
         $this->instance->current();

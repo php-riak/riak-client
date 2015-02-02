@@ -4,6 +4,7 @@ namespace Riak\Client\Core\Transport\Proto;
 
 use DrSlump\Protobuf\Message;
 use DrSlump\Protobuf\Protobuf;
+use GuzzleHttp\Stream\Stream;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\Core\Transport\RiakTransportException;
 
@@ -15,24 +16,9 @@ use Riak\Client\Core\Transport\RiakTransportException;
 class ProtoClient
 {
     /**
-     * @var resource
+     * @var \Riak\Client\Core\Transport\Proto\ProtoConnection
      */
-    private $resource;
-
-    /**
-     * @var string
-     */
-    private $host;
-
-    /**
-     * @var integer
-     */
-    private $port;
-
-    /**
-     * @var integer
-     */
-    private $timeout;
+    private $connection;
 
     /**
      * Mapping of message code to PB response class names
@@ -56,29 +42,11 @@ class ProtoClient
     ];
 
     /**
-     * @param string $host
-     * @param string $port
+     * @param \Riak\Client\Core\Transport\Proto\ProtoConnection $connection
      */
-    public function __construct($host, $port)
+    public function __construct(ProtoConnection $connection)
     {
-        $this->host = $host;
-        $this->port = $port;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getTimeout()
-    {
-        return $this->timeout;
-    }
-
-    /**
-     * @param integer $timeout
-     */
-    public function setTimeout($timeout)
-    {
-        $this->timeout = $timeout;
+        $this->connection = $connection;
     }
 
     /**
@@ -93,44 +61,39 @@ class ProtoClient
     public function send(Message $message, $messageCode, $expectedResponseCode)
     {
         $payload  = $this->encodeMessage($message, $messageCode);
-        $class    = $this->classForCode($expectedResponseCode);
-        $response = $this->sendData($payload);
-        $respCode = $response[0];
-        $respBody = $response[1];
+        $stream   = $this->connection->send($payload);
 
-        if ($respCode != $expectedResponseCode) {
-            $this->throwResponseException($respCode, $respBody);
-        }
-
-        if ($class == null) {
-            return;
-        }
-
-        return Protobuf::decode($class, $respBody);
+        return $this->receiveMessage($stream, $expectedResponseCode);
     }
 
     /**
-     * Send a Protobuf message but does not receive the response
+     * Send a Protobuf message using a new stream and return it for future usage
      *
      * @param \DrSlump\Protobuf\Message $message
      * @param integer                   $messageCode
+     *
+     * @return \GuzzleHttp\Stream\Stream
      */
     public function emit(Message $message, $messageCode)
     {
-        $this->sendPayload($this->encodeMessage($message, $messageCode));
+        $payload = $this->encodeMessage($message, $messageCode);
+        $stream  = $this->connection->createStream();
+
+        return $this->connection->send($payload, $stream);
     }
 
     /**
      * Receive a protobuf reponse message
      *
-     * @param integer $messageCode
+     * @param \GuzzleHttp\Stream\Stream $stream
+     * @param integer                   $messageCode
      *
      * @return \DrSlump\Protobuf\Message
      */
-    public function receiveMessage($messageCode)
+    public function receiveMessage(Stream $stream, $messageCode)
     {
+        $response = $this->connection->receive($stream);
         $class    = $this->classForCode($messageCode);
-        $response = $this->receive();
         $respCode = $response[0];
         $respBody = $response[1];
 
@@ -139,24 +102,10 @@ class ProtoClient
         }
 
         if ($class == null) {
-            throw new \InvalidArgumentException("Invalid response class for message code : $messageCode");
+            return;
         }
 
-        return Protobuf::decode($class, $respBody);
-    }
-
-    /**
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function classForCode($code)
-    {
-        if (isset(self::$respClassMap[$code])) {
-            return self::$respClassMap[$code];
-        }
-
-        return null;
+        return Protobuf::decode($class, (string) $respBody);
     }
 
     /**
@@ -167,10 +116,8 @@ class ProtoClient
      */
     protected function throwResponseException($actualCode, $respBody)
     {
-        $this->resource = null;
-
         $exceptionCode    = $actualCode;
-        $exceptionMessage = "Unexpected rpb response code: " . $actualCode;
+        $exceptionMessage = "Unexpected protobuf response code: " . $actualCode;
 
         if ($actualCode === RiakMessageCodes::ERROR_RESP) {
             $errorClass   = self::$respClassMap[$actualCode];
@@ -189,31 +136,6 @@ class ProtoClient
     }
 
     /**
-     * @return resource
-     */
-    protected function getConnection()
-    {
-        if ($this->resource != null && is_resource($this->resource)) {
-            return $this->resource;
-        }
-
-        $errno    = null;
-        $errstr   = null;
-        $uri      = sprintf('tcp://%s:%s', $this->host, $this->port);
-        $resource = stream_socket_client($uri, $errno, $errstr);
-
-        if ( ! is_resource($resource)) {
-            throw new RiakTransportException(sprintf('Fail to connect to : %s [%s %s]', $uri, $errno, $errstr));
-        }
-
-        if ($this->timeout !== null) {
-            stream_set_timeout($resource, $this->timeout);
-        }
-
-        return $this->resource = $resource;
-    }
-
-    /**
      * @param \DrSlump\Protobuf\Message $message
      * @param integer                   $code
      *
@@ -228,72 +150,16 @@ class ProtoClient
     }
 
     /**
-     * @param string $payload
+     * @param string $code
      *
-     * @return array
+     * @return string
      */
-    private function sendData($payload)
+    protected function classForCode($code)
     {
-        $this->sendPayload($payload);
-
-        return $this->receive();
-    }
-
-    /**
-     * @param string $payload
-     *
-     * @return array
-     */
-    private function sendPayload($payload)
-    {
-        $resource = $this->getConnection();
-        $lenght   = strlen($payload);
-        $fwrite   = 0;
-
-        for ($written = 0; $written < $lenght; $written += $fwrite) {
-            $fwrite = fwrite($resource, substr($payload, $written));
-
-            if ($fwrite === false) {
-                throw new RiakTransportException('Failed to write message');
-            }
-        }
-    }
-
-    /**
-     * @return array
-     */
-    private function receive()
-    {
-        $message  = '';
-        $resource = $this->getConnection();
-        $header   = fread($resource, 4);
-
-        if ($header === false) {
-            throw new RiakTransportException('Fail to read response headers');
+        if (isset(self::$respClassMap[$code])) {
+            return self::$respClassMap[$code];
         }
 
-        if (strlen($header) !== 4) {
-            throw new RiakTransportException('Short read on header, read ' . strlen($header) . ' bytes');
-        }
-
-        $unpackHeaders = array_values(unpack("N", $header));
-        $length        = isset($unpackHeaders[0]) ? $unpackHeaders[0] : 0;
-
-        while (strlen($message) !== $length) {
-
-            $buffer = fread($resource, min(8192, $length - strlen($message)));
-
-            if ( ! strlen($buffer) || $buffer === false) {
-                throw new RiakTransportException('Fail to read socket response');
-            }
-
-            $message .= $buffer;
-        }
-
-        $messageBodyString = substr($message, 1);
-        $messageCodeString = substr($message, 0, 1);
-        list($messageCode) = array_values(unpack("C", $messageCodeString));
-
-        return [$messageCode, $messageBodyString];
+        return null;
     }
 }

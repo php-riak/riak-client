@@ -5,6 +5,7 @@ namespace Riak\Client\Core;
 use GuzzleHttp\Client;
 use Riak\Client\RiakException;
 use Riak\Client\Core\Transport\Proto\ProtoClient;
+use Riak\Client\Core\Transport\Proto\ProtoConnection;
 
 /**
  * Riak Node builder.
@@ -119,7 +120,8 @@ class RiakNodeBuilder
      */
     private function buildProtoTransport()
     {
-        $rpbClient    = new ProtoClient($this->host, $this->port, $this->user, $this->pass);
+        $rpbConn      = new ProtoConnection($this->host, $this->port);
+        $rpbClient    = new ProtoClient($rpbConn);
         $riakPbAdpter = new RiakProtoTransport($rpbClient);
 
         return $riakPbAdpter;
@@ -128,7 +130,7 @@ class RiakNodeBuilder
     /**
      * @return \Riak\Client\Core\RiakTransport
      */
-    private function buildAdapter()
+    private function buildTransport()
     {
         if ($this->protocol == 'http' || $this->protocol == 'https') {
             return $this->buildHttpTransport();
@@ -146,6 +148,6 @@ class RiakNodeBuilder
      */
     public function build()
     {
-        return new RiakNode($this->buildAdapter());
+        return new RiakNode($this->buildTransport());
     }
 }

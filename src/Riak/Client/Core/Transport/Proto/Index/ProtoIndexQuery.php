@@ -61,14 +61,11 @@ class ProtoIndexQuery extends ProtoStrategy
      */
     public function send(Request $request)
     {
-        $client   = clone $this->client;
         $response = new IndexQueryResponse();
         $rpbReq   = $this->createRpbMessage($request);
-        $iterator = new ProtoIndexQueryResponseIterator($request, $client);
+        $socket   = $this->client->emit($rpbReq, RiakMessageCodes::INDEX_REQ);
 
-        $client->emit($rpbReq, RiakMessageCodes::INDEX_REQ);
-
-        $response->iterator = $iterator;
+        $response->iterator = new ProtoIndexQueryResponseIterator($request, $this->client, $socket);
 
         return $response;
     }
