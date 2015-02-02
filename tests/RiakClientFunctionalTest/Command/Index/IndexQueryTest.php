@@ -10,6 +10,7 @@ use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\Index\IntIndexQuery;
+use Riak\Client\Command\Index\BinIndexQuery;
 use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\Index\RiakIndexBin;
 use Riak\Client\Core\Query\Index\RiakIndexInt;
@@ -33,19 +34,31 @@ abstract class IndexQueryTest extends TestCase
      */
     protected $data = [
         [
-            'value' => 'User1',
-            'keys'  => [0, 1, 2],
-            'tags'  => ['t0', 't1', 't2'],
+            'value'  => 'User1',
+            'groups' => [0, 1, 2],
+            'emails' => [
+                'user1@gmail.com',
+                'user1@yahoo.com',
+                'user1@hotmail.com'
+            ],
         ],
         [
-            'value' => 'User2',
-            'keys'  => [0, 2, 3],
-            'tags'  => ['t0', 't2', 't3'],
+            'value'  => 'User2',
+            'groups' => [0, 2, 3],
+            'emails' => [
+                'user2@gmail.com',
+                'user2@yahoo.com',
+                'user2@hotmail.com'
+            ],
         ],
         [
-            'value' => 'User3',
-            'keys'  => [0, 3, 4],
-            'tags'  => ['t0', 't3', 't4'],
+            'value'  => 'User3',
+            'groups' => [0, 3, 4],
+            'emails' => [
+                'user3@gmail.com',
+                'user3@yahoo.com',
+                'user3@hotmail.com'
+            ],
         ]
     ];
 
@@ -87,12 +100,12 @@ abstract class IndexQueryTest extends TestCase
         $u2 = $this->data[1];
         $u3 = $this->data[2];
 
-        $this->storeObject("user1", $u1['value'], $u1['keys'], $u1['tags']);
-        $this->storeObject("user2", $u2['value'], $u2['keys'], $u2['tags']);
-        $this->storeObject("user3", $u3['value'], $u3['keys'], $u3['tags']);
+        $this->storeObject("user1", $u1['value'], $u1['groups'], $u1['emails']);
+        $this->storeObject("user2", $u2['value'], $u2['groups'], $u2['emails']);
+        $this->storeObject("user3", $u3['value'], $u3['groups'], $u3['emails']);
     }
 
-    private function storeObject($key, $info, array $keys, array $tags)
+    private function storeObject($key, $info, array $groups, array $emails)
     {
         $json     = json_encode($info);
         $object   = new RiakObject($json, 'application/json');
@@ -102,8 +115,8 @@ abstract class IndexQueryTest extends TestCase
             ->withOption(RiakOption::W, 2)
             ->build();
 
-        $object->addIndex(new RiakIndexInt('keys', $keys));
-        $object->addIndex(new RiakIndexBin('tags', $tags));
+        $object->addIndex(new RiakIndexInt('groups', $groups));
+        $object->addIndex(new RiakIndexBin('emails', $emails));
 
         $this->client->execute($command);
 
@@ -112,12 +125,42 @@ abstract class IndexQueryTest extends TestCase
 
     public function testSimpleIntIndexQueryMatch()
     {
-        $this->setUpData();
-
         $indexQuery = IntIndexQuery::builder()
             ->withNamespace($this->namespace)
-            ->withIndexName('keys')
+            ->withIndexName('groups')
             ->withReturnTerms(true)
+            ->withMatch(2)
+            ->build();
+
+        $result = $this->client->execute($indexQuery);
+
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result);
+
+        $iterator = $result->getEntries();
+        $values   = iterator_to_array($iterator);
+
+        $this->assertCount(2, $values);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[0]);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[1]);
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[0]->getLocation());
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[1]->getLocation());
+
+        usort($values, function(IndexEntry $a, IndexEntry $b){
+            return strcmp($a->getLocation()->getKey(), $b->getLocation()->getKey());
+        });
+
+        $this->assertEquals('user1', $values[0]->getLocation()->getKey());
+        $this->assertEquals('user2', $values[1]->getLocation()->getKey());
+        $this->assertEquals(2, $values[0]->getIndexKey());
+        $this->assertEquals(2, $values[1]->getIndexKey());
+    }
+
+    public function testSimpleIntIndexQueryMatchWhitoutTerms()
+    {
+        $indexQuery = IntIndexQuery::builder()
+            ->withNamespace($this->namespace)
+            ->withReturnTerms(false)
+            ->withIndexName('groups')
             ->withMatch(2)
             ->build();
 
@@ -146,11 +189,9 @@ abstract class IndexQueryTest extends TestCase
 
     public function testSimpleIntIndexQueryRange()
     {
-        $this->setUpData();
-
         $indexQuery = IntIndexQuery::builder()
             ->withNamespace($this->namespace)
-            ->withIndexName('keys')
+            ->withIndexName('groups')
             ->withReturnTerms(true)
             ->withStart(2)
             ->withEnd(3)
@@ -166,5 +207,62 @@ abstract class IndexQueryTest extends TestCase
         $this->assertCount(4, $values);
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[0]);
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[1]);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[2]);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[3]);
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[0]->getLocation());
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[1]->getLocation());
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[2]->getLocation());
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[3]->getLocation());
+
+        usort($values, function(IndexEntry $a, IndexEntry $b){
+            return strcmp($a->getLocation()->getKey(), $b->getLocation()->getKey());
+        });
+
+        $this->assertEquals('user1', $values[0]->getLocation()->getKey());
+        $this->assertEquals('user2', $values[1]->getLocation()->getKey());
+        $this->assertEquals('user2', $values[2]->getLocation()->getKey());
+        $this->assertEquals('user3', $values[3]->getLocation()->getKey());
+        $this->assertEquals(2, $values[0]->getIndexKey());
+        $this->assertEquals(2, $values[1]->getIndexKey());
+        $this->assertEquals(3, $values[2]->getIndexKey());
+        $this->assertEquals(3, $values[3]->getIndexKey());
+    }
+
+    public function testSimpleBinIndexQueryRange()
+    {
+        $indexQuery = BinIndexQuery::builder()
+            ->withNamespace($this->namespace)
+            ->withTermFilter('@gmail.com')
+            ->withIndexName('emails')
+            ->withReturnTerms(true)
+            ->withStart('user1')
+            ->withEnd('user4')
+            ->build();
+
+        $result = $this->client->execute($indexQuery);
+
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result);
+
+        $iterator = $result->getEntries();
+        $values   = iterator_to_array($iterator);
+
+        $this->assertCount(3, $values);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[0]);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[1]);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[2]);
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[0]->getLocation());
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[1]->getLocation());
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $values[2]->getLocation());
+
+        usort($values, function(IndexEntry $a, IndexEntry $b){
+            return strcmp($a->getLocation()->getKey(), $b->getLocation()->getKey());
+        });
+
+        $this->assertEquals('user1', $values[0]->getLocation()->getKey());
+        $this->assertEquals('user2', $values[1]->getLocation()->getKey());
+        $this->assertEquals('user3', $values[2]->getLocation()->getKey());
+        $this->assertEquals('user1@gmail.com', $values[0]->getIndexKey());
+        $this->assertEquals('user2@gmail.com', $values[1]->getIndexKey());
+        $this->assertEquals('user3@gmail.com', $values[2]->getIndexKey());
     }
 }

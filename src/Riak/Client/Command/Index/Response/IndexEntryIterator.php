@@ -81,6 +81,10 @@ class IndexEntryIterator implements Iterator
      */
     public function readNext()
     {
+        if ($this->innerIterator == null) {
+            return null;
+        }
+
         if ($this->innerIterator->valid()) {
             return $this->currentEntry();
         }

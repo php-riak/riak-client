@@ -50,6 +50,22 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        if ($this->current->hasResults()) {
+            return $this->currentFromResults($this->current->results);
+        }
+
+        if ($this->current->hasKeys()) {
+            return $this->currentFromKeys($this->current->keys);
+        }
+
+        throw new \RuntimeException("Invalid iterator element");
+    }
+
+    /**
      * @param array $results
      *
      * @return array
@@ -78,32 +94,19 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
     public function currentFromKeys(array $keys)
     {
         $values = [];
+        $key    = ($this->request->qtype === 'eq')
+            ? $this->request->key
+            : null;
 
         foreach ($keys as $value) {
             $entry = new IndexEntry();
 
-            $entry->indexKey  = $this->request->key;
+            $entry->indexKey  = $key;
             $entry->objectKey = $value;
 
             $values[] = $entry;
         }
 
         return new ArrayIterator($values);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        if ($this->current->hasResults()) {
-            return $this->currentFromResults($this->current->results);
-        }
-
-        if ($this->current->hasKeys()) {
-            return $this->currentFromKeys($this->current->keys);
-        }
-
-        throw new \RuntimeException("Invalid iterator element");
     }
 }

@@ -9,7 +9,6 @@ use Riak\Client\ProtoBuf\RpbIndexReq\IndexQueryType;
 use Riak\Client\Core\Transport\Proto\ProtoStrategy;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Message\Index\IndexQueryResponse;
-use Riak\Client\Core\Operation\Index\IndexEntryIterator;
 use Riak\Client\Core\Transport\Proto\Index\ProtoIndexQueryIterator;
 
 /**
@@ -46,6 +45,10 @@ class ProtoIndexQuery extends ProtoStrategy
 
         if ($request->returnTerms !== null) {
             $rpbGetReq->setReturnTerms($request->returnTerms);
+        }
+
+        if ($request->termRegex !== null) {
+            $rpbGetReq->setTermRegex($request->termRegex);
         }
 
         return $rpbGetReq;

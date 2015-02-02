@@ -4,14 +4,14 @@ namespace Riak\Client\Command\Index;
 
 use Riak\Client\Core\RiakCluster;
 use Riak\Client\Core\Operation\Index\IndexQueryOperation;
-use Riak\Client\Command\Index\Builder\IntIndexQueryBuilder;
+use Riak\Client\Command\Index\Builder\BinIndexQueryBuilder;
 
 /**
  * Performs a 2i query where the 2i keys are ints.
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class IntIndexQuery extends IndexQuery
+class BinIndexQuery extends IndexQuery
 {
     /**
      * {@inheritdoc}
@@ -30,10 +30,10 @@ class IntIndexQuery extends IndexQuery
      * @param mixed                                 $start
      * @param mixed                                 $end
      *
-     * @return \Riak\Client\Command\Index\Builder\IntIndexQueryBuilder
+     * @return \Riak\Client\Command\Index\Builder\BinIndexQueryBuilder
      */
     public static function builder(RiakNamespace $namespace = null, $indexName = null, $start = null, $end = null)
     {
-        return new IntIndexQueryBuilder($namespace, $indexName, $start, $end);
+        return new BinIndexQueryBuilder($namespace, $indexName, $start, $end);
     }
 }

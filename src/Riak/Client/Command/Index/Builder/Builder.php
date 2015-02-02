@@ -90,20 +90,6 @@ abstract class Builder
     }
 
     /**
-     * Set the regex to filter result terms by for this query.
-     *
-     * @param string $filter
-     *
-     * @return \Riak\Client\Command\Index\Builder\Builder
-     */
-    public function withTermFilter($filter)
-    {
-        $this->query->setTermFilter($filter);
-
-        return $this;
-    }
-
-    /**
      * Set the Riak-side timeout value.
      *
      * @param type $timeout
