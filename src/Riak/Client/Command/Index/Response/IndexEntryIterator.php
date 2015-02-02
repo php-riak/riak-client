@@ -128,7 +128,7 @@ class IndexEntryIterator implements Iterator
      */
     public function currentEntry()
     {
-        if ( !$this->innerIterator || ! $this->innerIterator->valid()) {
+        if ( ! $this->innerIterator || ! $this->innerIterator->valid()) {
             return null;
         }
 
