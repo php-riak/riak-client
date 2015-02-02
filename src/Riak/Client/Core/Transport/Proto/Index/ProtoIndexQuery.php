@@ -9,7 +9,7 @@ use Riak\Client\ProtoBuf\RpbIndexReq\IndexQueryType;
 use Riak\Client\Core\Transport\Proto\ProtoStrategy;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Message\Index\IndexQueryResponse;
-use Riak\Client\Core\Transport\Proto\Index\ProtoIndexQueryIterator;
+use Riak\Client\Core\Transport\Proto\Index\ProtoIndexQueryResponseIterator;
 
 /**
  * rpb index query implementation.
@@ -64,7 +64,7 @@ class ProtoIndexQuery extends ProtoStrategy
         $client   = clone $this->client;
         $response = new IndexQueryResponse();
         $rpbReq   = $this->createRpbMessage($request);
-        $iterator = new ProtoIndexQueryIterator($request, $client, RiakMessageCodes::INDEX_RESP);
+        $iterator = new ProtoIndexQueryResponseIterator($request, $client);
 
         $client->emit($rpbReq, RiakMessageCodes::INDEX_REQ);
 

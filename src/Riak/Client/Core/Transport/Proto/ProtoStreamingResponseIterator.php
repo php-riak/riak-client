@@ -22,11 +22,6 @@ abstract class ProtoStreamingResponseIterator implements Iterator
     protected $count = 0;
 
     /**
-     * @var boolean
-     */
-    protected $first = true;
-
-    /**
      * @var \DrSlump\Protobuf\Message
      */
     protected $current;
@@ -67,8 +62,7 @@ abstract class ProtoStreamingResponseIterator implements Iterator
      */
     public function next()
     {
-        $this->count ++;
-        $this->first   = false;
+        $this->count   = $this->count + 1;
         $this->current = $this->readNext();
     }
 

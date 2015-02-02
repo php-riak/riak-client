@@ -3,7 +3,9 @@
 namespace Riak\Client\Core\Transport\Proto\Index;
 
 use ArrayIterator;
+use RuntimeException;
 use Riak\Client\ProtoBuf\RpbIndexResp;
+use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\Core\Message\Index\IndexEntry;
 use Riak\Client\Core\Transport\Proto\ProtoClient;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
@@ -14,7 +16,7 @@ use Riak\Client\Core\Transport\Proto\ProtoStreamingResponseIterator;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
+class ProtoIndexQueryResponseIterator extends ProtoStreamingResponseIterator
 {
     /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
@@ -24,13 +26,12 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
     /**
      * @param \Riak\Client\Core\Message\Index\IndexQueryRequest $request
      * @param \Riak\Client\Core\Transport\Proto\ProtoClient     $client
-     * @param integer                                           $messageCode
      */
-    public function __construct(IndexQueryRequest $request, ProtoClient $client, $messageCode)
+    public function __construct(IndexQueryRequest $request, ProtoClient $client)
     {
         $this->request = $request;
 
-        parent::__construct($client, $messageCode);
+        parent::__construct($client, RiakMessageCodes::INDEX_RESP);
     }
 
     /**
@@ -38,7 +39,7 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
      */
     public function valid()
     {
-        if ($this->current === null || ( ! $this->current instanceof RpbIndexResp )) {
+        if ($this->current === null) {
             return false;
         }
 
@@ -55,14 +56,14 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
     public function current()
     {
         if ($this->current->hasResults()) {
-            return $this->currentFromResults($this->current->results);
+            return $this->iteratorFromResults($this->current->results);
         }
 
         if ($this->current->hasKeys()) {
-            return $this->currentFromKeys($this->current->keys);
+            return $this->iteratorFromKeys($this->current->keys);
         }
 
-        throw new \RuntimeException("Invalid iterator element");
+        throw new RuntimeException("Invalid iterator element");
     }
 
     /**
@@ -70,7 +71,7 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
      *
      * @return array
      */
-    public function currentFromResults(array $results)
+    private function iteratorFromResults(array $results)
     {
         $values = [];
 
@@ -91,7 +92,7 @@ class ProtoIndexQueryIterator extends ProtoStreamingResponseIterator
      *
      * @return array
      */
-    public function currentFromKeys(array $keys)
+    private function iteratorFromKeys(array $keys)
     {
         $values = [];
         $key    = ($this->request->qtype === 'eq')
