@@ -116,9 +116,22 @@ class ProtoConnection
         $socket = $stream ?: $this->getStream();
         $length = $this->receiveLengthHeader($socket);
         $code   = $this->receiveMessageCode($socket);
-        $body   = ($length > 1) ? $this->receiveMessageBody($socket, $length - 1) : null;
+        $body   = ($length > 1)
+            ? $this->receiveMessageBody($socket, $length - 1)
+            : null;
 
         return [$code, $body];
+    }
+
+    /**
+     * @param string  $payload
+     * @param integer $code
+     *
+     * @return string
+     */
+    public function encode($payload, $code)
+    {
+        return pack("NC", 1 + strlen($payload), $code) . $payload;
     }
 
     /**
@@ -135,7 +148,7 @@ class ProtoConnection
         }
 
         if (strlen($header) !== 4) {
-            throw new RiakTransportException('Short read on header, read ' . strlen($header) . ' bytes');
+            throw new RiakTransportException('Short read on header, read ' . strlen($header) . ', 4 bytes expected.');
         }
 
         $unpack = unpack("N", $header);
@@ -177,12 +190,11 @@ class ProtoConnection
         $bodyBuffer = Stream::factory();
 
         while ($readSize < $length) {
-
             $size     = min(8192, $length - $readSize);
             $part     = $socket->read($size);
             $readSize = $readSize + $size;
 
-            if ( ! strlen($part) || $part === false) {
+            if ($part === false) {
                 throw new RiakTransportException('Fail to read socket response');
             }
 

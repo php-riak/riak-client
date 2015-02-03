@@ -121,7 +121,7 @@ class ProtoClient
 
         if ($actualCode === RiakMessageCodes::ERROR_RESP) {
             $errorClass   = self::$respClassMap[$actualCode];
-            $errorMessage = Protobuf::decode($errorClass, $respBody);
+            $errorMessage = Protobuf::decode($errorClass, (string) $respBody);
 
             if ($errorMessage->hasErrmsg()) {
                 $exceptionMessage  = $errorMessage->getErrmsg();
@@ -143,10 +143,7 @@ class ProtoClient
      */
     private function encodeMessage(Message $message, $code)
     {
-        $encoded = Protobuf::encode($message);
-        $lenght  = strlen($encoded);
-
-        return pack("NC", 1 + $lenght, $code) . $encoded;
+        return $this->connection->encode(Protobuf::encode($message), $code);
     }
 
     /**

@@ -10,7 +10,6 @@ use malkusch\phpmock\Mock;
 use RiakClientTest\TestCase;
 
 /**
- * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  * @backupStaticAttributes enabled
  */
@@ -67,6 +66,9 @@ class ProtoConnectionTest extends TestCase
         ];
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testCreateConnectionWithTimeout()
     {
         $this->instance->setTimeout(350);
@@ -92,6 +94,89 @@ class ProtoConnectionTest extends TestCase
         $this->assertInstanceOf('GuzzleHttp\Stream\Stream', $this->instance->createStream());
     }
 
+    public function testReceiveLengthHeader()
+    {
+        $code    = pack('C', 10);
+        $message = 'message-body';
+        $stream  = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $header  = pack("N", strlen($code . $message));
+
+        $stream->expects($this->once())
+            ->method('read')
+            ->willReturn($header)
+            ->with($this->equalTo(4));
+
+       $this->assertEquals(13, $this->invokeMethod($this->instance, 'receiveLengthHeader', [$stream]));
+    }
+
+    public function testReceiveMessageCode()
+    {
+        $code    = pack('C', 10);
+        $stream  = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+
+        $stream->expects($this->once())
+            ->method('read')
+            ->willReturn($code)
+            ->with($this->equalTo(1));
+
+       $this->assertEquals(10, $this->invokeMethod($this->instance, 'receiveMessageCode', [$stream]));
+    }
+
+    public function testReceiveMessage()
+    {
+        $code    = pack('C', 10);
+        $message = 'message-body';
+        $stream  = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $header  = pack("N", strlen($code . $message));
+
+        $stream->expects($this->exactly(3))
+            ->method('read')
+            ->will($this->returnValueMap([
+                [4, $header],
+                [1, $code],
+                [12, $message],
+            ]));
+
+       $response     = $this->instance->receive($stream);
+       $responseCode = $response[0];
+       $responseBody = $response[1];
+
+       $this->assertEquals(10, $responseCode);
+       $this->assertEquals($message, $responseBody);
+    }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Fail to read response code
+     */
+    public function testReceiveInvalidCodeException()
+    {
+        $stream = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+
+        $stream->expects($this->once())
+            ->method('read')
+            ->willReturn(false)
+            ->with($this->equalTo(1));
+
+       $this->invokeMethod($this->instance, 'receiveMessageCode', [$stream]);
+    }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Short read on header, read 3, 4 bytes expected.
+     */
+    public function testReceiveInvalidHeaderSizeException()
+    {
+        $stream = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+
+        $stream->expects($this->once())
+            ->method('read')
+            ->willReturn('123')
+            ->with($this->equalTo(4));
+
+       $this->instance->receive($stream);
+    }
+
     /**
      * @expectedException Riak\Client\Core\Transport\RiakTransportException
      * @expectedExceptionMessage Fail to read response headers
@@ -109,6 +194,7 @@ class ProtoConnectionTest extends TestCase
     }
 
     /**
+     * @runInSeparateProcess
      * @expectedException Riak\Client\Core\Transport\RiakTransportException
      * @expectedExceptionMessage Fail to connect to : tcp://riak.local:8087 [ ]
      */
