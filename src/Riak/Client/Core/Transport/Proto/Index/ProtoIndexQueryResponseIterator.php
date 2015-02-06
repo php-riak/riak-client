@@ -3,20 +3,17 @@
 namespace Riak\Client\Core\Transport\Proto\Index;
 
 use ArrayIterator;
-use RuntimeException;
-use GuzzleHttp\Stream\StreamInterface;
-use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\Core\Message\Index\IndexEntry;
-use Riak\Client\Core\Transport\Proto\ProtoClient;
+use Riak\Client\Core\Transport\RiakTransportIterator;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
-use Riak\Client\Core\Transport\Proto\ProtoStreamingResponseIterator;
+use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
 
 /**
  * RPB index query response iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoIndexQueryResponseIterator extends ProtoStreamingResponseIterator
+class ProtoIndexQueryResponseIterator extends RiakTransportIterator
 {
     /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
@@ -24,47 +21,82 @@ class ProtoIndexQueryResponseIterator extends ProtoStreamingResponseIterator
     private $request;
 
     /**
-     * @param \Riak\Client\Core\Message\Index\IndexQueryRequest $request
-     * @param \Riak\Client\Core\Transport\Proto\ProtoClient     $client
-     * @param \GuzzleHttp\Stream\StreamInterface                $stream
+     * @var \Riak\Client\Core\Transport\Proto\ProtoStreamIterator $iterator
      */
-    public function __construct(IndexQueryRequest $request, ProtoClient $client, StreamInterface $stream)
-    {
-        $this->request = $request;
+    private $iterator;
 
-        parent::__construct($client, $stream, RiakMessageCodes::INDEX_RESP);
+    /**
+     * @var \Riak\Client\ProtoBuf\RpbIndexResp
+     */
+    private $currentMessage;
+
+    /**
+     * @param \Riak\Client\Core\Message\Index\IndexQueryRequest     $request
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStreamIterator $iterator
+     */
+    public function __construct(IndexQueryRequest $request, ProtoStreamIterator $iterator)
+    {
+        $this->request  = $request;
+        $this->iterator = $iterator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function next()
     {
-        if ($this->current === null) {
-            return false;
-        }
+        $this->iterator->next();
 
-        if ($this->current->hasDone() && $this->current->done) {
-            return false;
-        }
-
-        return true;
+        parent::next();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function current()
+    public function rewind()
     {
-        if ($this->current->hasResults()) {
-            return $this->iteratorFromResults($this->current->results);
+        $this->iterator->rewind();
+
+        parent::rewind();
+    }
+
+    /**
+     * @return \Iterator
+     */
+    public function readNext()
+    {
+        if ($this->isDone() || ! $this->iterator->valid()) {
+            return null;
         }
 
-        if ($this->current->hasKeys()) {
-            return $this->iteratorFromKeys($this->current->keys);
+        $this->currentMessage = $this->iterator->current();
+
+        if ($this->currentMessage->hasResults()) {
+            return $this->iteratorFromResults($this->currentMessage->results);
         }
 
-        throw new RuntimeException("Invalid iterator element");
+        if ($this->currentMessage->hasKeys()) {
+            return $this->iteratorFromKeys($this->currentMessage->keys);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isDone()
+    {
+        //  && $this->iterator->valid()
+        if ($this->currentMessage === null) {
+            return false;
+        }
+
+        if ($this->currentMessage->hasDone() && $this->currentMessage->done) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

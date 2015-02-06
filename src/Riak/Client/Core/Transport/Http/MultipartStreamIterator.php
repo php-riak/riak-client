@@ -2,31 +2,21 @@
 
 namespace Riak\Client\Core\Transport\Http;
 
-use Iterator;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\StreamInterface;
+use Riak\Client\Core\Transport\RiakTransportIterator;
 
 /**
  * Multipart stream iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MultipartStreamIterator implements Iterator
+class MultipartStreamIterator extends RiakTransportIterator
 {
     /**
      * @var \GuzzleHttp\Stream\StreamInterface
      */
     private $stream;
-
-    /**
-     * @var integer
-     */
-    private $count = 0;
-
-    /**
-     * @var \GuzzleHttp\Stream\StreamInterface
-     */
-    private $current;
 
     /**
      * @var string
@@ -106,9 +96,9 @@ class MultipartStreamIterator implements Iterator
     }
 
     /**
-     * @return \GuzzleHttp\Stream\StreamInterface
+     * {@inheritdoc}
      */
-    private function readNext()
+    protected function readNext()
     {
         $line   = null;
         $stream = Stream::factory();
@@ -141,46 +131,12 @@ class MultipartStreamIterator implements Iterator
     /**
      * {@inheritdoc}
      */
-    public function current()
-    {
-        return $this->current;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function key()
-    {
-        return $this->count;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        $this->count ++;
-        $this->current = $this->readNext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return ($this->current !== null);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         $this->stream->seek(0);
 
         $this->moveToNext();
 
-        $this->count   = 0;
-        $this->current = $this->readNext();
+        parent::rewind();
     }
 }

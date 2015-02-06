@@ -7,24 +7,20 @@ use Riak\Client\ProtoBuf\RpbPair;
 use Riak\Client\ProtoBuf\RpbIndexResp;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
+use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
 use Riak\Client\Core\Transport\Proto\Index\ProtoIndexQueryResponseIterator;
 
 class ProtoIndexQueryIteratorTest extends TestCase
 {
     /**
-     * @var \Riak\Client\Core\Transport\Proto\ProtoClient
-     */
-    private $client;
-
-    /**
-     * @var \GuzzleHttp\Stream\Stream
-     */
-    private $stream;
-
-    /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
      */
     private $request;
+
+    /**
+     * @var \Riak\Client\Core\Transport\Http\MultipartResponseIterator
+     */
+    private $iterator;
 
     /**
      * @var \Riak\Client\Core\Transport\Proto\Index\ProtoIndexQueryResponseIterator
@@ -36,9 +32,8 @@ class ProtoIndexQueryIteratorTest extends TestCase
         parent::setUp();
 
         $this->request  = new IndexQueryRequest();
-        $this->stream   = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
-        $this->client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
-        $this->instance = new ProtoIndexQueryResponseIterator($this->request, $this->client, $this->stream);
+        $this->iterator = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStreamIterator', [], [], '', false);
+        $this->instance = new ProtoIndexQueryResponseIterator($this->request, $this->iterator);
     }
 
     public function testIteratorFromResults()
@@ -115,18 +110,23 @@ class ProtoIndexQueryIteratorTest extends TestCase
 
     /**
      * @expectedException RuntimeException
-     * @expectedExceptionMessage Invalid iterator element
+     * @expectedExceptionMessage A streaming iterator cannot be rewind
      */
     public function testInvalidIteratorElementException()
     {
-        $rpbResp = new RpbIndexResp();
+        $stream   = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
+        $iterator = new ProtoStreamIterator($client, $stream, RiakMessageCodes::INDEX_RESP);
+        $instance = new ProtoIndexQueryResponseIterator($this->request, $iterator);
+        $rpbResp  = new RpbIndexResp();
 
-        $this->client->expects($this->once())
+        $client->expects($this->once())
             ->method('receiveMessage')
             ->willReturn($rpbResp)
-            ->with($this->equalTo($this->stream), $this->equalTo(RiakMessageCodes::INDEX_RESP));
+            ->with($this->equalTo($stream), $this->equalTo(RiakMessageCodes::INDEX_RESP));
 
-        $this->instance->rewind();
-        $this->instance->current();
+        $instance->rewind();
+        $instance->current();
+        $instance->rewind();
     }
 }

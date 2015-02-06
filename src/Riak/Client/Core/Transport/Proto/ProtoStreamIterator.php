@@ -2,15 +2,16 @@
 
 namespace Riak\Client\Core\Transport\Proto;
 
-use Iterator;
+use Riak\Client\Core\Transport\RiakTransportIterator;
 use GuzzleHttp\Stream\StreamInterface;
+use RuntimeException;
 
 /**
- * RPB response iterator
+ * RPB streaming iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-abstract class ProtoStreamingResponseIterator implements Iterator
+class ProtoStreamIterator extends RiakTransportIterator
 {
     /**
      * @var \Riak\Client\Core\Transport\Proto\ProtoClient
@@ -21,16 +22,6 @@ abstract class ProtoStreamingResponseIterator implements Iterator
      * @var \GuzzleHttp\Stream\StreamInterface
      */
     protected $stream;
-
-    /**
-     * @var integer
-     */
-    protected $count = 0;
-
-    /**
-     * @var \DrSlump\Protobuf\Message
-     */
-    protected $current;
 
     /**
      * @var integer
@@ -60,30 +51,12 @@ abstract class ProtoStreamingResponseIterator implements Iterator
     /**
      * {@inheritdoc}
      */
-    public function key()
-    {
-        return $this->count;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        $this->count   = $this->count + 1;
-        $this->current = $this->readNext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         if ($this->current != null) {
-            throw new \RuntimeException('A streaming iterator cannot be rewind');
+            throw new RuntimeException('A streaming iterator cannot be rewind');
         }
 
-        $this->count   = 0;
-        $this->current = $this->readNext();
+        parent::rewind();
     }
 }

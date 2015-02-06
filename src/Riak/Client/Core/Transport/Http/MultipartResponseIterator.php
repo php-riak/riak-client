@@ -2,19 +2,19 @@
 
 namespace Riak\Client\Core\Transport\Http;
 
-use Iterator;
 use InvalidArgumentException;
 use GuzzleHttp\Message\MessageParser;
 use GuzzleHttp\Message\MessageFactory;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Message\MessageFactoryInterface;
+use Riak\Client\Core\Transport\RiakTransportIterator;
 
 /**
  * Multipart stream parser iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MultipartResponseIterator implements Iterator
+class MultipartResponseIterator extends RiakTransportIterator
 {
     /**
      * @var \GuzzleHttp\Message\ResponseInterface
@@ -30,11 +30,6 @@ class MultipartResponseIterator implements Iterator
      * @var \GuzzleHttp\Message\MessageParser
      */
     private $parser;
-
-    /**
-     * @var \GuzzleHttp\Message\Response
-     */
-    private $current;
 
     /**
      * @var \GuzzleHttp\Message\MessageFactoryInterface
@@ -65,15 +60,17 @@ class MultipartResponseIterator implements Iterator
     /**
      * {@inheritdoc}
      */
-    public function current()
+    protected function readNext()
     {
+        if ( ! $this->iterator->valid()) {
+            return;
+        }
+
         $message  = $this->iterator->current();
         $code     = $this->response->getStatusCode();
         $content  = sprintf("HTTP/1.1 300\r\n %s", $message);
         $element  = $this->parser->parseResponse($content);
         $current  = $this->factory->createResponse($code, $element['headers'], $element['body']);
-
-        $this->current = $current;
 
         return $current;
     }
@@ -81,25 +78,11 @@ class MultipartResponseIterator implements Iterator
     /**
      * {@inheritdoc}
      */
-    public function key()
-    {
-        return $this->iterator->key();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function next()
     {
-        return $this->iterator->next();
-    }
+        $this->iterator->next();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return $this->iterator->valid();
+        parent::next();
     }
 
     /**
@@ -107,8 +90,8 @@ class MultipartResponseIterator implements Iterator
      */
     public function rewind()
     {
-        $this->current = null;
+        $this->iterator->rewind();
 
-        return $this->iterator->rewind();
+        parent::rewind();
     }
 }

@@ -9,6 +9,11 @@ use Riak\Client\Core\Transport\Http\Index\HttpIndexQueryResponseIterator;
 class HttpIndexQueryIteratorTest extends TestCase
 {
     /**
+     * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
+     */
+    private $request;
+
+    /**
      * @var \Riak\Client\Core\Transport\Http\MultipartResponseIterator
      */
     private $iterator;
@@ -94,29 +99,5 @@ class HttpIndexQueryIteratorTest extends TestCase
         $this->assertEquals(3, $values[0]->indexKey);
         $this->assertEquals(3, $values[0]->indexKey);
         $this->assertEquals(3, $values[0]->indexKey);
-    }
-
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Invalid iterator element
-     */
-    public function testInvalidIteratorElementException()
-    {
-        $response = $this->getMock('GuzzleHttp\Message\ResponseInterface');
-
-        $this->iterator->expects($this->once())
-            ->method('valid')
-            ->willReturn(true);
-
-        $this->iterator->expects($this->once())
-            ->method('current')
-            ->willReturn($response);
-
-        $response->expects($this->once())
-            ->method('json')
-            ->willReturn([]);
-
-        $this->instance->rewind();
-        $this->instance->current();
     }
 }

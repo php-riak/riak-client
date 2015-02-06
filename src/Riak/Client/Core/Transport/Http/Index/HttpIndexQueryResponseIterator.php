@@ -3,8 +3,8 @@
 namespace Riak\Client\Core\Transport\Http\Index;
 
 use ArrayIterator;
-use RuntimeException;
 use Riak\Client\Core\Message\Index\IndexEntry;
+use Riak\Client\Core\Transport\RiakTransportIterator;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Transport\Http\MultipartResponseIterator;
 
@@ -13,7 +13,7 @@ use Riak\Client\Core\Transport\Http\MultipartResponseIterator;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class HttpIndexQueryResponseIterator implements \Iterator
+class HttpIndexQueryResponseIterator extends RiakTransportIterator
 {
     /**
      * @var \Riak\Client\Core\Transport\Http\MultipartResponseIterator
@@ -24,11 +24,6 @@ class HttpIndexQueryResponseIterator implements \Iterator
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
      */
     private $request;
-
-    /**
-     * @var array
-     */
-    private $current;
 
     /**
      * @param \Riak\Client\Core\Message\Index\IndexQueryRequest          $request
@@ -91,7 +86,7 @@ class HttpIndexQueryResponseIterator implements \Iterator
     public function readNext()
     {
         if ( ! $this->iterator->valid()) {
-            return;
+            return null;
         }
 
         $body = $this->iterator->current();
@@ -105,23 +100,7 @@ class HttpIndexQueryResponseIterator implements \Iterator
             return $this->iteratorFromKeys($json['keys']);
         }
 
-        throw new RuntimeException("Invalid iterator element");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        return $this->current;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function key()
-    {
-        return $this->iterator->key();
+        return null;
     }
 
     /**
@@ -131,15 +110,7 @@ class HttpIndexQueryResponseIterator implements \Iterator
     {
         $this->iterator->next();
 
-        $this->current = $this->readNext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return ($this->current !== null);
+        parent::next();
     }
 
     /**
@@ -149,6 +120,6 @@ class HttpIndexQueryResponseIterator implements \Iterator
     {
         $this->iterator->rewind();
 
-        $this->current = $this->readNext();
+        parent::rewind();
     }
 }
