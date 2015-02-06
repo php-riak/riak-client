@@ -94,6 +94,18 @@ class HttpIndexQuery extends HttpStrategy
             $query->add('term_regex', $getRequest->termRegex);
         }
 
+        if ($getRequest->maxResults !== null) {
+            $query->add('max_results', $getRequest->maxResults);
+        }
+
+        if ($getRequest->continuation !== null) {
+            $query->add('continuation', $getRequest->continuation);
+        }
+
+        if ($getRequest->paginationSort !== null) {
+            $query->add('pagination_sort', $getRequest->paginationSort);
+        }
+
         return $request;
     }
 

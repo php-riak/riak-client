@@ -1,6 +1,6 @@
 <?php
 
-namespace RiakClientTest\Core\Adapter;
+namespace RiakClientTest\Core\Transport;
 
 use RiakClientTest\TestCase;
 use GuzzleHttp\Stream\Stream;
