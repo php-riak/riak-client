@@ -267,11 +267,7 @@ For example, assuming we want two results per page, getting the second page is e
 
     <?php
 
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Search\Search;
-    use Riak\Client\Command\Kv\FetchValue;
-    use Riak\Client\Core\Query\RiakLocation;
-    use Riak\Client\Core\Query\RiakNamespace;
 
     $rowsPerPage = 2;
     $page        = 2;
