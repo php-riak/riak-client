@@ -289,4 +289,5 @@ Contents
    bucket
    kv
    datatype
+   yokozuna-search
    siblings
