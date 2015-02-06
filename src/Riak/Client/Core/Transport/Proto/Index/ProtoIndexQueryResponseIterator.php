@@ -4,7 +4,7 @@ namespace Riak\Client\Core\Transport\Proto\Index;
 
 use ArrayIterator;
 use RuntimeException;
-use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Stream\StreamInterface;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\Core\Message\Index\IndexEntry;
 use Riak\Client\Core\Transport\Proto\ProtoClient;
@@ -26,9 +26,9 @@ class ProtoIndexQueryResponseIterator extends ProtoStreamingResponseIterator
     /**
      * @param \Riak\Client\Core\Message\Index\IndexQueryRequest $request
      * @param \Riak\Client\Core\Transport\Proto\ProtoClient     $client
-     * @param \GuzzleHttp\Stream\Stream                         $stream
+     * @param \GuzzleHttp\Stream\StreamInterface                $stream
      */
-    public function __construct(IndexQueryRequest $request, ProtoClient $client, Stream $stream)
+    public function __construct(IndexQueryRequest $request, ProtoClient $client, StreamInterface $stream)
     {
         $this->request = $request;
 

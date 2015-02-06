@@ -3,7 +3,7 @@
 namespace Riak\Client\Core\Transport\Proto;
 
 use Iterator;
-use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * RPB response iterator
@@ -18,7 +18,7 @@ abstract class ProtoStreamingResponseIterator implements Iterator
     protected $client;
 
     /**
-     * @var \GuzzleHttp\Stream\Stream
+     * @var \GuzzleHttp\Stream\StreamInterface
      */
     protected $stream;
 
@@ -42,7 +42,7 @@ abstract class ProtoStreamingResponseIterator implements Iterator
      * @param \GuzzleHttp\Stream\Stream                     $stream
      * @param integer                                       $messageCode
      */
-    public function __construct(ProtoClient $client, Stream $stream, $messageCode)
+    public function __construct(ProtoClient $client, StreamInterface $stream, $messageCode)
     {
         $this->client      = $client;
         $this->stream      = $stream;

@@ -106,6 +106,10 @@ class HttpIndexQuery extends HttpStrategy
             $query->add('pagination_sort', $getRequest->paginationSort);
         }
 
+        if ($getRequest->timeout !== null) {
+            $query->add('timeout', $getRequest->timeout);
+        }
+
         return $request;
     }
 

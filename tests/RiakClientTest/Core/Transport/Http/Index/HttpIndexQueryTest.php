@@ -85,6 +85,7 @@ class HttpIndexQueryTest extends TestCase
         $getRequest->termRegex      = 'regex';
         $getRequest->continuation   = 'continuation';
         $getRequest->maxResults     = 999;
+        $getRequest->timeout        = 888;
         $getRequest->returnTerms    = true;
         $getRequest->paginationSort = true;
 
@@ -104,7 +105,7 @@ class HttpIndexQueryTest extends TestCase
             ->method('getQuery')
             ->willReturn($query);
 
-        $query->expects($this->exactly(6))
+        $query->expects($this->exactly(7))
             ->method('add')
             ->will($this->returnValueMap([
                 ['stream', 'true', $query],
@@ -113,6 +114,7 @@ class HttpIndexQueryTest extends TestCase
                 ['max_results', 999, $query],
                 ['continuation', 'continuation', $query],
                 ['pagination_sort', 'true', $query],
+                ['timeout', 888, $query],
             ]));
 
         $this->assertSame($request, $this->invokeMethod($this->instance, 'createHttpRequest', [$getRequest]));

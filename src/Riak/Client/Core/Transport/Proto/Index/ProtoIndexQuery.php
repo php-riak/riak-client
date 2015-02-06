@@ -51,6 +51,22 @@ class ProtoIndexQuery extends ProtoStrategy
             $rpbGetReq->setTermRegex($request->termRegex);
         }
 
+        if ($request->maxResults !== null) {
+            $rpbGetReq->setMaxResults($request->maxResults);
+        }
+
+        if ($request->continuation !== null) {
+            $rpbGetReq->setContinuation($request->continuation);
+        }
+
+        if ($request->paginationSort !== null) {
+            $rpbGetReq->setPaginationSort($request->paginationSort);
+        }
+
+        if ($request->timeout !== null) {
+            $rpbGetReq->setTimeout($request->timeout);
+        }
+
         return $rpbGetReq;
     }
 
