@@ -3,8 +3,9 @@
 namespace Riak\Client\Core\Transport\Http\Index;
 
 use ArrayIterator;
+use Riak\Client\Core\RiakIterator;
+use Riak\Client\Core\RiakContinuableIterator;
 use Riak\Client\Core\Message\Index\IndexEntry;
-use Riak\Client\Core\Transport\RiakTransportIterator;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Transport\Http\MultipartResponseIterator;
 
@@ -13,7 +14,7 @@ use Riak\Client\Core\Transport\Http\MultipartResponseIterator;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class HttpIndexQueryResponseIterator extends RiakTransportIterator
+class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinuableIterator
 {
     /**
      * @var \Riak\Client\Core\Transport\Http\MultipartResponseIterator
@@ -26,6 +27,11 @@ class HttpIndexQueryResponseIterator extends RiakTransportIterator
     private $request;
 
     /**
+     * @var array
+     */
+    private $currentJson;
+
+    /**
      * @param \Riak\Client\Core\Message\Index\IndexQueryRequest          $request
      * @param \Riak\Client\Core\Transport\Http\MultipartResponseIterator $iterator
      */
@@ -33,6 +39,26 @@ class HttpIndexQueryResponseIterator extends RiakTransportIterator
     {
         $this->request  = $request;
         $this->iterator = $iterator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasContinuation()
+    {
+        return isset($this->currentJson['continuation']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContinuation()
+    {
+        if ( ! $this->hasContinuation()) {
+            return null;
+        }
+
+        return $this->currentJson['continuation'];
     }
 
     /**
@@ -91,6 +117,8 @@ class HttpIndexQueryResponseIterator extends RiakTransportIterator
 
         $body = $this->iterator->current();
         $json = $body->json();
+
+        $this->currentJson = $json;
 
         if (isset($json['results'])) {
             return $this->iteratorFromResults($json['results']);

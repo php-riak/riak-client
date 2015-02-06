@@ -3,18 +3,18 @@
 namespace Riak\Client\Core\Transport\Http;
 
 use InvalidArgumentException;
+use Riak\Client\Core\RiakIterator;
 use GuzzleHttp\Message\MessageParser;
 use GuzzleHttp\Message\MessageFactory;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Message\MessageFactoryInterface;
-use Riak\Client\Core\Transport\RiakTransportIterator;
 
 /**
  * Multipart stream parser iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MultipartResponseIterator extends RiakTransportIterator
+class MultipartResponseIterator extends RiakIterator
 {
     /**
      * @var \GuzzleHttp\Message\ResponseInterface

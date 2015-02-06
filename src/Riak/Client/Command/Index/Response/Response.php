@@ -19,32 +19,50 @@ abstract class Response implements RiakResponse
     private $iterator;
 
     /**
+     * @var array
+     */
+    private $entries;
+
+    /**
      * @var \Riak\Client\Core\Query\RiakNamespace
      */
     private $namespace;
 
     /**
-     * @var string
-     */
-    private $continuation;
-
-    /**
      * @param \Riak\Client\Core\Query\RiakNamespace $namespace
      * @param \Iterator                             $iterator
-     * @param string                                $continuation
      */
-    public function __construct(RiakNamespace $namespace, Iterator $iterator, $continuation = null)
+    public function __construct(RiakNamespace $namespace, Iterator $iterator)
     {
-        $this->continuation = $continuation;
-        $this->namespace    = $namespace;
-        $this->iterator     = $iterator;
+        $this->namespace = $namespace;
+        $this->iterator  = $iterator;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContinuation()
+    {
+        return $this->iterator->getContinuation();
     }
 
     /**
      * @return \Iterator
      */
-    public function getEntries()
+    public function getIterator()
     {
         return $this->iterator;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEntries()
+    {
+        if ($this->entries === null) {
+            $this->entries = iterator_to_array($this->iterator);
+        }
+
+        return $this->entries;
     }
 }

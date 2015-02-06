@@ -3,8 +3,9 @@
 namespace Riak\Client\Core\Transport\Proto\Index;
 
 use ArrayIterator;
+use Riak\Client\Core\RiakIterator;
+use Riak\Client\Core\RiakContinuableIterator;
 use Riak\Client\Core\Message\Index\IndexEntry;
-use Riak\Client\Core\Transport\RiakTransportIterator;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
 
@@ -13,7 +14,7 @@ use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoIndexQueryResponseIterator extends RiakTransportIterator
+class ProtoIndexQueryResponseIterator extends RiakIterator implements RiakContinuableIterator
 {
     /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
@@ -38,6 +39,26 @@ class ProtoIndexQueryResponseIterator extends RiakTransportIterator
     {
         $this->request  = $request;
         $this->iterator = $iterator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasContinuation()
+    {
+        return $this->currentMessage && $this->currentMessage->hasContinuation();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContinuation()
+    {
+        if ( ! $this->hasContinuation()) {
+            return null;
+        }
+
+        return $this->currentMessage->continuation;
     }
 
     /**
@@ -87,7 +108,6 @@ class ProtoIndexQueryResponseIterator extends RiakTransportIterator
      */
     private function isDone()
     {
-        //  && $this->iterator->valid()
         if ($this->currentMessage === null) {
             return false;
         }

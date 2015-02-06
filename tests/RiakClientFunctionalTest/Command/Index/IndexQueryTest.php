@@ -136,8 +136,7 @@ abstract class IndexQueryTest extends TestCase
 
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result);
 
-        $iterator = $result->getEntries();
-        $values   = iterator_to_array($iterator);
+        $values = $result->getEntries();
 
         $this->assertCount(2, $values);
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[0]);
@@ -168,8 +167,7 @@ abstract class IndexQueryTest extends TestCase
 
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result);
 
-        $iterator = $result->getEntries();
-        $values   = iterator_to_array($iterator);
+        $values = $result->getEntries();
 
         $this->assertCount(2, $values);
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[0]);
@@ -201,7 +199,7 @@ abstract class IndexQueryTest extends TestCase
 
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result);
 
-        $iterator = $result->getEntries();
+        $iterator = $result->getIterator();
         $values   = iterator_to_array($iterator);
 
         $this->assertCount(4, $values);
@@ -243,8 +241,7 @@ abstract class IndexQueryTest extends TestCase
 
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result);
 
-        $iterator = $result->getEntries();
-        $values   = iterator_to_array($iterator);
+        $values = $result->getEntries();
 
         $this->assertCount(3, $values);
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values[0]);
@@ -264,5 +261,59 @@ abstract class IndexQueryTest extends TestCase
         $this->assertEquals('user1@gmail.com', $values[0]->getIndexKey());
         $this->assertEquals('user2@gmail.com', $values[1]->getIndexKey());
         $this->assertEquals('user3@gmail.com', $values[2]->getIndexKey());
+    }
+
+    public function testContinuationIndexQuery()
+    {
+        $builder = BinIndexQuery::builder()
+            ->withNamespace($this->namespace)
+            ->withTermFilter('@gmail.com')
+            ->withIndexName('emails')
+            ->withReturnTerms(true)
+            ->withStart('user1')
+            ->withMaxResults(2)
+            ->withEnd('user4');
+
+        $result1 = $this->client->execute($builder->build());
+
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result1);
+
+        $values1       = $result1->getEntries();
+        $continuation1 = $result1->getContinuation();
+
+        $this->assertCount(2, $values1);
+        $this->assertNotNull($continuation1);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values1[0]);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values1[1]);
+
+        usort($values1, function(IndexEntry $a, IndexEntry $b){
+            return strcmp($a->getLocation()->getKey(), $b->getLocation()->getKey());
+        });
+
+        $this->assertEquals('user1', $values1[0]->getLocation()->getKey());
+        $this->assertEquals('user2', $values1[1]->getLocation()->getKey());
+        $this->assertEquals('user1@gmail.com', $values1[0]->getIndexKey());
+        $this->assertEquals('user2@gmail.com', $values1[1]->getIndexKey());
+
+        $result2 = $this->client->execute($builder
+            ->withContinuation($continuation1)
+            ->build());
+
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result2);
+
+        $iterator2     = $result2->getIterator();
+        $values2       = iterator_to_array($iterator2);
+        $continuation2 = $result2->getContinuation();
+
+        $this->assertCount(1, $values2);
+        $this->assertNull($continuation2);
+        $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values2[0]);
+
+        usort($values1, function(IndexEntry $a, IndexEntry $b){
+            return strcmp($a->getLocation()->getKey(), $b->getLocation()->getKey());
+        });
+
+        $this->assertEquals('user3', $values2[0]->getLocation()->getKey());
+        $this->assertEquals('user3@gmail.com', $values2[0]->getIndexKey());
     }
 }

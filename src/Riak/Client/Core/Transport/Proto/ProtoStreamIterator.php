@@ -2,8 +2,8 @@
 
 namespace Riak\Client\Core\Transport\Proto;
 
-use Riak\Client\Core\Transport\RiakTransportIterator;
 use GuzzleHttp\Stream\StreamInterface;
+use Riak\Client\Core\RiakIterator;
 use RuntimeException;
 
 /**
@@ -11,7 +11,7 @@ use RuntimeException;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoStreamIterator extends RiakTransportIterator
+class ProtoStreamIterator extends RiakIterator
 {
     /**
      * @var \Riak\Client\Core\Transport\Proto\ProtoClient

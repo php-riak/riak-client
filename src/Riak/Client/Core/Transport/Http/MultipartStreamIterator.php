@@ -3,15 +3,15 @@
 namespace Riak\Client\Core\Transport\Http;
 
 use GuzzleHttp\Stream\Stream;
+use Riak\Client\Core\RiakIterator;
 use GuzzleHttp\Stream\StreamInterface;
-use Riak\Client\Core\Transport\RiakTransportIterator;
 
 /**
  * Multipart stream iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MultipartStreamIterator extends RiakTransportIterator
+class MultipartStreamIterator extends RiakIterator
 {
     /**
      * @var \GuzzleHttp\Stream\StreamInterface

@@ -2,9 +2,10 @@
 
 namespace Riak\Client\Command\Index\Response;
 
-use Iterator;
+use Riak\Client\Core\RiakIterator;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
+use Riak\Client\Core\RiakContinuableIterator;
 use Riak\Client\Command\Index\Response\IndexEntry;
 
 /**
@@ -12,10 +13,10 @@ use Riak\Client\Command\Index\Response\IndexEntry;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class IndexEntryIterator implements Iterator
+class IndexEntryIterator extends RiakIterator implements RiakContinuableIterator
 {
     /**
-     * @var \Iterator
+     * @var \Riak\Client\Core\RiakContinuableIterator
      */
     private $iterator;
 
@@ -25,25 +26,15 @@ class IndexEntryIterator implements Iterator
     private $innerIterator;
 
     /**
-     * @var \Riak\Client\Command\Index\Response\IndexEntry
-     */
-    private $current;
-
-    /**
-     * @var integer
-     */
-    private $count;
-
-    /**
      * @var \Riak\Client\Core\Query\RiakNamespace
      */
     private $namespace;
 
     /**
-     * @param \Riak\Client\Core\Query\RiakNamespace $namespace
-     * @param \Iterator                             $iterator
+     * @param \Riak\Client\Core\Query\RiakNamespace                        $namespace
+     * @param \Riak\Client\Core\Transport\RiakTransportContinuableIterator $iterator
      */
-    public function __construct(RiakNamespace $namespace, Iterator $iterator)
+    public function __construct(RiakNamespace $namespace, RiakContinuableIterator $iterator)
     {
         $this->namespace = $namespace;
         $this->iterator  = $iterator;
@@ -52,17 +43,17 @@ class IndexEntryIterator implements Iterator
     /**
      * {@inheritdoc}
      */
-    public function current()
+    public function hasContinuation()
     {
-        return $this->current;
+        return $this->iterator->hasContinuation();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function key()
+    public function getContinuation()
     {
-        return $this->count;
+        return $this->iterator->getContinuation();
     }
 
     /**
@@ -72,8 +63,7 @@ class IndexEntryIterator implements Iterator
     {
         $this->innerIterator->next();
 
-        $this->count   = $this->count + 1;
-        $this->current = $this->readNext();
+        parent::next();
     }
 
     /**
@@ -115,16 +105,7 @@ class IndexEntryIterator implements Iterator
             ? $this->iterator->current()
             : null;
 
-        $this->current = $this->readNext();
-        $this->count   = 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return ($this->current !== null);
+        parent::rewind();
     }
 
     /**
