@@ -62,3 +62,17 @@ RiakCommand classes
 
     * ``Riak\Client\Command\Bucket\FetchBucketProperties``
     * ``Riak\Client\Command\Bucket\StoreBucketProperties``
+
+* Secondary index (2i)
+
+    * ``Riak\Client\Command\Index\BinIndexQuery``
+    * ``Riak\Client\Command\Index\IntIndexQuery``
+
+* Yokozuna Search
+
+    * ``Riak\Client\Command\Search\DeleteIndex``
+    * ``Riak\Client\Command\Search\FetchIndex``
+    * ``Riak\Client\Command\Search\StoreIndex``
+    * ``Riak\Client\Command\Search\StoreSchema``
+    * ``Riak\Client\Command\Search\FetchSchema``
+    * ``Riak\Client\Command\Search\Search``
