@@ -10,21 +10,26 @@ Key/Value commands
 
     <?php
     use Riak\Client\RiakOption;
-    use Riak\Client\Command\Kv\FetchValue;
+    use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
 
     $namespace = new RiakNamespace('bucket_type', 'bucket_name');
     $location  = new RiakLocation($namespace, 'object_key');
+    $object    = new RiakObject();
 
-    // fetch object
-    $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+    $object->setContentType('application/json');
+    $object->setValue('{"name": "FabioBatSilva"}');
+
+    // store object
+    $store  = StoreValue::builder($location)
+        ->withOption(RiakOption::RETURN_BODY, true)
+        ->withOption(RiakOption::PW, 1)
+        ->withOption(RiakOption::W, 2)
         ->build();
 
-    $result = $client->execute($fetch);
+    $result = $client->execute($store);
     $object = $result->getValue();
 
 

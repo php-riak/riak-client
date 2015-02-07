@@ -289,5 +289,6 @@ Contents
    bucket
    kv
    datatype
+   secondary-indexes
    yokozuna-search
    siblings

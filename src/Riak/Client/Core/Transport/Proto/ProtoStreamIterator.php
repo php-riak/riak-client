@@ -54,7 +54,7 @@ class ProtoStreamIterator extends RiakIterator
     public function rewind()
     {
         if ($this->current != null) {
-            throw new RuntimeException('A streaming iterator cannot be rewind');
+            throw new RuntimeException('A streaming iterator cannot be rewinded.');
         }
 
         parent::rewind();
