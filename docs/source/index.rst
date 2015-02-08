@@ -3,26 +3,25 @@ PHP Riak Client
 ===============
 
 
-.. _reference-taste-of-riak-instalation:
+--------------------
+Taste of Riak: PHP
+--------------------
 
-------------
-Instalation
-------------
+.. _reference-taste-of-client-setup:
 
-To include the PHP Riak Client in your project,
-add it to your project's dependencies.
+If you haven't set up a Riak Node and started it, please visit the Prerequisites first.
+
+-------------
+Client Setup
+-------------
 
 Here is a `Composer`_ example::
 
     $ composer require "php-riak/riak-client"
 
 
-
-.. _reference-taste-of-riak-client:
-
-----------
-The client
-----------
+If you are using a single local Riak node, use the following to create a new client instance,
+assuming that the node is running on ``localhost`` port ``8087`` Protocol Buffers or port ``8098`` for http:
 
 The easiest way to get started with the client is using a `RiakClientBuilder` :
 
@@ -37,8 +36,7 @@ The easiest way to get started with the client is using a `RiakClientBuilder` :
         ->withNodeUri('proto://192.168.1.2:8087')
         ->build();
 
-Once you have a ``$client``, commands from the ``Riak\Client\Command\*`` namespace are built then executed by the client.
-
+Once you have a ``$client`` we are now ready to start interacting with Riak.
 
 
 .. _reference-taste-of-riak-create-object:
@@ -47,8 +45,8 @@ Once you have a ``$client``, commands from the ``Riak\Client\Command\*`` namespa
 Creating Objects in Riak
 -------------------------
 
-The first object that we create is a very basic object with a content type of ``text/plain``. Once that object is created, we create a ``StoreValue`` operation that will store the object later on down the line:
-
+The first object that we create is a very basic object with a content type of ``text/plain``.
+Once that object is created, we create a ``StoreValue`` operation that will store the object later on down the line:
 
 
 .. code-block:: php
@@ -84,7 +82,8 @@ The first object that we create is a very basic object with a content type of ``
 Reading Objects from Riak
 --------------------------
 
-After that, we check to make sure that the stored object has the same value as the object that we created. This requires us to fetch the object by way of a ``FetchValue`` operation:
+After that, we check to make sure that the stored object has the same value as the object that we created.
+This requires us to fetch the object by way of a ``FetchValue`` operation:
 
 
 .. code-block:: php
@@ -120,7 +119,8 @@ After that, we check to make sure that the stored object has the same value as t
 Deleting Objects from Riak
 ---------------------------
 
-Now that we've stored and then fetched the object, we can delete it by creating and executing a DeleteValue operation:
+Now that we've stored and then fetched the object,
+we can delete it by creating and executing a ``DeleteValue`` operation:
 
 .. code-block:: php
 
