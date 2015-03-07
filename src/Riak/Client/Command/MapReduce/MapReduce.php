@@ -1,0 +1,65 @@
+<?php
+
+namespace Riak\Client\Command\MapReduce;
+
+use Riak\Client\RiakCommand;
+use Riak\Client\Core\RiakCluster;
+use Riak\Client\Core\Query\RiakSearchQuery;
+use Riak\Client\Command\Search\Builder\SearchBuilder;
+use Riak\Client\Core\Operation\Search\SearchOperation;
+
+/**
+ * Base abstract class for all MapReduce commands.
+ *
+ * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ */
+class MapReduce implements RiakCommand
+{
+    /**
+     * @var \Riak\Client\Core\Query\RiakSearchQuery
+     */
+    private $query;
+
+    /**
+     * @param \Riak\Client\Core\Query\RiakSearchQuery $query
+     */
+    public function __construct(RiakSearchQuery $query)
+    {
+        $this->query = $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(RiakCluster $cluster)
+    {
+        $operation = new SearchOperation($this->query);
+        $response  = $cluster->execute($operation);
+
+        return $response;
+    }
+
+    /**
+     * @return \Riak\Client\Core\Query\RiakSearchQuery
+     */
+    public function getSearchQuery()
+    {
+        return $this->query;
+    }
+
+    /**
+     * @param \Riak\Client\Core\Query\RiakSearchQuery $query
+     */
+    public function setSearchQuery(RiakSearchQuery $query)
+    {
+        $this->query = $query;
+    }
+
+    /**
+     * @return \Riak\Client\Command\Search\Builder\SearchBuilder
+     */
+    public static function builder()
+    {
+        return new SearchBuilder();
+    }
+}
