@@ -32,7 +32,7 @@ class IndexInput implements MapReduceInput
      * @param string                                             $indexName
      * @param \Riak\Client\Command\MapReduce\Input\IndexCriteria $criteria
      */
-    public function __construct(RiakNamespace $namespace, $indexName, IndexCriteria $criteria)
+    public function __construct(RiakNamespace $namespace, $indexName, IndexCriteria $criteria = null)
     {
         $this->namespace = $namespace;
         $this->indexName = $indexName;

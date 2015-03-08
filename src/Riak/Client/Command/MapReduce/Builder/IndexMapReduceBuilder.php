@@ -1,0 +1,105 @@
+<?php
+
+namespace Riak\Client\Command\MapReduce\Builder;
+
+use Riak\Client\Core\Query\RiakNamespace;
+use Riak\Client\Command\MapReduce\Specification;
+use Riak\Client\Command\MapReduce\IndexMapReduce;
+use Riak\Client\Command\MapReduce\Input\IndexInput;
+use Riak\Client\Command\MapReduce\Input\Index\RangeCriteria;
+use Riak\Client\Command\MapReduce\Input\Index\MatchCriteria;
+
+/**
+ * Used to construct a FetchBucketProperties command.
+ *
+ * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ */
+class IndexMapReduceBuilder extends Builder
+{
+    /**
+     * @var \Riak\Client\Core\Query\RiakNamespace
+     */
+    private $namespace;
+
+    /**
+     * @var string
+     */
+    private $indexName;
+
+    /**
+     * @var \Riak\Client\Command\MapReduce\Input\IndexCriteria
+     */
+    private $criteria;
+
+    /**
+     * @param \Riak\Client\Command\MapReduce\Builder\RiakLocation $namespace
+     * @param string                                              $indexName
+     */
+    public function __construct(RiakLocation $namespace, $indexName)
+    {
+        $this->namespace = $namespace;
+        $this->indexName = $indexName;
+    }
+
+    /**
+     * @param \Riak\Client\Core\Query\RiakNamespace $namespace
+     *
+     * @return \Riak\Client\Command\Bucket\Builder\StoreBucketPropertiesBuilder
+     */
+    public function withNamespace(RiakNamespace $namespace)
+    {
+        $$this->namespace = $namespace;
+
+        return $this;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
+     */
+    public function withIndexName($index)
+    {
+        $this->indexName = $index;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $start
+     * @param mixed $end
+     *
+     * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
+     */
+    public function withRange($start, $end)
+    {
+        $this->criteria = new RangeCriteria($start, $end);
+
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
+     */
+    public function withMatchValue($value)
+    {
+        $this->criteria = new MatchCriteria($value);
+
+        return $this;
+    }
+
+    /**
+     * Build a Index Map-Reduce command object
+     *
+     * @return \Riak\Client\Command\MapReduce\IndexMapReduce
+     */
+    public function build()
+    {
+        $input = new IndexInput($this->namespace, $this->indexName, $this->criteria);
+        $spec  = new Specification($input, $this->phases, $this->timeout);
+
+        return new IndexMapReduce($spec);
+    }
+}

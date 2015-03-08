@@ -7,7 +7,7 @@ namespace Riak\Client\Command\MapReduce\Phase;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MapPhase extends FunctionPhase
+class ReducePhase extends FunctionPhase
 {
     /**
      * {@inheritdoc}
