@@ -31,11 +31,11 @@ abstract class MapReducePhase
     /**
      * Set whether this should be kept
      *
-     * @param keep
+     * @param boolean $keepResult
      */
-    public function setKeepResult($keep)
+    public function setKeepResult($keepResult)
     {
-        $this->keepResult = $keep;
+        $this->keepResult = $keepResult;
     }
 
     /**
