@@ -33,7 +33,7 @@ abstract class IndexMapReduceTest extends TestCase
 
         $hash      = hash('crc32', __CLASS__ );
         $bucket    = sprintf('test_riak_client_%s_index_mapreduce', $hash);
-        $namespace = new RiakNamespace('default', $bucket);
+        $namespace = new RiakNamespace(null, $bucket);
 
         $this->namespace = $namespace;
 
@@ -64,7 +64,7 @@ abstract class IndexMapReduceTest extends TestCase
         for ($i = 0; $i < 100; $i++) {
             $this->storeObject($i, [$i,$i,$i], [
                 (($i % 2) == 0) ? 'odd' : 'even',
-                'mumber'
+                'number'
             ]);
         }
     }
@@ -88,7 +88,7 @@ abstract class IndexMapReduceTest extends TestCase
 
     public function testIndexMapReduceMatch()
     {
-        $source  = 'function(value, keydata, arg) { return [value.values[0].data]; }';
+        $source  = 'function(obj) { return obj; }';
         $command = IndexMapReduce::builder()
             ->withMapPhase(new AnonymousJsFunction($source))
             ->withNamespace($this->namespace)

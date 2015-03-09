@@ -44,7 +44,7 @@ class IndexMapReduceBuilder extends Builder
     /**
      * @param \Riak\Client\Core\Query\RiakNamespace $namespace
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreBucketPropertiesBuilder
+     * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
      */
     public function withNamespace(RiakNamespace $namespace)
     {

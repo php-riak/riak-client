@@ -2,8 +2,6 @@
 
 namespace Riak\Client\Command\MapReduce\Phase;
 
-use JsonSerializable;
-
 /**
  * Base class for Map/Reduce phase definitions.
  *

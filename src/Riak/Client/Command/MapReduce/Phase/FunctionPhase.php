@@ -55,10 +55,11 @@ abstract class FunctionPhase extends MapReducePhase
     public function jsonSerialize()
     {
         $function = $this->function->jsonSerialize();
-        $data     = [
-            'arg'  => $this->argument,
-            'keep' => $this->keepResult
-        ];
+        $data     = ['keep' => $this->keepResult];
+
+        if ($this->argument) {
+            $data['arg'] = $this->argument;
+        }
 
         return array_merge($function, $data);
     }
