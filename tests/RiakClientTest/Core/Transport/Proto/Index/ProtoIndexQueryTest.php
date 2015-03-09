@@ -6,7 +6,6 @@ use Riak\Client\Core\Transport\Proto\Index\ProtoIndexQuery;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\ProtoBuf\RpbIndexReq\IndexQueryType;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
-use Riak\Client\ProtoBuf\RpbIndexReq;
 use Riak\Client\ProtoBuf\RpbPair;
 use RiakClientTest\TestCase;
 
@@ -83,7 +82,7 @@ class ProtoIndexQueryTest extends TestCase
     public function testIndexQueryMessageResponse()
     {
         $request   = new IndexQueryRequest();
-        $rpbStream = $this->getMock('GuzzleHttp\Stream\StreamInterface');
+        $rpbStream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $callback  = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbIndexReq', $subject);
             $this->assertEquals(IndexQueryType::range, $subject->qtype);

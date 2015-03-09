@@ -2,7 +2,7 @@
 
 namespace Riak\Client\Core\Transport\Proto;
 
-use GuzzleHttp\Stream\Stream;
+use Riak\Client\Core\Transport\Proto\ProtoStream;
 use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
@@ -13,7 +13,7 @@ use Riak\Client\Core\Transport\RiakTransportException;
 class ProtoConnection
 {
     /**
-     * @var \GuzzleHttp\Stream\Stream
+     * @var \Riak\Client\Core\Transport\Proto\ProtoStream
      */
     private $stream;
 
@@ -59,11 +59,11 @@ class ProtoConnection
     }
 
     /**
-     * @return \GuzzleHttp\Stream\Stream
+     * @return \Riak\Client\Core\Transport\Proto\ProtoStream
      */
     public function getStream()
     {
-        if ($this->stream != null && $this->stream->isReadable()) {
+        if ($this->stream != null && $this->stream->isResource()) {
             return $this->stream;
         }
 
@@ -71,7 +71,7 @@ class ProtoConnection
     }
 
     /**
-     * @return \GuzzleHttp\Stream\Stream
+     * @return \Riak\Client\Core\Transport\Proto\ProtoStream
      */
     public function createStream()
     {
@@ -88,16 +88,16 @@ class ProtoConnection
             stream_set_timeout($resource, $this->timeout);
         }
 
-        return Stream::factory($resource);
+        return new ProtoStream($resource);
     }
 
     /**
-     * @param string                    $payload
-     * @param \GuzzleHttp\Stream\Stream $stream
+     * @param string                                        $payload
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $stream
      *
-     * @return \GuzzleHttp\Stream\Stream
+     * @return \Riak\Client\Core\Transport\Proto\ProtoStream
      */
-    public function send($payload, Stream $stream = null)
+    public function send($payload, ProtoStream $stream = null)
     {
         $socket = $stream ?: $this->getStream();
 
@@ -107,11 +107,11 @@ class ProtoConnection
     }
 
     /**
-     * @param \GuzzleHttp\Stream\Stream $stream
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $stream
      *
      * @return array
      */
-    public function receive(Stream $stream = null)
+    public function receive(ProtoStream $stream = null)
     {
         $socket = $stream ?: $this->getStream();
         $length = $this->receiveLengthHeader($socket);
@@ -135,11 +135,11 @@ class ProtoConnection
     }
 
     /**
-     * @param \GuzzleHttp\Stream\Stream $socket
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $socket
      *
      * @return integer
      */
-    private function receiveLengthHeader(Stream $socket)
+    private function receiveLengthHeader(ProtoStream $socket)
     {
         $header = $socket->read(4);
 
@@ -159,11 +159,11 @@ class ProtoConnection
     }
 
     /**
-     * @param \GuzzleHttp\Stream\Stream $socket
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $socket
      *
      * @return integer
      */
-    private function receiveMessageCode(Stream $socket)
+    private function receiveMessageCode(ProtoStream $socket)
     {
         $codeBin = $socket->read(1);
 
@@ -179,15 +179,16 @@ class ProtoConnection
     }
 
     /**
-     * @param \GuzzleHttp\Stream\Stream $socket
-     * @param integer                   $length
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $socket
+     * @param integer                                       $length
      *
-     * @return \GuzzleHttp\Stream\Stream
+     * @return \Riak\Client\Core\Transport\Proto\ProtoStream
      */
-    private function receiveMessageBody(Stream $socket, $length)
+    private function receiveMessageBody(ProtoStream $socket, $length)
     {
         $readSize   = 0;
-        $bodyBuffer = Stream::factory();
+        $resource   = fopen('php://temp', 'r+');
+        $bodyBuffer = new ProtoStream($resource);
 
         while ($readSize < $length) {
             $size     = min(8192, $length - $readSize);

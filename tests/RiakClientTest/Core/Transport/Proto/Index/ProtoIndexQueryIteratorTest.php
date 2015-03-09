@@ -114,7 +114,7 @@ class ProtoIndexQueryIteratorTest extends TestCase
      */
     public function testInvalidIteratorElementException()
     {
-        $stream   = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $client   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoClient', [], [], '', false);
         $iterator = new ProtoStreamIterator($client, $stream, RiakMessageCodes::INDEX_RESP);
         $instance = new ProtoIndexQueryResponseIterator($this->request, $iterator);

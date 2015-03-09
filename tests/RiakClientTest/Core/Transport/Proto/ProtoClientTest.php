@@ -36,7 +36,7 @@ class ProtoClientTest extends TestCase
      */
     public function testReceiveInvalidMessageException()
     {
-        $stream      = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream      = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $messageCode = 10;
 
         $this->connection->expects($this->once())
@@ -84,7 +84,7 @@ class ProtoClientTest extends TestCase
         $reqCode  = RiakMessageCodes::PUT_REQ;
         $respCode = RiakMessageCodes::PUT_RESP;
         $respBody = Protobuf::encode(new RpbPutResp());
-        $stream   = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
 
         $this->connection->expects($this->once())
             ->method('send')

@@ -4,8 +4,8 @@ namespace Riak\Client\Core\Transport\Proto;
 
 use DrSlump\Protobuf\Message;
 use DrSlump\Protobuf\Protobuf;
-use GuzzleHttp\Stream\Stream;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
+use Riak\Client\Core\Transport\Proto\ProtoStream;
 use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
@@ -72,7 +72,7 @@ class ProtoClient
      * @param \DrSlump\Protobuf\Message $message
      * @param integer                   $messageCode
      *
-     * @return \GuzzleHttp\Stream\Stream
+     * @return \Riak\Client\Core\Transport\Proto\ProtoStream
      */
     public function emit(Message $message, $messageCode)
     {
@@ -85,12 +85,12 @@ class ProtoClient
     /**
      * Receive a protobuf reponse message
      *
-     * @param \GuzzleHttp\Stream\Stream $stream
-     * @param integer                   $messageCode
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $stream
+     * @param integer                                       $messageCode
      *
      * @return \DrSlump\Protobuf\Message
      */
-    public function receiveMessage(Stream $stream, $messageCode)
+    public function receiveMessage(ProtoStream $stream, $messageCode)
     {
         $response = $this->connection->receive($stream);
         $class    = $this->classForCode($messageCode);

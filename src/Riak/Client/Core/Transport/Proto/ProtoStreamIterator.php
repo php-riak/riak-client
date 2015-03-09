@@ -2,7 +2,7 @@
 
 namespace Riak\Client\Core\Transport\Proto;
 
-use GuzzleHttp\Stream\StreamInterface;
+use Riak\Client\Core\Transport\Proto\ProtoStream;
 use Riak\Client\Core\RiakIterator;
 use RuntimeException;
 
@@ -19,7 +19,7 @@ class ProtoStreamIterator extends RiakIterator
     protected $client;
 
     /**
-     * @var \GuzzleHttp\Stream\StreamInterface
+     * @var \Riak\Client\Core\Transport\Proto\ProtoStream
      */
     protected $stream;
 
@@ -30,10 +30,10 @@ class ProtoStreamIterator extends RiakIterator
 
     /**
      * @param \Riak\Client\Core\Transport\Proto\ProtoClient $client
-     * @param \GuzzleHttp\Stream\Stream                     $stream
+     * @param \Riak\Client\Core\Transport\Proto\ProtoStream $stream
      * @param integer                                       $messageCode
      */
-    public function __construct(ProtoClient $client, StreamInterface $stream, $messageCode)
+    public function __construct(ProtoClient $client, ProtoStream $stream, $messageCode)
     {
         $this->client      = $client;
         $this->stream      = $stream;

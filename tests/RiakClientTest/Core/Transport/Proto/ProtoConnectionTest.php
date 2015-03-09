@@ -91,14 +91,14 @@ class ProtoConnectionTest extends TestCase
             ->expects($this->once())
             ->with($this->equalTo($socket), $this->equalTo(350));
 
-        $this->assertInstanceOf('GuzzleHttp\Stream\Stream', $this->instance->createStream());
+        $this->assertInstanceOf('Riak\Client\Core\Transport\Proto\ProtoStream', $this->instance->createStream());
     }
 
     public function testReceiveLengthHeader()
     {
         $code    = pack('C', 10);
         $message = 'message-body';
-        $stream  = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream  = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $header  = pack("N", strlen($code . $message));
 
         $stream->expects($this->once())
@@ -112,7 +112,7 @@ class ProtoConnectionTest extends TestCase
     public function testReceiveMessageCode()
     {
         $code    = pack('C', 10);
-        $stream  = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream  = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
 
         $stream->expects($this->once())
             ->method('read')
@@ -126,7 +126,7 @@ class ProtoConnectionTest extends TestCase
     {
         $code    = pack('C', 10);
         $message = 'message-body';
-        $stream  = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream  = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $header  = pack("N", strlen($code . $message));
 
         $stream->expects($this->exactly(3))
@@ -151,7 +151,7 @@ class ProtoConnectionTest extends TestCase
      */
     public function testReceiveInvalidCodeException()
     {
-        $stream = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
 
         $stream->expects($this->once())
             ->method('read')
@@ -167,7 +167,7 @@ class ProtoConnectionTest extends TestCase
      */
     public function testReceiveInvalidHeaderSizeException()
     {
-        $stream = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
 
         $stream->expects($this->once())
             ->method('read')
@@ -183,7 +183,7 @@ class ProtoConnectionTest extends TestCase
      */
     public function testReceiveInvalidHeaderException()
     {
-        $stream = $this->getMock('GuzzleHttp\Stream\Stream', [], [], '', false);
+        $stream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
 
         $stream->expects($this->once())
             ->method('read')
