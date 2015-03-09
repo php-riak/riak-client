@@ -3,30 +3,56 @@
 namespace Riak\Client\Command\MapReduce\Input\Index;
 
 /**
- * Map-Reduce match criteria
+ * Map-Reduce range criteria
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MatchCriteria implements IndexCriteria
+class RangeCriteria implements IndexCriteria
 {
     /**
      * @var mixed
      */
-    private $value;
+    private $start;
 
     /**
-     * @param mixed $value
+     * @var mixed
      */
-    public function __construct($value)
+    private $end;
+
+    /**
+     * @param mixed $start
+     * @param mixed $end
+     */
+    public function __construct($start, $end)
     {
-        $this->value = $value;
+        $this->start = $start;
+        $this->end   = $end;
     }
 
     /**
      * @return mixed
      */
-    public function getValue()
+    public function getStart()
     {
-        return $this->value;
+        return $this->start;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'start' => $this->start,
+            'end'   => $this->end,
+        ];
     }
 }

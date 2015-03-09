@@ -2,6 +2,7 @@
 
 namespace Riak\Client\Command\MapReduce;
 
+use JsonSerializable;
 use Riak\Client\Command\MapReduce\Phase\MapReducePhase;
 use Riak\Client\Command\MapReduce\Input\MapReduceInput;
 
@@ -10,7 +11,7 @@ use Riak\Client\Command\MapReduce\Input\MapReduceInput;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class Specification
+class Specification implements JsonSerializable
 {
     /**
      * @var \Riak\Client\Command\MapReduce\MapReduceInput
@@ -20,7 +21,7 @@ class Specification
     /**
      * @var \Riak\Client\Command\MapReduce\MapReducePhase[]
      */
-    private $phases;
+    private $phases = [];
 
     /**
      * @var integer
@@ -32,7 +33,7 @@ class Specification
      * @param \Riak\Client\Command\MapReduce\MapReducePhase[] $phases
      * @param integer                                         $timeout
      */
-    public function __construct(MapReduceInput $input, array $phases, $timeout = null)
+    public function __construct(MapReduceInput $input, array $phases = [], $timeout = null)
     {
         $this->input   = $input;
         $this->phases  = $phases;
@@ -85,5 +86,22 @@ class Specification
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $input  = $this->input ? $this->input->jsonSerialize() : null;
+        $phases = array_map(function (MapReducePhase $phase) {
+            return [$phase->getPhaseName() => $phase->jsonSerialize()];
+        }, $this->phases);
+
+        return array_filter([
+            'inputs'  => $input,
+            'query'   => $phases,
+            'timeout' => $this->timeout,
+        ]);
     }
 }

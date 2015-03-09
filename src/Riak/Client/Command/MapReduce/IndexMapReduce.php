@@ -4,7 +4,7 @@ namespace Riak\Client\Command\MapReduce;
 
 use Riak\Client\Core\RiakCluster;
 use Riak\Client\Core\Query\RiakNamespace;
-use Riak\Client\Core\Operation\Index\MapReduceOperation;
+use Riak\Client\Core\Operation\MapReduce\MapReduceOperation;
 use Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder;
 
 /**
@@ -19,7 +19,7 @@ class IndexMapReduce extends MapReduce
      */
     public function execute(RiakCluster $cluster)
     {
-        $operation = new MapReduceOperation(json_decode([]));
+        $operation = new MapReduceOperation(json_encode($this->specification));
         $response  = $cluster->execute($operation);
 
         return $response;

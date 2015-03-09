@@ -19,23 +19,23 @@ class IndexMapReduceBuilder extends Builder
     /**
      * @var \Riak\Client\Core\Query\RiakNamespace
      */
-    private $namespace;
+    protected $namespace;
 
     /**
      * @var string
      */
-    private $indexName;
+    protected $indexName;
 
     /**
      * @var \Riak\Client\Command\MapReduce\Input\IndexCriteria
      */
-    private $criteria;
+    protected $criteria;
 
     /**
      * @param \Riak\Client\Command\MapReduce\Builder\RiakLocation $namespace
      * @param string                                              $indexName
      */
-    public function __construct(RiakLocation $namespace, $indexName)
+    public function __construct(RiakLocation $namespace = null, $indexName = null)
     {
         $this->namespace = $namespace;
         $this->indexName = $indexName;
@@ -48,7 +48,7 @@ class IndexMapReduceBuilder extends Builder
      */
     public function withNamespace(RiakNamespace $namespace)
     {
-        $$this->namespace = $namespace;
+        $this->namespace = $namespace;
 
         return $this;
     }
@@ -58,9 +58,21 @@ class IndexMapReduceBuilder extends Builder
      *
      * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
      */
-    public function withIndexName($index)
+    public function withIndexInt($index)
     {
-        $this->indexName = $index;
+        $this->indexName = $index  . '_int';
+
+        return $this;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
+     */
+    public function withIndexBin($index)
+    {
+        $this->indexName = $index  . '_bin';
 
         return $this;
     }

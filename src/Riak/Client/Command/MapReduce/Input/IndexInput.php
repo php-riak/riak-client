@@ -62,4 +62,21 @@ class IndexInput implements MapReduceInput
     {
         return $this->criteria;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $index    = $this->indexName;
+        $bucket   = $this->namespace->getBucketName();
+        $criteria = $this->criteria
+            ? $this->criteria->jsonSerialize()
+            : [];
+
+        return array_merge([
+            'bucket' => $bucket,
+            'index'  => $index
+        ], $criteria);
+    }
 }

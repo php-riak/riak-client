@@ -17,7 +17,7 @@ abstract class Builder
     /**
      * @var \Riak\Client\Command\MapReduce\MapReducePhase[]
      */
-    protected $phases;
+    protected $phases = [];
 
     /**
      * @var integer

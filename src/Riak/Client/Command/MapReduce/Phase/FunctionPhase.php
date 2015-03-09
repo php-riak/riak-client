@@ -48,4 +48,18 @@ abstract class FunctionPhase extends MapReducePhase
     {
         return $this->argument;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $function = $this->function->jsonSerialize();
+        $data     = [
+            'arg'  => $this->argument,
+            'keep' => $this->keepResult
+        ];
+
+        return array_merge($function, $data);
+    }
 }

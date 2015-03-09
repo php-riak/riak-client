@@ -1,9 +1,11 @@
 <?php
 
-namespace Riak\Client\Core\Operation\Index;
+namespace Riak\Client\Core\Operation\MapReduce;
 
 use Riak\Client\Core\RiakOperation;
 use Riak\Client\Core\RiakTransport;
+use Riak\Client\Core\Message\MapReduce\MapReduceRequest;
+use Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse;
 
 /**
  * A Map-Reduce Operation on Riak.
@@ -15,14 +17,14 @@ class MapReduceOperation implements RiakOperation
     /**
      * @var string
      */
-    private $content;
+    private $request;
 
     /**
-     * @param string $content
+     * @param string $request
      */
-    public function __construct($content)
+    public function __construct($request)
     {
-        $this->content = $content;
+        $this->request = $request;
     }
 
     /**
@@ -30,6 +32,21 @@ class MapReduceOperation implements RiakOperation
      */
     public function execute(RiakTransport $adapter)
     {
-        return null;
+        $request  = $this->createMapReduceRequest();
+        $response = $adapter->send($request);
+
+        return new IndexMapReduceResponse();
+    }
+
+    /**
+     * @return \Riak\Client\Core\Message\MapReduce\MapReduceRequest
+     */
+    private function createMapReduceRequest()
+    {
+        $request = new MapReduceRequest();
+
+        $request->request = $this->request;
+
+        return $request;
     }
 }
