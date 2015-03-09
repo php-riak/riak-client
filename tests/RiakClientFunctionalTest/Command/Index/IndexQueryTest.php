@@ -220,6 +220,11 @@ abstract class IndexQueryTest extends TestCase
         $this->assertEquals('user2', $values[1]->getLocation()->getKey());
         $this->assertEquals('user2', $values[2]->getLocation()->getKey());
         $this->assertEquals('user3', $values[3]->getLocation()->getKey());
+
+        usort($values, function(IndexEntry $a, IndexEntry $b){
+            return strcmp($a->getIndexKey(), $b->getIndexKey());
+        });
+
         $this->assertEquals(2, $values[0]->getIndexKey());
         $this->assertEquals(2, $values[1]->getIndexKey());
         $this->assertEquals(3, $values[2]->getIndexKey());
