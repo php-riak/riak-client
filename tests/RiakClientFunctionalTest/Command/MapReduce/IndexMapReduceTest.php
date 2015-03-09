@@ -12,6 +12,7 @@ use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\Index\RiakIndexBin;
 use Riak\Client\Command\MapReduce\IndexMapReduce;
+use Riak\Client\Core\Query\Func\ErlangFunction;
 use Riak\Client\Core\Query\Func\AnonymousJsFunction;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
 
@@ -89,8 +90,11 @@ abstract class IndexMapReduceTest extends TestCase
     public function testIndexMapReduceMatch()
     {
         $source  = 'function(obj) { return obj; }';
+        $map     = new AnonymousJsFunction($source);
+        $reduce  = new ErlangFunction('riak_kv_mapreduce', 'reduce_identity');
         $command = IndexMapReduce::builder()
-            ->withMapPhase(new AnonymousJsFunction($source))
+            ->withMapPhase($map)
+            ->withReducePhase($reduce, null, true)
             ->withNamespace($this->namespace)
             ->withIndexBin('tags')
             ->withMatchValue('number')
