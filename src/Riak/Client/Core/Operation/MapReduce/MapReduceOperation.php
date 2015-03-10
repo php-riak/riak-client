@@ -5,6 +5,7 @@ namespace Riak\Client\Core\Operation\MapReduce;
 use Riak\Client\Core\RiakOperation;
 use Riak\Client\Core\RiakTransport;
 use Riak\Client\Core\Message\MapReduce\MapReduceRequest;
+use Riak\Client\Command\MapReduce\Response\MapReduceEntryIterator;
 use Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse;
 
 /**
@@ -34,8 +35,9 @@ class MapReduceOperation implements RiakOperation
     {
         $request  = $this->createMapReduceRequest();
         $response = $adapter->send($request);
+        $iterator = new MapReduceEntryIterator($response->iterator);
 
-        return new IndexMapReduceResponse();
+        return new IndexMapReduceResponse($iterator);
     }
 
     /**

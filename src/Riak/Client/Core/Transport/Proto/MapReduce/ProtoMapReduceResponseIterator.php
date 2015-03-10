@@ -3,6 +3,7 @@
 namespace Riak\Client\Core\Transport\Proto\MapReduce;
 
 use Riak\Client\Core\RiakIterator;
+use Riak\Client\Core\Message\MapReduce\MapReduceEntry;
 use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
 
 /**
@@ -61,7 +62,23 @@ class ProtoMapReduceResponseIterator extends RiakIterator
 
         $this->currentMessage = $this->iterator->current();
 
-        return null;
+        $phase = 0;
+
+        if ($this->currentMessage->hasPhase()) {
+            $phase = $this->currentMessage->phase;
+        }
+
+        if ( ! $this->currentMessage->hasResponse()) {
+            return null;
+        }
+
+        $response = json_decode($this->currentMessage->response, true);
+        $entry    = new MapReduceEntry();
+
+        $entry->phase    = $phase;
+        $entry->response = $response;
+
+        return $entry;
     }
 
     /**

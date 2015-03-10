@@ -2,6 +2,7 @@
 
 namespace Riak\Client\Command\MapReduce\Response;
 
+use Iterator;
 use Riak\Client\RiakResponse;
 
 /**
@@ -11,5 +12,24 @@ use Riak\Client\RiakResponse;
  */
 abstract class Response implements RiakResponse
 {
+    /**
+     * @var \Iterator
+     */
+    private $iterator;
 
+    /**
+     * @param \Iterator $iterator
+     */
+    public function __construct(Iterator $iterator)
+    {
+        $this->iterator = $iterator;
+    }
+
+    /**
+     * @return \Iterator
+     */
+    public function getIterator()
+    {
+        return $this->iterator;
+    }
 }

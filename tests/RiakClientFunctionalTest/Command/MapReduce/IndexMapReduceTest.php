@@ -33,7 +33,7 @@ abstract class IndexMapReduceTest extends TestCase
         parent::setUp();
 
         $hash      = hash('crc32', __CLASS__ );
-        $bucket    = sprintf('test_riak_client_%s_index_mapreduce', $hash);
+        $bucket    = sprintf('test_riak_client_%s_index_mapreducea', $hash);
         $namespace = new RiakNamespace(null, $bucket);
 
         $this->namespace = $namespace;
@@ -63,7 +63,7 @@ abstract class IndexMapReduceTest extends TestCase
     private function setUpData()
     {
         for ($i = 0; $i < 100; $i++) {
-            $this->storeObject($i, [$i,$i,$i], [
+            $this->storeObject($i, $i, [
                 (($i % 2) == 0) ? 'odd' : 'even',
                 'number'
             ]);
@@ -89,9 +89,9 @@ abstract class IndexMapReduceTest extends TestCase
 
     public function testIndexMapReduceMatch()
     {
-        $source  = 'function(obj) { return obj; }';
+        $source  = 'function(value) { return [Riak.mapValuesJson(value)[0]]; }';
         $map     = new AnonymousJsFunction($source);
-        $reduce  = new ErlangFunction('riak_kv_mapreduce', 'reduce_identity');
+        $reduce  = new ErlangFunction('riak_kv_mapreduce', 'reduce_sum');
         $command = IndexMapReduce::builder()
             ->withMapPhase($map)
             ->withReducePhase($reduce, null, true)
@@ -103,5 +103,11 @@ abstract class IndexMapReduceTest extends TestCase
         $result = $this->client->execute($command);
 
         $this->assertInstanceOf('Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse', $result);
+
+        $iterator = $result->getIterator();
+        $values   = iterator_to_array($iterator);
+
+        $this->assertCount(1, $values);
+        $this->assertInstanceOf('Riak\Client\Command\MapReduce\Response\MapReduceEntry', $values[0]);
     }
 }
