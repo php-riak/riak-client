@@ -32,13 +32,11 @@ class IndexMapReduceBuilder extends Builder
     protected $criteria;
 
     /**
-     * @param \Riak\Client\Command\MapReduce\Builder\RiakLocation $namespace
-     * @param string                                              $indexName
+     * @param \Riak\Client\Core\Query\RiakNamespace $namespace
      */
-    public function __construct(RiakLocation $namespace = null, $indexName = null)
+    public function __construct(RiakNamespace $namespace = null)
     {
         $this->namespace = $namespace;
-        $this->indexName = $indexName;
     }
 
     /**

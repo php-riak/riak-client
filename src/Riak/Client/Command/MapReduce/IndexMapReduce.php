@@ -27,12 +27,11 @@ class IndexMapReduce extends MapReduce
 
     /**
      * @param \Riak\Client\Core\Query\RiakNamespace $namespace
-     * @param string                                $indexName
      *
      * @return \Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder
      */
-    public static function builder(RiakNamespace $namespace = null, $indexName = null)
+    public static function builder(RiakNamespace $namespace = null)
     {
-        return new IndexMapReduceBuilder($namespace, $indexName);
+        return new IndexMapReduceBuilder($namespace);
     }
 }

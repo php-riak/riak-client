@@ -42,9 +42,9 @@ class HttpMapReduceResponseIterator extends RiakIterator
             return null;
         }
 
-        $phase    = isset($json['phase']) ? $json['phase'] : 0;
         $response = $json['data'];
         $entry    = new MapReduceEntry();
+        $phase    = isset($json['phase']) ? $json['phase'] : 0;
 
         $entry->phase    = $phase;
         $entry->response = $response;

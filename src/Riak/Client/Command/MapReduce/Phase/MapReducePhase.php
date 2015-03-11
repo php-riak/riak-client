@@ -29,16 +29,6 @@ abstract class MapReducePhase
     }
 
     /**
-     * Set whether this should be kept
-     *
-     * @param boolean $keepResult
-     */
-    public function setKeepResult($keepResult)
-    {
-        $this->keepResult = $keepResult;
-    }
-
-    /**
      * The type of this Phase implementation.
      *
      * @return string
