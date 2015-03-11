@@ -2,8 +2,6 @@
 
 namespace Riak\Client\Command\MapReduce\Response;
 
-use Riak\Client\Core\Query\RiakLocation;
-
 /**
  * Riak MapReduce entry.
  *

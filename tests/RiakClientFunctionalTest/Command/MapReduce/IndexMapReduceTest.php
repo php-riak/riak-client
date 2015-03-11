@@ -33,7 +33,7 @@ abstract class IndexMapReduceTest extends TestCase
         parent::setUp();
 
         $hash      = hash('crc32', __CLASS__ );
-        $bucket    = sprintf('test_riak_client_%s_index_mapreducea', $hash);
+        $bucket    = sprintf('test_riak_client_%s_index_mapreduce', $hash);
         $namespace = new RiakNamespace(null, $bucket);
 
         $this->namespace = $namespace;
@@ -64,7 +64,7 @@ abstract class IndexMapReduceTest extends TestCase
     {
         for ($i = 0; $i < 100; $i++) {
             $this->storeObject($i, $i, [
-                (($i % 2) == 0) ? 'odd' : 'even',
+                (($i % 2) == 0) ? 'even' : 'odd',
                 'number'
             ]);
         }
@@ -87,17 +87,36 @@ abstract class IndexMapReduceTest extends TestCase
         $this->locations[] = $location;
     }
 
+    /**
+     * @return \Riak\Client\Core\Query\Func\RiakFunction
+     */
+    public function createMapFunction()
+    {
+        return new AnonymousJsFunction('
+function(value) {
+
+    for (i = 0; i < value.values.length; i++) {
+        if (value.values[i].metadata["X-Riak-Deleted"]) {
+            continue;
+        }
+
+        return [JSON.parse(value.values[i].data)];
+    }
+
+    return [];
+}');
+    }
+
     public function testIndexMapReduceMatch()
     {
-        $source  = 'function(value) { return [Riak.mapValuesJson(value)[0]]; }';
-        $map     = new AnonymousJsFunction($source);
+        $map     = $this->createMapFunction();
         $reduce  = new ErlangFunction('riak_kv_mapreduce', 'reduce_sum');
         $command = IndexMapReduce::builder()
             ->withMapPhase($map)
             ->withReducePhase($reduce, null, true)
             ->withNamespace($this->namespace)
             ->withIndexBin('tags')
-            ->withMatchValue('number')
+            ->withMatchValue('even')
             ->build();
 
         $result = $this->client->execute($command);
@@ -109,5 +128,32 @@ abstract class IndexMapReduceTest extends TestCase
 
         $this->assertCount(1, $values);
         $this->assertInstanceOf('Riak\Client\Command\MapReduce\Response\MapReduceEntry', $values[0]);
+        $this->assertEquals(1, $values[0]->getPhase());
+        $this->assertEquals([2450], $values[0]->getResponse());
+    }
+
+    public function testIndexMapReduceKeepMap()
+    {
+        $map     = $this->createMapFunction();
+        $command = IndexMapReduce::builder()
+            ->withMapPhase($map, null, true)
+            ->withNamespace($this->namespace)
+            ->withIndexBin('tags')
+            ->withMatchValue('odd')
+            ->build();
+
+        $result = $this->client->execute($command);
+
+        $this->assertInstanceOf('Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse', $result);
+
+        $results  = $result->getResultForPhase(0);
+        $expected = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99];
+
+        $this->assertInternalType('array', $results);
+        $this->assertCount(50, $results);
+
+        sort($results);
+
+        $this->assertEquals($expected, $results);
     }
 }
