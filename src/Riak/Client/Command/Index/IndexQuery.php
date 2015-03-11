@@ -33,12 +33,4 @@ abstract class IndexQuery implements RiakCommand
     {
         return $this->query;
     }
-
-    /**
-     * @param \Riak\Client\Core\Query\RiakIndexQuery $query
-     */
-    public function setQuery(RiakIndexQuery $query)
-    {
-        $this->query = $query;
-    }
 }

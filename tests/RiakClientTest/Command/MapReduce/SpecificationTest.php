@@ -4,6 +4,7 @@ namespace RiakClientTest\Command\MapReduce;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\Query\RiakNamespace;
+use Riak\Client\Core\Query\Func\ErlangFunction;
 use Riak\Client\Command\MapReduce\Specification;
 use Riak\Client\Command\MapReduce\Phase\MapPhase;
 use Riak\Client\Command\MapReduce\Input\IndexInput;
@@ -41,5 +42,23 @@ class SpecificationTest extends TestCase
         ];
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testConstruct()
+    {
+        $indexName  = 'lang_bin';
+        $criteria   = new MatchCriteria('php');
+        $namespace  = new RiakNamespace(null, 'bucket_name');
+        $input      = new IndexInput($namespace, $indexName, $criteria);
+        $phases     = [new MapPhase(new ErlangFunction('module', 'map_func1'))];
+        $spec       = new Specification($input, $phases, 120);
+
+        $this->assertSame($input, $spec->getInput());
+        $this->assertEquals($phases, $spec->getPhases());
+        $this->assertEquals(120, $spec->getTimeout());
+
+        $spec->setTimeout(220);
+
+        $this->assertEquals(220, $spec->getTimeout());
     }
 }

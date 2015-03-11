@@ -2,12 +2,14 @@
 
 namespace Riak\Client\Command\MapReduce\Phase;
 
+use JsonSerializable;
+
 /**
  * Base class for Map/Reduce phase definitions.
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-abstract class MapReducePhase
+abstract class MapReducePhase implements JsonSerializable
 {
     const MAP = 'map';
     const LINK = 'link';

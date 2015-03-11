@@ -32,7 +32,8 @@ class HttpPut extends BaseHttpStrategy
      */
     public function createHttpRequest(PutRequest $putRequest)
     {
-        $request     = $this->createRequest('PUT', $putRequest->type, $putRequest->bucket, $putRequest->key);
+        $method      = $putRequest->key ? 'PUT' : 'POST';
+        $request     = $this->createRequest($method, $putRequest->type, $putRequest->bucket, $putRequest->key);
         $query       = $request->getQuery();
         $content     = $putRequest->content;
         $contentType = $content->contentType;
@@ -91,8 +92,15 @@ class HttpPut extends BaseHttpStrategy
 
         $contentList = $this->getRiakContentList($httpResponse);
         $vClock      = $httpResponse->getHeader('X-Riak-Vclock');
+        $key         = null;
 
-        $response->vClock = $vClock;
+        if ($httpResponse->hasHeader('Location')) {
+            $location = $httpResponse->getHeader('Location');
+            $key      = substr($location, strrpos($location, '/') + 1);
+        }
+
+        $response->key         = $key;
+        $response->vClock      = $vClock;
         $response->contentList = $contentList;
 
         return $response;

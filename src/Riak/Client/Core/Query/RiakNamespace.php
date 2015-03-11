@@ -31,7 +31,7 @@ class RiakNamespace
     public function __construct($type, $bucket)
     {
         $this->bucket = $bucket;
-        $this->type   = $type ?: self::DEFAULT_TYPE;
+        $this->type   = $type;
     }
 
     /**
@@ -52,5 +52,13 @@ class RiakNamespace
     public function getBucketName()
     {
         return $this->bucket;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDefaultType()
+    {
+        return ($this->type == null) || ($this->type == self::DEFAULT_TYPE);
     }
 }

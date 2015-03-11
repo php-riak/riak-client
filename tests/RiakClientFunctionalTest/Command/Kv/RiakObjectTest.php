@@ -201,4 +201,32 @@ abstract class RiakObjectTest extends TestCase
         $this->assertEquals('[1,1,1]', $values[0]->getValue());
         $this->assertEquals('[2,2,2]', $values[1]->getValue());
     }
+
+    public function testGeneratedKey()
+    {
+        $object   = new RiakObject();
+        $location = new RiakLocation(new RiakNamespace('default', 'bucket'), null);
+
+        $object->setValue('[1,1,1]');
+        $object->setContentType('application/json');
+
+        $store = StoreValue::builder($location, $object)
+            ->withOption(RiakOption::RETURN_BODY, true)
+            ->withOption(RiakOption::PW, 1)
+            ->withOption(RiakOption::W, 2)
+            ->build();
+
+        $result     = $this->client->execute($store);
+        $riakObject = $result->getValue();
+
+        $this->assertInstanceOf('Riak\Client\Command\Kv\Response\StoreValueResponse', $result);
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakObject', $riakObject);
+        $this->assertEquals('[1,1,1]', $riakObject->getValue());
+        $this->assertNotNull($result->getGeneratedKey());
+
+        $location->setKey($result->getGeneratedKey());
+
+        $this->client->execute(DeleteValue::builder($location)
+            ->build());
+    }
 }

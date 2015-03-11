@@ -7,6 +7,7 @@ use Riak\Client\Core\Message\Kv\PutRequest;
 use Riak\Client\Core\Message\Kv\PutResponse;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\ProtoBuf\RpbPutReq;
+use Riak\Client\ProtoBuf\RpbPutResp;
 use Riak\Client\ProtoBuf\RpbContent;
 use Riak\Client\ProtoBuf\RpbPair;
 use Riak\Client\ProtoBuf\RpbLink;
@@ -30,7 +31,10 @@ class ProtoPut extends BaseProtoStrategy
         $rpbPutReq->setVclock($request->vClock);
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);
-        $rpbPutReq->setKey($request->key);
+
+        if ($request->key) {
+            $rpbPutReq->setKey($request->key);
+        }
 
         if ($request->w !== null) {
             $rpbPutReq->setW($request->w);
@@ -105,19 +109,23 @@ class ProtoPut extends BaseProtoStrategy
     public function send(Request $request)
     {
         $response   = new PutResponse();
-        $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::PUT_REQ, RiakMessageCodes::PUT_RESP);
+        $rpbPutReq  = $this->createRpbMessage($request);
+        $rpbPutResp = $this->client->send($rpbPutReq, RiakMessageCodes::PUT_REQ, RiakMessageCodes::PUT_RESP);
 
-        if ( ! $rpbGetResp instanceof RpbGetResp) {
+        if ( ! $rpbPutResp instanceof RpbPutResp) {
             return $response;
         }
 
-        if ( ! $rpbGetResp->hasContent()) {
+        if ( ! $rpbPutResp->hasContent()) {
             return $response;
         }
 
-        $response->vClock      = $rpbGetResp->getVclock()->get();
-        $response->contentList = $this->createContentList($rpbGetResp->getContentList());
+        if ($rpbPutResp->hasKey()) {
+            $response->key = $rpbPutResp->key;
+        }
+
+        $response->vClock      = $rpbPutResp->getVclock()->get();
+        $response->contentList = $this->createContentList($rpbPutResp->getContentList());
 
         return $response;
     }

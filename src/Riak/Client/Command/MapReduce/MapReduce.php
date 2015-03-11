@@ -3,7 +3,6 @@
 namespace Riak\Client\Command\MapReduce;
 
 use Riak\Client\RiakCommand;
-use Riak\Client\Core\Query\Func\RiakFunction;
 use Riak\Client\Command\MapReduce\Specification;
 
 /**
@@ -32,13 +31,5 @@ abstract class MapReduce implements RiakCommand
     public function getSpecification()
     {
         return $this->specification;
-    }
-
-    /**
-     * @param \Riak\Client\Command\MapReduce\Specification $specification
-     */
-    public function setSpecification(RiakFunction $specification)
-    {
-        $this->specification = $specification;
     }
 }

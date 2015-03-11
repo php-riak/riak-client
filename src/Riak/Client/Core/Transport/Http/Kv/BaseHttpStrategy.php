@@ -174,7 +174,7 @@ abstract class BaseHttpStrategy extends HttpStrategy
             $contentList = $this->getMultipartBodyContent($response);
         }
 
-        if ($code == 200) {
+        if ($code == 200 || $code == 201) {
             $contentList[] = $this->getBodyContent($response);
         }
 

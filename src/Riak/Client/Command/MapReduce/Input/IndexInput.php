@@ -69,10 +69,13 @@ class IndexInput implements MapReduceInput
     public function jsonSerialize()
     {
         $index    = $this->indexName;
-        $bucket   = $this->namespace->getBucketName();
         $criteria = $this->criteria
             ? $this->criteria->jsonSerialize()
             : [];
+
+        $bucket = ( ! $this->namespace->isDefaultType())
+            ? [$this->namespace->getBucketType(), $this->namespace->getBucketName()]
+            : $this->namespace->getBucketName();
 
         return array_merge([
             'bucket' => $bucket,

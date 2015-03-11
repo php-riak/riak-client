@@ -3,6 +3,7 @@
 namespace Riak\Client\Command\Index;
 
 use Riak\Client\Core\RiakCluster;
+use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\Operation\Index\IndexQueryOperation;
 use Riak\Client\Command\Index\Builder\IntIndexQueryBuilder;
 

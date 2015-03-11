@@ -32,10 +32,43 @@ class LinkPhase extends MapReducePhase
     }
 
     /**
+     * @return string
+     */
+    public function getBucket()
+    {
+        return $this->bucket;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPhaseName()
     {
         return self::LINK;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $data = [
+            'bucket' => $this->bucket,
+            'tag'    => $this->tag
+        ];
+
+        if ($this->keepResult != null) {
+            $data['keep'] = $this->keepResult;
+        }
+
+        return $data;
     }
 }

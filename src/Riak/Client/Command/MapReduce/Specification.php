@@ -41,14 +41,6 @@ class Specification implements JsonSerializable
     }
 
     /**
-     * @param \Riak\Client\Command\MapReduce\MapReduceInput $input
-     */
-    public function setInput(MapReduceInput $input)
-    {
-        $this->input = $input;
-    }
-
-    /**
      * @return \Riak\Client\Command\MapReduce\MapReduceInput
      */
     public function getInput()

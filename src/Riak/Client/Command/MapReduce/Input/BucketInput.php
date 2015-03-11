@@ -52,10 +52,14 @@ class BucketInput implements MapReduceInput
      */
     public function jsonSerialize()
     {
-        $bucket = $this->namespace->getBucketName();
+        $filters = [];
+        $bucket  = ( ! $this->namespace->isDefaultType())
+            ? [$this->namespace->getBucketType(), $this->namespace->getBucketName()]
+            : $this->namespace->getBucketName();
 
         return [
-            'bucket' => $bucket
+            'bucket'      => $bucket,
+            'key_filters' => $filters
         ];
     }
 }
