@@ -1,6 +1,10 @@
 before_commands:
     - "composer install --no-dev --prefer-source"
 
+filter:
+    paths:
+        - src/*
+
 tools:
    external_code_coverage:
         timeout: 900
