@@ -1,0 +1,18 @@
+before_commands:
+    - "composer install --no-dev --prefer-source"
+
+tools:
+    external_code_coverage:
+        timeout: 600
+    php_code_coverage:
+        enabled: true
+    php_code_sniffer:
+        enabled: true
+        include_standards:
+            - ruleset.xml
+        filter:
+            paths: ["src/*"]
+    php_hhvm:
+        enabled: true
+        filter:
+            paths: ["src/*", "tests/*"]
