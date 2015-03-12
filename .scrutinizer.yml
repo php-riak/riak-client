@@ -6,7 +6,7 @@ filter:
         - src/*
 
 tools:
-   external_code_coverage:
+    external_code_coverage:
         timeout: 900
     php_code_coverage:
         enabled: true
