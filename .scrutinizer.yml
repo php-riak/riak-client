@@ -8,8 +8,7 @@ tools:
         enabled: true
     php_code_sniffer:
         enabled: true
-        include_standards:
-            - ruleset.xml
+        ruleset: ruleset.xml
         filter:
             paths: ["src/*"]
     php_hhvm:
