@@ -22,7 +22,7 @@ abstract class RiakIterator implements Iterator
     protected $current;
 
     /**
-     * @returnmixed
+     * @return mixed
      */
     abstract protected function readNext();
 

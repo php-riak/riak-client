@@ -24,7 +24,7 @@ class HttpPut extends BaseHttpStrategy
     ];
 
     /**
-     * @param \Riak\Client\Core\Message\DataType\PutRequest $putRequest
+     * @param \Riak\Client\Core\Message\Bucket\PutRequest $putRequest
      *
      * @return \GuzzleHttp\Message\RequestInterface
      */
@@ -43,9 +43,9 @@ class HttpPut extends BaseHttpStrategy
     }
 
     /**
-     * @param \Riak\Client\Core\Message\DataType\PutRequest $request
+     * @param \Riak\Client\Core\Message\Bucket\PutRequest $request
      *
-     * @return \Riak\Client\Core\Message\DataType\PutResponse
+     * @return \Riak\Client\Core\Message\Bucket\PutResponse
      */
     public function send(Request $request)
     {

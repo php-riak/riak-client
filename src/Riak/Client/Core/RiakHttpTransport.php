@@ -26,6 +26,7 @@ class RiakHttpTransport implements RiakTransport
         // bucket
         'Riak\Client\Core\Message\Bucket\GetRequest'          => 'Riak\Client\Core\Transport\Http\Bucket\HttpGet',
         'Riak\Client\Core\Message\Bucket\PutRequest'          => 'Riak\Client\Core\Transport\Http\Bucket\HttpPut',
+        'Riak\Client\Core\Message\Bucket\ListRequest'         => 'Riak\Client\Core\Transport\Http\Bucket\HttpList',
         // index
         'Riak\Client\Core\Message\Index\IndexQueryRequest'    => 'Riak\Client\Core\Transport\Http\Index\HttpIndexQuery',
         // search

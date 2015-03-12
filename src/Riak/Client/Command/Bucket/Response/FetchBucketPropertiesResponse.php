@@ -18,14 +18,26 @@ class FetchBucketPropertiesResponse extends Response
     private $properties;
 
     /**
+     * @var \Riak\Client\Core\Query\RiakNamespace
+     */
+    private $namespace;
+
+    /**
      * @param \Riak\Client\Command\Bucket\Response\RiakNamespace $namespace
      * @param \Riak\Client\Core\Query\BucketProperties           $properties
      */
     public function __construct(RiakNamespace $namespace, BucketProperties $properties)
     {
-        parent::__construct($namespace);
-
+        $this->namespace  = $namespace;
         $this->properties = $properties;
+    }
+
+    /**
+     * @return \Riak\Client\Core\Query\RiakNamespace
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**

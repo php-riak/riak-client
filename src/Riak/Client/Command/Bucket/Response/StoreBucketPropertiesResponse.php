@@ -2,6 +2,8 @@
 
 namespace Riak\Client\Command\Bucket\Response;
 
+use Riak\Client\Core\Query\RiakNamespace;
+
 /**
  * Store Bucket Properties Response.
  *
@@ -9,5 +11,24 @@ namespace Riak\Client\Command\Bucket\Response;
  */
 class StoreBucketPropertiesResponse extends Response
 {
+    /**
+     * @var \Riak\Client\Core\Query\RiakNamespace
+     */
+    private $namespace;
 
+    /**
+     * @param \Riak\Client\Command\Bucket\Response\RiakNamespace $namespace
+     */
+    public function __construct(RiakNamespace $namespace)
+    {
+        $this->namespace  = $namespace;
+    }
+
+    /**
+     * @return \Riak\Client\Core\Query\RiakNamespace
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
 }

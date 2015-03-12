@@ -3,18 +3,19 @@
 namespace Riak\Client\Core\Transport\Proto\Index;
 
 use ArrayIterator;
-use Riak\Client\Core\RiakIterator;
+use DrSlump\Protobuf\Message;
 use Riak\Client\Core\RiakContinuableIterator;
 use Riak\Client\Core\Message\Index\IndexEntry;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
+use Riak\Client\Core\Transport\Proto\ProtoStreamIteratorIterator;
 
 /**
  * RPB index query response iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoIndexQueryResponseIterator extends RiakIterator implements RiakContinuableIterator
+class ProtoIndexQueryResponseIterator extends ProtoStreamIteratorIterator implements RiakContinuableIterator
 {
     /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
@@ -22,23 +23,14 @@ class ProtoIndexQueryResponseIterator extends RiakIterator implements RiakContin
     private $request;
 
     /**
-     * @var \Riak\Client\Core\Transport\Proto\ProtoStreamIterator $iterator
-     */
-    private $iterator;
-
-    /**
-     * @var \Riak\Client\ProtoBuf\RpbIndexResp
-     */
-    private $currentMessage;
-
-    /**
      * @param \Riak\Client\Core\Message\Index\IndexQueryRequest     $request
      * @param \Riak\Client\Core\Transport\Proto\ProtoStreamIterator $iterator
      */
     public function __construct(IndexQueryRequest $request, ProtoStreamIterator $iterator)
     {
-        $this->request  = $request;
-        $this->iterator = $iterator;
+        $this->request = $request;
+
+        parent::__construct($iterator);
     }
 
     /**
@@ -46,7 +38,7 @@ class ProtoIndexQueryResponseIterator extends RiakIterator implements RiakContin
      */
     public function hasContinuation()
     {
-        return $this->currentMessage && $this->currentMessage->hasContinuation();
+        return $this->message && $this->message->hasContinuation();
     }
 
     /**
@@ -58,65 +50,23 @@ class ProtoIndexQueryResponseIterator extends RiakIterator implements RiakContin
             return null;
         }
 
-        return $this->currentMessage->continuation;
+        return $this->message->continuation;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function next()
+    protected function extract(Message $message)
     {
-        $this->iterator->next();
-
-        parent::next();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
-    {
-        $this->iterator->rewind();
-
-        parent::rewind();
-    }
-
-    /**
-     * @return \Iterator
-     */
-    public function readNext()
-    {
-        if ($this->isDone() || ! $this->iterator->valid()) {
-            return null;
+        if ($message->hasResults()) {
+            return $this->iteratorFromResults($message->results);
         }
 
-        $this->currentMessage = $this->iterator->current();
-
-        if ($this->currentMessage->hasResults()) {
-            return $this->iteratorFromResults($this->currentMessage->results);
-        }
-
-        if ($this->currentMessage->hasKeys()) {
-            return $this->iteratorFromKeys($this->currentMessage->keys);
+        if ($message->hasKeys()) {
+            return $this->iteratorFromKeys($message->keys);
         }
 
         return null;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function isDone()
-    {
-        if ($this->currentMessage === null) {
-            return false;
-        }
-
-        if ($this->currentMessage->hasDone() && $this->currentMessage->done) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

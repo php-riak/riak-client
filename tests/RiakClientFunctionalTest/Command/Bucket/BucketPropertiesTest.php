@@ -5,6 +5,7 @@ namespace RiakClientFunctionalTest\Command\Bucket;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Core\Query\BucketProperties;
+use Riak\Client\Command\Bucket\ListBuckets;
 use Riak\Client\Command\Bucket\FetchBucketProperties;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
 
@@ -33,5 +34,20 @@ abstract class BucketPropertiesTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Core\Query\BucketProperties', $fetchProperties);
         $this->assertTrue($fetchProperties->getAllowSiblings());
         $this->assertEquals(3, $fetchProperties->getNVal());
+    }
+
+    public function testListBuckets()
+    {
+        $command = ListBuckets::builder()
+            ->withBucketType('default')
+            ->build();
+
+        $response = $this->client->execute($command);
+        $iterator = $response->getIterator();
+        $buckets  = $response->getBuckets();
+
+        $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\ListBucketsResponse', $response);
+        $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\ListBucketsIterator', $iterator);
+        $this->assertInternalType('array', $buckets);
     }
 }

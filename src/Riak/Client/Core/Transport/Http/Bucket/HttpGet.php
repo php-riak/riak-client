@@ -22,7 +22,7 @@ class HttpGet extends BaseHttpStrategy
     ];
 
     /**
-     * @param \Riak\Client\Core\Message\DataType\GetRequest $getRequest
+     * @param \Riak\Client\Core\Message\Bucket\GetRequest $getRequest
      *
      * @return \GuzzleHttp\Message\RequestInterface
      */

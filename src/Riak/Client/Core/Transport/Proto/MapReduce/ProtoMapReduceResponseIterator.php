@@ -2,98 +2,37 @@
 
 namespace Riak\Client\Core\Transport\Proto\MapReduce;
 
-use Riak\Client\Core\RiakIterator;
+use DrSlump\Protobuf\Message;
 use Riak\Client\Core\Message\MapReduce\MapReduceEntry;
-use Riak\Client\Core\Transport\Proto\ProtoStreamIterator;
+use Riak\Client\Core\Transport\Proto\ProtoStreamIteratorIterator;
 
 /**
  * RPB Map-Reduce response iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ProtoMapReduceResponseIterator extends RiakIterator
+class ProtoMapReduceResponseIterator extends ProtoStreamIteratorIterator
 {
     /**
-     * @var \Riak\Client\Core\Transport\Proto\ProtoStreamIterator $iterator
-     */
-    private $iterator;
-
-    /**
-     * @var \Riak\Client\ProtoBuf\RpbMapRedResp
-     */
-    private $currentMessage;
-
-    /**
-     * @param \Riak\Client\Core\Transport\Proto\ProtoStreamIterator $iterator
-     */
-    public function __construct(ProtoStreamIterator $iterator)
-    {
-        $this->iterator = $iterator;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function next()
+    protected function extract(Message $message)
     {
-        $this->iterator->next();
-
-        parent::next();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
-    {
-        $this->iterator->rewind();
-
-        parent::rewind();
-    }
-
-    /**
-     * @return \Iterator
-     */
-    public function readNext()
-    {
-        if ($this->isDone() || ! $this->iterator->valid()) {
+        if ( ! $message->hasResponse()) {
             return null;
         }
 
-        $this->currentMessage = $this->iterator->current();
-
-        $phase = 0;
-
-        if ($this->currentMessage->hasPhase()) {
-            $phase = $this->currentMessage->phase;
+        if ($message->hasKeys()) {
+            return $this->iteratorFromKeys($message->keys);
         }
 
-        if ( ! $this->currentMessage->hasResponse()) {
-            return null;
-        }
-
-        $response = json_decode($this->currentMessage->response, true);
+        $phase    = $message->hasPhase() ? $message->phase : 0;
+        $response = json_decode($message->response, true);
         $entry    = new MapReduceEntry();
 
         $entry->phase    = $phase;
         $entry->response = $response;
 
         return $entry;
-    }
-
-    /**
-     * @return boolean
-     */
-    private function isDone()
-    {
-        if ($this->currentMessage === null) {
-            return false;
-        }
-
-        if ($this->currentMessage->hasDone() && $this->currentMessage->done) {
-            return true;
-        }
-
-        return false;
     }
 }

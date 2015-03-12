@@ -3,9 +3,9 @@
 namespace Riak\Client\Command\Bucket;
 
 use Riak\Client\RiakCommand;
-use Riak\Client\RiakException;
 use Riak\Client\Core\RiakCluster;
 use Riak\Client\Command\Bucket\Builder\ListBucketsBuilder;
+use Riak\Client\Core\Operation\Bucket\ListBucketsOperation;
 
 /**
  * Command used to list the buckets contained in a bucket type.
@@ -15,11 +15,34 @@ use Riak\Client\Command\Bucket\Builder\ListBucketsBuilder;
 class ListBuckets implements RiakCommand
 {
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var integer
+     */
+    private $timeout;
+
+    /**
+     * @param string  $type
+     * @param integer $timeout
+     */
+    public function __construct($type = null, $timeout = null)
+    {
+        $this->type    = $type;
+        $this->timeout = $timeout;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $operation = new ListBucketsOperation($this->type, $this->timeout);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**

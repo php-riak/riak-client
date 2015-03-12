@@ -3,33 +3,23 @@
 namespace Riak\Client\Core\Transport\Http\Index;
 
 use ArrayIterator;
-use Riak\Client\Core\RiakIterator;
 use Riak\Client\Core\RiakContinuableIterator;
 use Riak\Client\Core\Message\Index\IndexEntry;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
 use Riak\Client\Core\Transport\Http\MultipartResponseIterator;
+use Riak\Client\Core\Transport\Http\MultipartResponseIteratorIterator;
 
 /**
  * Http index query response iterator
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinuableIterator
+class HttpIndexQueryResponseIterator extends MultipartResponseIteratorIterator implements RiakContinuableIterator
 {
-    /**
-     * @var \Riak\Client\Core\Transport\Http\MultipartResponseIterator
-     */
-    private $iterator;
-
     /**
      * @var \Riak\Client\Core\Message\Index\IndexQueryRequest $request
      */
     private $request;
-
-    /**
-     * @var array
-     */
-    private $currentJson;
 
     /**
      * @param \Riak\Client\Core\Message\Index\IndexQueryRequest          $request
@@ -37,8 +27,9 @@ class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinu
      */
     public function __construct(IndexQueryRequest $request, MultipartResponseIterator $iterator)
     {
-        $this->request  = $request;
-        $this->iterator = $iterator;
+        $this->request = $request;
+
+        parent::__construct($iterator);
     }
 
     /**
@@ -46,7 +37,7 @@ class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinu
      */
     public function hasContinuation()
     {
-        return isset($this->currentJson['continuation']);
+        return isset($this->json['continuation']);
     }
 
     /**
@@ -58,7 +49,7 @@ class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinu
             return null;
         }
 
-        return $this->currentJson['continuation'];
+        return $this->json['continuation'];
     }
 
     /**
@@ -109,17 +100,8 @@ class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinu
     /**
      * {@inheritdoc}
      */
-    public function readNext()
+    public function extract($json)
     {
-        if ( ! $this->iterator->valid()) {
-            return null;
-        }
-
-        $body = $this->iterator->current();
-        $json = $body->json();
-
-        $this->currentJson = $json;
-
         if (isset($json['results'])) {
             return $this->iteratorFromResults($json['results']);
         }
@@ -129,25 +111,5 @@ class HttpIndexQueryResponseIterator extends RiakIterator implements RiakContinu
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        $this->iterator->next();
-
-        parent::next();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
-    {
-        $this->iterator->rewind();
-
-        parent::rewind();
     }
 }

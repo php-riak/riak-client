@@ -17,9 +17,9 @@ class ListBucketsBuilder extends Builder
     private $type;
 
     /**
-     * @var array
+     * @var integer
      */
-    protected $options = [];
+    private $timeout;
 
     /**
      * @param string $type
@@ -30,11 +30,13 @@ class ListBucketsBuilder extends Builder
     }
 
     /**
+     * Set the bucket type.
+     *
      * @param string $type
      *
      * @return \Riak\Client\Command\Bucket\Builder\ListBucketsBuilder
      */
-    public function withType($type)
+    public function withBucketType($type)
     {
         $this->type = $type;
 
@@ -42,17 +44,15 @@ class ListBucketsBuilder extends Builder
     }
 
     /**
-     * Add an optional setting for this command.
-     * This will be passed along with the request to Riak.
+     * Set the Riak-side timeout value.
      *
-     * @param string $option
-     * @param mixed  $value
+     * @param mixed  $timeout
      *
      * @return \Riak\Client\Command\Bucket\Builder\ListBucketsBuilder
      */
-    public function withOption($option, $value)
+    public function withTimeout($timeout)
     {
-        $this->options[$option] = $value;
+        $this->timeout = $timeout;
 
         return $this;
     }
@@ -64,6 +64,6 @@ class ListBucketsBuilder extends Builder
      */
     public function build()
     {
-        return new ListBuckets($this->type, $this->options);
+        return new ListBuckets($this->type, $this->timeout);
     }
 }
