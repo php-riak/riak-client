@@ -6,6 +6,7 @@ filter:
         - src/*
 
 tools:
+    php_cpd: false
     external_code_coverage:
         timeout: 900
     php_code_coverage:
@@ -13,6 +14,8 @@ tools:
         test_command: ./vendor/bin/phpunit --exclude-group functional
     php_code_sniffer:
         enabled: true
+        config:
+            sniffs: [ruleset.xml]
         filter:
             paths: ["src/*"]
     php_cpd:
