@@ -173,7 +173,7 @@ abstract class Builder
     /**
      * Build a riak command object
      *
-     * @return \Riak\Client\Command\Index\SecondaryIndexQuery
+     * @return \Riak\Client\Command\Index\IndexQuery
      */
     abstract public function build();
 }

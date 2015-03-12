@@ -13,7 +13,7 @@ use Riak\Client\Core\Query\RiakNamespace;
 class FetchBucketPropertiesBuilder extends Builder
 {
     /**
-     * @var \Riak\Client\Core\Query\RiakLocation
+     * @var \Riak\Client\Core\Query\RiakNamespace
      */
     private $namespace;
 

@@ -2,9 +2,9 @@
 
 namespace Riak\Client\Command\Index\Response;
 
-use Iterator;
 use Riak\Client\RiakResponse;
 use Riak\Client\Core\Query\RiakNamespace;
+use Riak\Client\Core\RiakContinuableIterator;
 
 /**
  * Base response for 2i index queries.
@@ -14,7 +14,7 @@ use Riak\Client\Core\Query\RiakNamespace;
 abstract class Response implements RiakResponse
 {
     /**
-     * @var \Iterator
+     * @var \Riak\Client\Core\RiakContinuableIterator
      */
     private $iterator;
 
@@ -29,10 +29,10 @@ abstract class Response implements RiakResponse
     private $namespace;
 
     /**
-     * @param \Riak\Client\Core\Query\RiakNamespace $namespace
-     * @param \Iterator                             $iterator
+     * @param \Riak\Client\Core\Query\RiakNamespace     $namespace
+     * @param \Riak\Client\Core\RiakContinuableIterator $iterator
      */
-    public function __construct(RiakNamespace $namespace, Iterator $iterator)
+    public function __construct(RiakNamespace $namespace, RiakContinuableIterator $iterator)
     {
         $this->namespace = $namespace;
         $this->iterator  = $iterator;
@@ -47,7 +47,7 @@ abstract class Response implements RiakResponse
     }
 
     /**
-     * @return \Iterator
+     * @return \Riak\Client\Core\RiakContinuableIterator
      */
     public function getIterator()
     {

@@ -3,7 +3,6 @@
 namespace Riak\Client\Command\Bucket\Builder;
 
 use Riak\Client\Command\Bucket\ListBuckets;
-use Riak\Client\Core\Query\RiakNamespace;
 
 /**
  * Used to construct a ListBuckets command.
@@ -25,7 +24,7 @@ class ListBucketsBuilder extends Builder
     /**
      * @param string $type
      */
-    public function __construct(RiakNamespace $type = null)
+    public function __construct($type = null)
     {
         $this->type = $type;
     }
