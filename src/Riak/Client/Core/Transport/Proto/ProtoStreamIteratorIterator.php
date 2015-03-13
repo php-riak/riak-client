@@ -55,15 +55,11 @@ abstract class ProtoStreamIteratorIterator extends RiakIterator
      */
     protected function readNext()
     {
-        if ($this->isDone() || ! $this->iterator->valid()) {
+        if ($this->isDone()) {
             return null;
         }
 
         $this->message = $this->iterator->current();
-
-        if ($this->message == null) {
-            return null;
-        }
 
         return $this->extract($this->message);
     }

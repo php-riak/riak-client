@@ -37,6 +37,10 @@ class HttpList extends BaseHttpStrategy
         $request->setHeader('Accept', 'application/json');
         $query->add('buckets', 'true');
 
+        if ($getRequest->timeout != null) {
+            $query->add('timeout', $getRequest->timeout);
+        }
+
         return $request;
     }
 

@@ -3,7 +3,6 @@
 namespace Riak\Client\Core\Transport\Proto\Bucket;
 
 use Riak\Client\Core\Message\Request;
-use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\ProtoBuf\RpbListBucketsReq;
 use Riak\Client\Core\Message\Bucket\ListRequest;
@@ -31,7 +30,7 @@ class ProtoList extends ProtoStrategy
             $rpbGetReq->setTimeout($request->timeout);
         }
 
-        if ($request->type != null && $request->type != RiakNamespace::DEFAULT_TYPE) {
+        if ($request->type != null) {
             $rpbGetReq->setType($request->type);
         }
 

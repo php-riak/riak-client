@@ -34,4 +34,17 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
         return $reflection->getValue($object);
     }
+
+    /**
+     * @param object $object
+     * @param string $property
+     * @param mixed  $value
+     */
+    protected function setPropertyValue($object, $property, $value)
+    {
+        $reflection = new \ReflectionProperty($object, $property);
+
+        $reflection->setAccessible(true);
+        $reflection->setValue($object, $value);
+    }
 }
