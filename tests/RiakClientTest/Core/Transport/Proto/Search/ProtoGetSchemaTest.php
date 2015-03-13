@@ -64,4 +64,28 @@ class ProtoGetSchemaTest extends TestCase
 
         $this->assertInstanceOf('Riak\Client\Core\Message\Search\GetSchemaResponse', $this->instance->send($request));
     }
+
+    public function testGetMessageResponseNull()
+    {
+        $request  = new GetSchemaRequest();
+        $callback = function($subject) {
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchemaGetReq', $subject);
+            $this->assertEquals('schema-name', $subject->name);
+
+            return true;
+        };
+
+        $request->name = 'schema-name';
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn(null)
+            ->with(
+                $this->callback($callback),
+                $this->equalTo(RiakMessageCodes::YOKOZUNA_SCHEMA_GET_REQ),
+                $this->equalTo(RiakMessageCodes::YOKOZUNA_SCHEMA_GET_RESP)
+            );
+
+        $this->assertInstanceOf('Riak\Client\Core\Message\Search\GetSchemaResponse', $this->instance->send($request));
+    }
 }

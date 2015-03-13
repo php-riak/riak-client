@@ -99,7 +99,7 @@ class ProtoClient
         $respBody = $response[1];
 
         if ($respCode != $messageCode) {
-            $this->throwResponseException($respCode, $respBody);
+            throw $this->createResponseException($respCode, $respBody);
         }
 
         if ($class == null) {
@@ -113,9 +113,9 @@ class ProtoClient
      * @param integer $actualCode
      * @param string  $respBody
      *
-     * @throws \Riak\Client\Core\Transport\RiakTransportException
+     * @return \Riak\Client\Core\Transport\RiakTransportException
      */
-    protected function throwResponseException($actualCode, $respBody)
+    protected function createResponseException($actualCode, $respBody)
     {
         $exceptionCode    = $actualCode;
         $exceptionMessage = "Unexpected protobuf response code: " . $actualCode;
@@ -133,7 +133,7 @@ class ProtoClient
             }
         }
 
-        throw new RiakTransportException($exceptionMessage, $exceptionCode);
+        return new RiakTransportException($exceptionMessage, $exceptionCode);
     }
 
     /**

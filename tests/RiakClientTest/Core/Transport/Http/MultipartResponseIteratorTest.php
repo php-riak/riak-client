@@ -104,6 +104,15 @@ class MultipartResponseIteratorTest extends TestCase
         $this->assertEquals('Wed, 07 Jan 2015 19:41:52 GMT', $values[1]->getHeader('Last-Modified'));
     }
 
+    public function testReadNextWhenEof()
+    {
+        $stream   = Stream::factory();
+        $boundary = '--KQLFjHN3yt2P0CWSxcIywUeI0kR--';
+        $iterator = new MultipartStreamIterator($stream, $boundary);
+
+        $this->assertEquals('', $this->invokeMethod($iterator, 'readLine'));
+    }
+
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Unable to parse boundary from content type : 'application/json'

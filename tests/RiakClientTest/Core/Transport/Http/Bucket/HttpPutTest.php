@@ -3,7 +3,6 @@
 namespace RiakClientTest\Core\Transport\Http\Bucket;
 
 use RiakClientTest\TestCase;
-use Riak\Client\Core\Query\Crdt\Op\CounterOp;
 use Riak\Client\Core\Transport\Http\Bucket\HttpPut;
 use Riak\Client\Core\Message\Bucket\PutRequest;
 
@@ -144,5 +143,42 @@ class HttpPutTest extends TestCase
         $response = $this->instance->send($putRequest);
 
         $this->assertInstanceOf('Riak\Client\Core\Message\Bucket\PutResponse', $response);
+    }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "555"
+     */
+    public function testUnexpectedHttpStatusCode()
+    {
+        $request      = new PutRequest();
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($httpResponse);
+
+        $httpRequest->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $httpQuery->expects($this->any())
+            ->method('add')
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(555);
+
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+
+        $this->instance->send($request);
     }
 }

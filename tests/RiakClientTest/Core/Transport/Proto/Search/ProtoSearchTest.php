@@ -124,4 +124,78 @@ class ProtoSearchTest extends TestCase
         $this->assertArrayHasKey('username', $result->docs[0]);
         $this->assertArrayHasKey('username', $result->docs[1]);
     }
+
+    public function testSearchMessageResponseNull()
+    {
+        $rpbResp  = new RpbSearchQueryResp();
+        $request  = new SearchRequest();
+        $callback = function($subject) {
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSearchQueryReq', $subject);
+            $this->assertEquals('index-name', $subject->index);
+            $this->assertEquals('name:Fabio*', $subject->q);
+
+            return true;
+        };
+
+        $request->q     = 'name:Fabio*';
+        $request->index = 'index-name';
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($rpbResp)
+            ->with(
+                $this->callback($callback),
+                $this->equalTo(RiakMessageCodes::SEARCH_QUERY_REQ),
+                $this->equalTo(RiakMessageCodes::SEARCH_QUERY_RESP)
+            );
+
+        $this->assertInstanceOf('Riak\Client\Core\Message\Search\SearchResponse', $this->instance->send($request));
+    }
+
+    public function testSearchMessageResponseEnptyDocs()
+    {
+        $request  = new SearchRequest();
+        $callback = function($subject) {
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSearchQueryReq', $subject);
+            $this->assertEquals('index-name', $subject->index);
+            $this->assertEquals('name:Fabio*', $subject->q);
+
+            return true;
+        };
+
+        $request->q     = 'name:Fabio*';
+        $request->index = 'index-name';
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn(null)
+            ->with(
+                $this->callback($callback),
+                $this->equalTo(RiakMessageCodes::SEARCH_QUERY_REQ),
+                $this->equalTo(RiakMessageCodes::SEARCH_QUERY_RESP)
+            );
+
+        $this->assertInstanceOf('Riak\Client\Core\Message\Search\SearchResponse', $this->instance->send($request));
+    }
+
+    public function testDocToArray()
+    {
+        $rpbDoc = new RpbSearchDoc();
+
+        $rpbDoc->addFields($this->createRpbPair('name', 'Fabio B. Silva'));
+        $rpbDoc->addFields($this->createRpbPair('username', 'FabioBatSilva'));
+
+        $result = $this->invokeMethod($this->instance, 'docToArray', [$rpbDoc]);
+
+        $this->assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('username', $result);
+
+        $this->assertEquals('Fabio B. Silva', $result['name']);
+        $this->assertEquals('FabioBatSilva', $result['username']);
+    }
+
+    public function testEnptyDocToArray()
+    {
+        $this->assertEquals([], $this->invokeMethod($this->instance, 'docToArray', [new RpbSearchDoc()]));
+    }
 }

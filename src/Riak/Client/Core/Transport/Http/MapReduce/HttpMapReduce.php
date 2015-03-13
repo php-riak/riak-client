@@ -55,13 +55,14 @@ class HttpMapReduce extends HttpStrategy
         $httpRequest  = $this->createHttpRequest($request);
         $httpResponse = $this->client->send($httpRequest);
         $code         = $httpResponse->getStatusCode();
-        $iterator     = new MultipartResponseIterator($httpResponse);
 
         if ( ! isset($this->validResponseCodes[$code])) {
             throw RiakTransportException::unexpectedStatusCode($code);
         }
 
-        $response->iterator = new HttpMapReduceResponseIterator($iterator);
+        $multipartIterator  = new MultipartResponseIterator($httpResponse);
+        $mapReduceIterator  = new HttpMapReduceResponseIterator($multipartIterator);
+        $response->iterator = $mapReduceIterator;
 
         return $response;
     }

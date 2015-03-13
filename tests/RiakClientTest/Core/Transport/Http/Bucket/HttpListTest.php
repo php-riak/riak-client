@@ -123,4 +123,41 @@ class HttpListTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Core\Message\Bucket\ListResponse', $response);
         $this->assertInstanceOf('Iterator', $response->iterator);
     }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "555"
+     */
+    public function testUnexpectedHttpStatusCode()
+    {
+        $request      = new ListRequest();
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($httpResponse);
+
+        $httpRequest->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $httpQuery->expects($this->any())
+            ->method('add')
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(555);
+
+        $request->timeout = 60;
+        $request->type    = null;
+
+        $this->instance->send($request);
+    }
 }

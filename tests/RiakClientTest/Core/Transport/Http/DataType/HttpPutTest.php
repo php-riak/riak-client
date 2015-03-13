@@ -3,7 +3,6 @@
 namespace RiakClientTest\Core\Transport\Http\DataType;
 
 use RiakClientTest\TestCase;
-use GuzzleHttp\Stream\Stream;
 use Riak\Client\Core\Query\Crdt\Op\CounterOp;
 use Riak\Client\Core\Transport\Http\DataType\HttpPut;
 use Riak\Client\Core\Message\DataType\PutRequest;
@@ -131,7 +130,7 @@ class HttpPutTest extends TestCase
         $putRequest->type   = 'default';
         $putRequest->key    = '1';
 
-        $putRequest->returnBody  = true;
+        $putRequest->returnBody = true;
         $putRequest->op         = new CounterOp(10);
 
 
@@ -140,5 +139,44 @@ class HttpPutTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Core\Message\DataType\PutResponse', $response);
         $this->assertEquals('counter', $response->type);
         $this->assertEquals(10, $response->value);
+    }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "555"
+     */
+    public function testUnexpectedHttpStatusCode()
+    {
+        $request      = new PutRequest();
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($httpResponse);
+
+        $httpRequest->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $httpQuery->expects($this->any())
+            ->method('add')
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(555);
+
+        $request->op     = new CounterOp(10);
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+        $request->key    = '1';
+
+        $this->instance->send($request);
     }
 }

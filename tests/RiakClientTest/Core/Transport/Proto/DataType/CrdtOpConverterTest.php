@@ -214,6 +214,21 @@ class CrdtOpConverterTest extends TestCase
 
     /**
      * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unknown crdt field type : UNKNOWN
+     */
+    public function testConvertUnknownMapEntryException()
+    {
+        $entry = new ProtoBuf\MapEntry();
+        $field = new ProtoBuf\MapField();
+
+        $entry->setField($field);
+        $field->setType('UNKNOWN');
+
+        $this->instance->convertMapEntry($entry);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
      */
     public function testConvertUnknownDataTypeOpException()
     {

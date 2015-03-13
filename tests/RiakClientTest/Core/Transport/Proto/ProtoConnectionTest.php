@@ -179,6 +179,21 @@ class ProtoConnectionTest extends TestCase
 
     /**
      * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Fail to read socket response
+     */
+    public function testFailToReadMessagePart()
+    {
+        $stream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
+
+        $stream->expects($this->once())
+            ->method('read')
+            ->willReturn(false);
+
+        $this->invokeMethod($this->instance, 'receiveMessageBody', [$stream, 1024]);
+    }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
      * @expectedExceptionMessage Fail to read response headers
      */
     public function testReceiveInvalidHeaderException()

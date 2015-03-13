@@ -116,4 +116,41 @@ class HttpGetTest extends TestCase
         $this->assertEquals('allow_mult', $response->allowMult);
         $this->assertEquals('search', $response->search);
     }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "555"
+     */
+    public function testUnexpectedHttpStatusCode()
+    {
+        $request      = new GetRequest();
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($httpResponse);
+
+        $httpRequest->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $httpQuery->expects($this->any())
+            ->method('add')
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(555);
+
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+
+        $this->instance->send($request);
+    }
 }

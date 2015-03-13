@@ -59,7 +59,7 @@ class ProtoClientTest extends TestCase
         $message->setErrmsg('Some Riak Error');
         $message->setErrcode(-10);
 
-        $this->invokeMethod($this->instance, 'throwResponseException', [0, Protobuf::encode($message)]);
+        throw $this->invokeMethod($this->instance, 'createResponseException', [0, Protobuf::encode($message)]);
     }
 
     public function testClassForCode()

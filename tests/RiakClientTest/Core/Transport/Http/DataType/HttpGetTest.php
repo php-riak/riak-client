@@ -158,4 +158,78 @@ class HttpGetTest extends TestCase
         $this->assertNull($response->value);
         $this->assertNull($response->type);
     }
+
+    /**
+     * @expectedException GuzzleHttp\Exception\ClientException
+     * @expectedExceptionMessage Request Exception
+     */
+    public function testGetRequestThrownRequestException()
+    {
+        $request      = new GetRequest();
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->with($this->equalTo('GET'), $this->equalTo('/types/default/buckets/test_bucket/datatypes/1'))
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->once())
+            ->method('getStatusCode')
+            ->willReturn(404);
+
+        $httpRequest->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->with($this->equalTo($httpRequest))
+            ->willThrowException(new ClientException('Request Exception', $httpRequest, $httpResponse));
+
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+        $request->key    = '1';
+
+        $this->instance->send($request);
+    }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "555"
+     */
+    public function testUnexpectedHttpStatusCode()
+    {
+        $request      = new GetRequest();
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($httpResponse);
+
+        $httpRequest->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $httpQuery->expects($this->any())
+            ->method('add')
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(555);
+
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+        $request->key    = '1';
+
+        $this->instance->send($request);
+    }
 }

@@ -169,4 +169,49 @@ class HttpPutTest extends TestCase
         $this->assertEquals(1420249594, $response->contentList[0]->lastModified);
         $this->assertEquals('application/json', $response->contentList[0]->contentType);
     }
+
+    /**
+     * @expectedException Riak\Client\Core\Transport\RiakTransportException
+     * @expectedExceptionMessage Unexpected status code : "555"
+     */
+    public function testUnexpectedHttpStatusCode()
+    {
+        $content      = new Content();
+        $request      = new PutRequest();
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+        $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
+        $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+
+        $request->bucket = 'test_bucket';
+        $request->type   = 'default';
+        $request->key    = '1';
+
+        $request->returnBody  = true;
+        $request->content     = $content;
+        $request->vClock      = 'vclock-hash';
+        $content->contentType = 'application/json';
+        $content->value       = '[1,1,1]';
+
+        $this->client->expects($this->once())
+            ->method('createRequest')
+            ->willReturn($httpRequest);
+
+        $this->client->expects($this->once())
+            ->method('send')
+            ->willReturn($httpResponse);
+
+        $httpRequest->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
+        $httpQuery->expects($this->any())
+            ->method('add')
+            ->willReturn($httpRequest);
+
+        $httpResponse->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(555);
+
+        $this->instance->send($request);
+    }
 }

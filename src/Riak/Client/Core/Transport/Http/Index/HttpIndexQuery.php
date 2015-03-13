@@ -124,13 +124,14 @@ class HttpIndexQuery extends HttpStrategy
         $httpRequest  = $this->createHttpRequest($request);
         $httpResponse = $this->client->send($httpRequest);
         $code         = $httpResponse->getStatusCode();
-        $iterator     = new MultipartResponseIterator($httpResponse);
 
         if ( ! isset($this->validResponseCodes[$code])) {
             throw RiakTransportException::unexpectedStatusCode($code);
         }
 
-        $response->iterator = new HttpIndexQueryResponseIterator($request, $iterator);
+        $multipartIterator  = new MultipartResponseIterator($httpResponse);
+        $responseIterator   = new HttpIndexQueryResponseIterator($request, $multipartIterator);
+        $response->iterator = $responseIterator;
 
         return $response;
     }

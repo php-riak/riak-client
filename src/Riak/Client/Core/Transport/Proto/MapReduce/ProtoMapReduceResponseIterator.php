@@ -22,10 +22,6 @@ class ProtoMapReduceResponseIterator extends ProtoStreamIteratorIterator
             return null;
         }
 
-        if ($message->hasKeys()) {
-            return $this->iteratorFromKeys($message->keys);
-        }
-
         $phase    = $message->hasPhase() ? $message->phase : 0;
         $response = json_decode($message->response, true);
         $entry    = new MapReduceEntry();
