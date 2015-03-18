@@ -6,14 +6,13 @@ use Riak\Client\Core\RiakOperation;
 use Riak\Client\Core\RiakTransport;
 use Riak\Client\Core\Message\MapReduce\MapReduceRequest;
 use Riak\Client\Command\MapReduce\Response\MapReduceEntryIterator;
-use Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse;
 
 /**
  * A Map-Reduce Operation on Riak.
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MapReduceOperation implements RiakOperation
+abstract class MapReduceOperation implements RiakOperation
 {
     /**
      * @var string
@@ -37,8 +36,15 @@ class MapReduceOperation implements RiakOperation
         $response = $adapter->send($request);
         $iterator = new MapReduceEntryIterator($response->iterator);
 
-        return new IndexMapReduceResponse($iterator);
+        return $this->createMapReduceResponse($iterator);
     }
+
+    /**
+     * @param \Riak\Client\Command\MapReduce\Response\MapReduceEntryIterator $iterator
+     *
+     * @return \Riak\Client\Command\MapReduce\Response\Response
+     */
+    abstract protected function createMapReduceResponse(MapReduceEntryIterator $iterator);
 
     /**
      * @return \Riak\Client\Core\Message\MapReduce\MapReduceRequest

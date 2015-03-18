@@ -2,10 +2,9 @@
 
 namespace Riak\Client\Command\MapReduce;
 
-use Riak\Client\Core\RiakCluster;
 use Riak\Client\Core\Query\RiakNamespace;
-use Riak\Client\Core\Operation\MapReduce\MapReduceOperation;
 use Riak\Client\Command\MapReduce\Builder\IndexMapReduceBuilder;
+use Riak\Client\Core\Operation\MapReduce\IndexMapReduceOperation;
 
 /**
  * Command used to perform a map reduce operation using a secondary index (2i) as input. 
@@ -17,12 +16,9 @@ class IndexMapReduce extends MapReduce
     /**
      * {@inheritdoc}
      */
-    public function execute(RiakCluster $cluster)
+    protected function createOperation()
     {
-        $operation = new MapReduceOperation(json_encode($this->specification));
-        $response  = $cluster->execute($operation);
-
-        return $response;
+        return new IndexMapReduceOperation(json_encode($this->specification));
     }
 
     /**

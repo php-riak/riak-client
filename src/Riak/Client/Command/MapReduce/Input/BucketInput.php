@@ -3,6 +3,7 @@
 namespace Riak\Client\Command\MapReduce\Input;
 
 use Riak\Client\Core\Query\RiakNamespace;
+use Riak\Client\Command\MapReduce\KeyFilters;
 
 /**
  * Map-Reduce bucket input
@@ -17,15 +18,15 @@ class BucketInput implements MapReduceInput
     private $namespace;
 
     /**
-     * @var array
+     * @var \Riak\Client\Command\MapReduce\KeyFilters
      */
     private $filters;
 
     /**
      * @param \Riak\Client\Command\MapReduce\Input\RiakNamespace $namespace
-     * @param array                                              $filters
+     * @param \Riak\Client\Command\MapReduce\KeyFilters          $filters
      */
-    public function __construct(RiakNamespace $namespace, array $filters = [])
+    public function __construct(RiakNamespace $namespace, KeyFilters $filters = null)
     {
         $this->namespace = $namespace;
         $this->filters   = $filters;
@@ -40,7 +41,7 @@ class BucketInput implements MapReduceInput
     }
 
     /**
-     * @return array
+     * @return \Riak\Client\Command\MapReduce\KeyFilters
      */
     public function getFilters()
     {
@@ -52,7 +53,7 @@ class BucketInput implements MapReduceInput
      */
     public function jsonSerialize()
     {
-        $filters = [];
+        $filters = $this->filters ?: [];
         $bucket  = ( ! $this->namespace->isDefaultType())
             ? [$this->namespace->getBucketType(), $this->namespace->getBucketName()]
             : $this->namespace->getBucketName();

@@ -10,7 +10,7 @@ use Riak\Client\Command\MapReduce\Input\Index\RangeCriteria;
 use Riak\Client\Command\MapReduce\Input\Index\MatchCriteria;
 
 /**
- * Used to construct a FetchBucketProperties command.
+ * Used to construct a IndexMapReduce command.
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */

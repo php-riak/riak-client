@@ -3,6 +3,7 @@
 namespace Riak\Client\Command\MapReduce;
 
 use Riak\Client\RiakCommand;
+use Riak\Client\Core\RiakCluster;
 use Riak\Client\Command\MapReduce\Specification;
 
 /**
@@ -32,4 +33,20 @@ abstract class MapReduce implements RiakCommand
     {
         return $this->specification;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(RiakCluster $cluster)
+    {
+        $operation = $this->createOperation();
+        $response  = $cluster->execute($operation);
+
+        return $response;
+    }
+
+    /**
+     * @return \Riak\Client\Core\RiakOperation
+     */
+    abstract protected function createOperation();
 }
