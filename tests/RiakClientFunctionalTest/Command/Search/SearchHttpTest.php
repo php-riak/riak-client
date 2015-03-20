@@ -3,10 +3,10 @@
 namespace RiakClientFunctionalTest\Command\Search;
 
 /**
- * @group html
+ * @group http
  * @group functional
  */
-class SearchHtmlTest extends SearchTest
+class SearchHttpTest extends SearchTest
 {
     /**
      * {@inheritdoc}

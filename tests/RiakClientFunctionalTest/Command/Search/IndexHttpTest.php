@@ -3,11 +3,11 @@
 namespace RiakClientFunctionalTest\Command\Search;
 
 /**
- * @group html
+ * @group http
  * @group functional
  * @group deprecated
  */
-class IndexHtmlTest extends IndexTest
+class IndexHttpTest extends IndexTest
 {
     /**
      * {@inheritdoc}

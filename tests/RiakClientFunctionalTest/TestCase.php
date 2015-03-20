@@ -2,10 +2,7 @@
 
 namespace RiakClientFunctionalTest;
 
-use GuzzleHttp\Client;
 use Riak\Client\RiakCommand;
-use Riak\Client\RiakClientBuilder;
-use Riak\Client\Core\Transport\RiakTransportException;
 
 abstract class TestCase extends \RiakClientTest\TestCase
 {
@@ -34,7 +31,7 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function getEnv($name, $default)
     {
-        return getenv($name) ?: $default;
+        return TestHelper::getEnv($name, $default);
     }
 
     /**
@@ -42,7 +39,7 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function createRiakProtoClient()
     {
-        return $this->createRiakClient($this->getEnv('RIAK_PROTO_URI', 'proto://127.0.0.1:8087'));
+        return TestHelper::createRiakProtoClient();
     }
 
     /**
@@ -50,7 +47,7 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function createRiakHttpClient()
     {
-        return $this->createRiakClient($this->getEnv('RIAK_HTTP_URI', 'http://127.0.0.1:8098'));
+        return TestHelper::createRiakHttpClient();
     }
 
     /**
@@ -61,9 +58,7 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function createInternalSolarBucketUri($bucket, $action)
     {
-        // http://127.0.0.1:8093/internal_solr/test_riak_client_cats/select?q=name_s:Lion-o&wt=json&facet=on&facet.field=name_s
-
-        return sprintf('%s/internal_solr/%s/%s', $this->getEnv('RIAK_SOLR_URI', 'http://127.0.0.1:8093'), $bucket, $action);
+        return TestHelper::createInternalSolarBucketUri($bucket, $action);
     }
 
     /**
@@ -73,7 +68,7 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function createGuzzleClient($baseUrl)
     {
-        return new Client(['base_url'  => $baseUrl]);
+        return TestHelper::createGuzzleClient($baseUrl);
     }
 
     /**
@@ -84,18 +79,7 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function retryCommand(RiakCommand $command, $retryCount)
     {
-        try {
-            return $this->client->execute($command);
-        } catch (RiakTransportException $exc) {
-
-            if ($retryCount <= 0) {
-                throw $exc;
-            }
-
-            sleep(1);
-
-            return $this->retryCommand($command, -- $retryCount);
-        }
+        return TestHelper::retryCommand($command, $retryCount);
     }
 
     /**
@@ -105,18 +89,6 @@ abstract class TestCase extends \RiakClientTest\TestCase
      */
     protected function createRiakClient($nodeUri)
     {
-        $nodeHost = parse_url($nodeUri, PHP_URL_HOST);
-        $nodePort = parse_url($nodeUri, PHP_URL_PORT);
-
-        if ((@fsockopen($nodeHost, $nodePort) === false)) {
-            $this->markTestSkipped('The ' . __CLASS__ .' cannot connect to riak : ' . $nodeUri);
-        }
-
-        $builder = new RiakClientBuilder();
-        $client  = $builder
-            ->withNodeUri($nodeUri)
-            ->build();
-
-        return $client;
+        return TestHelper::createRiakClient($nodeUri);
     }
 }
