@@ -60,4 +60,16 @@ class RiakClient
     {
         return $command->execute($this->cluster);
     }
+
+    public function batch(array $commands)
+    {
+        $cluster = $this->cluster;
+        $operations = array_map(
+            function($command) use ($cluster) {
+                return $command->createOperation($cluster);
+            },
+            $commands
+        );
+        return $this->cluster->batch($operations);
+    }
 }

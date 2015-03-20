@@ -1,5 +1,5 @@
 <?php
-
+ 
 namespace Riak\Client\Core\Transport\Http\DataType;
 
 use Riak\Client\Core\Message\Request;
@@ -64,8 +64,7 @@ class HttpGet extends BaseHttpStrategy
      */
     public function send(Request $request)
     {
-        $response    = new GetResponse();
-        $httpRequest = $this->createHttpRequest($request);
+        $httpRequest = $this->buildRequest($request);
 
         try {
             $httpResponse = $this->client->send($httpRequest);
@@ -78,6 +77,19 @@ class HttpGet extends BaseHttpStrategy
             throw $e;
         }
 
+        return $this->buildResponse($httpResponse);
+    }
+
+    public function buildRequest(Request $request)
+    {
+        return $this->createHttpRequest($request);
+    }
+
+    public function buildResponse($httpResponse)
+    {
+        $response = new GetResponse();
+
+        $code = $httpResponse->getStatusCode();        
         if ( ! isset($this->validResponseCodes[$code])) {
             throw RiakTransportException::unexpectedStatusCode($code);
         }
@@ -91,6 +103,6 @@ class HttpGet extends BaseHttpStrategy
         $response->context = $context;
         $response->value   = $this->opConverter->fromArray($type, $value);
 
-        return $response;
+        return $response;        
     }
 }

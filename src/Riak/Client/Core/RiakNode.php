@@ -40,4 +40,22 @@ class RiakNode
     {
         return $operation->execute($this->adapter);
     }
+
+    public function batch(array $operations)
+    {
+        $requests = array_map(
+            function ($operation) {
+                return $operation->createRequest();
+            },
+            $operations
+        );
+
+        $adapterResponses = $this->adapter->batch($requests);
+
+        $responses = [];
+        foreach ($adapterResponses as $key => $resp) {
+            $responses[$key] = $operations[$key]->createResponse($resp);
+        }
+        return $responses;
+    }
 }

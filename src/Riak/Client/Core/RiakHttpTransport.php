@@ -91,4 +91,30 @@ class RiakHttpTransport implements RiakTransport
             throw RiakTransportException::httpRequestException($exc);
         }
     }
+
+    public function batch(array $requests)
+    {
+        $strategies = [];
+        foreach ($requests as $key => $req) {
+            $strategies[$key] = $this->createAdapterStrategyFor($req);
+        }
+
+        $strategiesRequests = [];
+        foreach ($strategies as $key => $strategy) {
+            $strategiesRequests[$key] = $strategy->buildRequest($requests[$key]);
+        }
+
+        $results = \GuzzleHttp\Pool::batch($this->client, $strategiesRequests);
+
+        $strategiesResponses = [];
+        foreach($strategiesRequests as $key => $strategyRequest) {
+            $strategiesResponses[$key] = $results->getResult($strategyRequest);
+        }
+
+        $responses = [];
+        foreach ($strategiesResponses as $key => $strategyResponse) {
+            $responses[$key] = $strategies[$key]->buildResponse($strategiesResponses[$key]);
+        }
+        return $responses;
+    }
 }
