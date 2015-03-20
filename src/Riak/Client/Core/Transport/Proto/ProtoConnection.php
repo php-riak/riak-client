@@ -85,7 +85,7 @@ class ProtoConnection
         }
 
         if ($this->timeout !== null) {
-            stream_set_timeout($resource, $this->timeout);
+            stream_set_timeout($resource, $this->timeout, 0);
         }
 
         return new ProtoStream($resource);
