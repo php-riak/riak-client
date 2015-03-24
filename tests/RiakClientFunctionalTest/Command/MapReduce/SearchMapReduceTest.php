@@ -33,7 +33,7 @@ abstract class SearchMapReduceTest extends TestCase
         $hash      = hash('crc32', __CLASS__ );
         $bucket    = sprintf('test_riak_client_%s_search_mapreduce_bucket', $hash);
         $index     = sprintf('test_riak_client_%s_search_mapreduce_index', $hash);
-        $namespace = new RiakNamespace(null, $bucket);
+        $namespace = new RiakNamespace('thunder_cats', $bucket);
         $data      = new ThunderCatsData($this->client, $namespace, $index);
 
         $this->searchData = $data;
@@ -41,6 +41,7 @@ abstract class SearchMapReduceTest extends TestCase
         $this->namespace  = $namespace;
 
         $this->searchData->setUp();
+        $this->searchData->storeThunderCats();
     }
 
     /**
@@ -56,7 +57,7 @@ function(value) {
             continue;
         }
 
-        return [JSON.parse(value.values[i].data)];
+        return [JSON.parse(value.values[i].data).name_s];
     }
 
     return [];
@@ -67,7 +68,7 @@ function(value) {
     {
         $index   = $this->indexName;
         $map     = $this->createMapFunction();
-        $reduce  = new ErlangFunction('riak_kv_mapreduce', 'reduce_identity');
+        $reduce  = new ErlangFunction('riak_kv_mapreduce', 'reduce_sort');
         $command = SearchMapReduce::builder()
             ->withMapPhase($map)
             ->withReducePhase($reduce, null, true)
@@ -82,6 +83,9 @@ function(value) {
         $iterator = $result->getIterator();
         $values   = iterator_to_array($iterator);
 
-        $this->assertInternalType('array', $values);
+        $this->assertCount(1, $values);
+        $this->assertInstanceOf('Riak\Client\Command\MapReduce\Response\MapReduceEntry', $values[0]);
+        $this->assertEquals(["Snarf"], $values[0]->getResponse());
+        $this->assertEquals(1, $values[0]->getPhase());
     }
 }

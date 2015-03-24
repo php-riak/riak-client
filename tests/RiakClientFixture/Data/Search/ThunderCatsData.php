@@ -4,7 +4,6 @@ namespace RiakClientFixture\Data\Search;
 
 use Riak\Client\RiakOption;
 use Riak\Client\RiakClient;
-use Riak\Client\RiakCommand;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\StoreValue;
 use Riak\Client\Core\Query\RiakLocation;
