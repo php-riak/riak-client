@@ -39,6 +39,14 @@ abstract class Response implements RiakResponse
     }
 
     /**
+     * @return boolean
+     */
+    public function hasContinuation()
+    {
+        return $this->iterator->hasContinuation();
+    }
+
+    /**
      * @return string
      */
     public function getContinuation()

@@ -6,7 +6,6 @@ use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
 use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
-use Riak\Client\Core\Query\Crdt\RiakSet;
 use Riak\Client\Core\Query\Crdt\RiakCounter;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
@@ -45,9 +44,10 @@ class StoreSetTest extends TestCase
 
     public function testBuildCommand()
     {
-        $builder = StoreSet::builder()
+        $builder = StoreSet::builder($this->location, [])
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
+            ->withContext('context-hash')
             ->add(new RiakCounter(1))
             ->remove(new RiakCounter(1))
             ->add(new RiakCounter(2))

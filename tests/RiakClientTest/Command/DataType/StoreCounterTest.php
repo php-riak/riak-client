@@ -43,9 +43,10 @@ class StoreCounterTest extends TestCase
 
     public function testBuildCommand()
     {
-        $builder = StoreCounter::builder()
+        $builder = StoreCounter::builder($this->location, [])
             ->withLocation($this->location)
             ->withOption(RiakOption::W, 1)
+            ->withContext('context-hash')
             ->withDelta(1);
 
         $this->assertInstanceOf('Riak\Client\Command\DataType\StoreCounter', $builder->build());

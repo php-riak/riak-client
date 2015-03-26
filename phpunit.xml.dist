@@ -24,6 +24,9 @@
     </groups>
 
     <filter>
+        <blacklist>
+              <directory>./vendor/*</directory>
+        </blacklist>
         <whitelist>
             <directory>./src</directory>
         </whitelist>

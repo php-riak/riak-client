@@ -41,7 +41,8 @@ class ListBucketsTest extends TestCase
     public function testBuildCommand()
     {
         $builder = ListBuckets::builder()
-            ->withBucketType($this->type);
+            ->withBucketType($this->type)
+            ->withTimeout(3600);
 
         $this->assertInstanceOf('Riak\Client\Command\Bucket\ListBuckets', $builder->build());
     }

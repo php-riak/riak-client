@@ -6,7 +6,6 @@ use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
 use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
-use Riak\Client\Core\Query\Crdt\RiakMap;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\DataType\FetchMap;

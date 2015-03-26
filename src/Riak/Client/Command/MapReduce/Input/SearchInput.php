@@ -42,7 +42,7 @@ class SearchInput implements MapReduceInput
      */
     public function getQuery()
     {
-        return $this->index;
+        return $this->query;
     }
 
     /**

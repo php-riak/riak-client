@@ -44,12 +44,17 @@ class StoreMapTest extends TestCase
             ->build();
     }
 
-
     public function testBuildCommand()
     {
-        $command = StoreMap::builder()
+        $command = StoreMap::builder($this->location, [])
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
+            ->withContext('context-hash')
+            ->removeMap('map_key_remove')
+            ->removeSet('set_key_remove')
+            ->removeFlag('flag_key_remove')
+            ->removeCounter('map_counter_remove')
+            ->removeRegister('map_register_remove')
             ->updateMap('map_key', MapUpdate::create())
             ->updateSet('set_key', SetUpdate::create())
             ->updateRegister('map_register', 'foo')

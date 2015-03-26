@@ -282,12 +282,14 @@ abstract class IndexQueryTest extends TestCase
         $result1 = $this->client->execute($builder->build());
 
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result1);
+        $this->assertFalse($result1->hasContinuation());
 
         $values1       = $result1->getEntries();
         $continuation1 = $result1->getContinuation();
 
         $this->assertCount(2, $values1);
         $this->assertNotNull($continuation1);
+        $this->assertTrue($result1->hasContinuation());
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values1[0]);
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexEntry', $values1[1]);
 
@@ -305,6 +307,7 @@ abstract class IndexQueryTest extends TestCase
             ->build());
 
         $this->assertInstanceOf('Riak\Client\Command\Index\Response\IndexQueryResponse', $result2);
+        $this->assertFalse($result2->hasContinuation());
 
         $iterator2     = $result2->getIterator();
         $values2       = iterator_to_array($iterator2);

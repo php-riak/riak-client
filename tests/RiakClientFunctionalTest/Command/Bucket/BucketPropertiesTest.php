@@ -32,6 +32,8 @@ abstract class BucketPropertiesTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\StoreBucketPropertiesResponse', $storeResponse);
         $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\FetchBucketPropertiesResponse', $fetchResponse);
         $this->assertInstanceOf('Riak\Client\Core\Query\BucketProperties', $fetchProperties);
+        $this->assertSame($namespace, $storeResponse->getNamespace());
+        $this->assertSame($namespace, $fetchResponse->getNamespace());
         $this->assertTrue($fetchProperties->getAllowSiblings());
         $this->assertEquals(3, $fetchProperties->getNVal());
     }
