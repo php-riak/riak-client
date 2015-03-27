@@ -28,7 +28,7 @@
               <directory>./vendor/*</directory>
         </blacklist>
         <whitelist>
-            <directory>./src</directory>
+            <directory>./src/Riak/Client</directory>
         </whitelist>
     </filter>
 </phpunit>
