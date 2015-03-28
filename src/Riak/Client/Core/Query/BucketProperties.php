@@ -18,8 +18,10 @@ class BucketProperties
     const N_VAL = 'nVal';
     const ALLOW_MULT = 'allowMult';
     const LAST_WRITE_WINS = 'lastWriteWins';
-    const PRE_COMMIT = 'preCommit';
-    const POST_COMMIT = 'postCommit';
+    const LINKWALK_FUNCTION = 'linkwalkFunction';
+    const CHASH_KEY_FUNCTION = 'chashKeyFunction';
+    const PRECOMMIT_HOOKS = 'precommitHooks';
+    const POSTCOMMIT_HOOKS = 'postcommitHooks';
     const OLD_VCLOCK = 'oldVclock';
     const YOUNG_VCLOCK = 'youngVclock';
     const BIG_VCLOCK = 'bigVclock';
@@ -31,29 +33,148 @@ class BucketProperties
     const SEARCH = 'search';
 
     /**
-     * @var array
+     * @var mixed $rw
      */
-    private $props = [];
+    private $rw;
+
+    /**
+     * @var mixed $rw
+     */
+    private $dw;
+
+    /**
+     * @var mixed $rw
+     */
+    private $w;
+
+    /**
+     * @var mixed $rw
+     */
+    private $r;
+
+    /**
+     * @var mixed $rw
+     */
+    private $pr;
+
+    /**
+     * @var mixed $rw
+     */
+    private $pw;
+
+    /**
+     * @var boolean $notFoundOk
+     */
+    private $notfoundOk;
+
+    /**
+     * @var boolean $basicQuorum
+     */
+    private $basicQuorum;
+
+    /**
+     * @var \Riak\Client\Core\Query\Func\RiakFunction $linkwalkFunction
+     */
+    private $linkwalkFunction;
+
+    /**
+     * @var \Riak\Client\Core\Query\Func\RiakFunction $chashKeyFunction
+     */
+    private $chashKeyFunction;
+
+    /**
+     * @var \Riak\Client\Core\Query\Func\RiakFunction[] $precommitHooks
+     */
+    private $precommitHooks = [];
+
+    /**
+     * @var \Riak\Client\Core\Query\Func\RiakFunction[] $postcommitHooks
+     */
+    private $postcommitHooks = [];
+
+    /**
+     * @var integer $oldVClock
+     */
+    private $oldVclock;
+
+    /**
+     * @var integer $youngVClock
+     */
+    private $youngVclock;
+
+    /**
+     * @var integer $bigVClock
+     */
+    private $bigVclock;
+
+    /**
+     * @var integer $smallVClock
+     */
+    private $smallVclock;
+
+    /**
+     * @var string $backend
+     */
+    private $backend;
+
+    /**
+     * @var integer $nVal
+     */
+    private $nVal;
+
+    /**
+     * @var boolean $lastWriteWins
+     */
+    private $lastWriteWins;
+
+    /**
+     * @var boolean $allowMult
+     */
+    private $allowMult;
+
+    /**
+     * @var boolean $lastWriteWins
+     */
+    private $search;
+
+    /**
+     * @var string $searchIndex
+     */
+    private $searchIndex;
+
+    /**
+     * @var string $datatype
+     */
+    private $datatype;
+
+    /**
+     * @var boolean $consistent
+     */
+    private $consistent;
 
     /**
      * @param array $props
      */
     public function __construct(array $props = [])
     {
-        $this->props = $props;
+        foreach ($props as $name => $value) {
+            $this->{$name} = $value;
+        }
     }
 
     /**
-     * @param string $name
-     * @param mixed  $default
+     * Error handler for unknown property mutator.
      *
-     * @return mixed
+     * @param string $name  Unknown property name.
+     * @param mixed  $value Property value.
+     *
+     * @throws \BadMethodCallException
      */
-    private function get($name, $default = null)
+    public function __set($name, $value)
     {
-        return isset($this->props[$name])
-            ? $this->props[$name]
-            : $default;
+        throw new \InvalidArgumentException(
+            sprintf("Unknown property '%s' on '%s'.", $name, get_class($this))
+        );
     }
 
     /**
@@ -61,7 +182,7 @@ class BucketProperties
      */
     public function getRw()
     {
-        return $this->get(self::RW);
+        return $this->rw;
     }
 
     /**
@@ -69,7 +190,7 @@ class BucketProperties
      */
     public function getDw()
     {
-        return $this->get(self::DW);
+        return $this->dw;
     }
 
     /**
@@ -77,7 +198,7 @@ class BucketProperties
      */
     public function getW()
     {
-        return $this->get(self::W);
+        return $this->w;
     }
 
     /**
@@ -85,7 +206,7 @@ class BucketProperties
      */
     public function getR()
     {
-        return $this->get(self::R);
+        return $this->r;
     }
 
     /**
@@ -93,7 +214,7 @@ class BucketProperties
      */
     public function getPr()
     {
-        return $this->get(self::PR);
+        return $this->pr;
     }
 
     /**
@@ -101,7 +222,7 @@ class BucketProperties
      */
     public function getPw()
     {
-        return $this->get(self::PW);
+        return $this->pw;
     }
 
     /**
@@ -109,7 +230,7 @@ class BucketProperties
      */
     public function getNotFoundOk()
     {
-        return $this->get(self::NOTFOUND_OK);
+        return $this->notfoundOk;
     }
 
     /**
@@ -117,7 +238,23 @@ class BucketProperties
      */
     public function getBasicQuorum()
     {
-        return $this->get(self::BASIC_QUORUM);
+        return $this->basicQuorum;
+    }
+
+    /**
+     * @return \Riak\Client\Core\Query\Func\RiakFunction
+     */
+    function getLinkwalkFunction()
+    {
+        return $this->linkwalkFunction;
+    }
+
+    /**
+     * @return \Riak\Client\Core\Query\Func\RiakFunction
+     */
+    public function getChashKeyFunction()
+    {
+        return $this->chashKeyFunction;
     }
 
     /**
@@ -125,7 +262,7 @@ class BucketProperties
      */
     public function getPreCommitHooks()
     {
-        return $this->get(self::POST_COMMIT, []);
+        return $this->postcommitHooks;
     }
 
     /**
@@ -133,7 +270,7 @@ class BucketProperties
      */
     public function getPostCommitHooks()
     {
-        return $this->get(self::POST_COMMIT, []);
+        return $this->precommitHooks;
     }
 
     /**
@@ -141,7 +278,7 @@ class BucketProperties
      */
     public function getOldVClock()
     {
-        return $this->get(self::OLD_VCLOCK);
+        return $this->oldVclock;
     }
 
     /**
@@ -149,7 +286,7 @@ class BucketProperties
      */
     public function getYoungVClock()
     {
-        return $this->get(self::YOUNG_VCLOCK);
+        return $this->youngVclock;
     }
 
     /**
@@ -157,7 +294,7 @@ class BucketProperties
      */
     public function getBigVClock()
     {
-        return $this->get(self::BIG_VCLOCK);
+        return $this->bigVclock;
     }
 
     /**
@@ -165,7 +302,7 @@ class BucketProperties
      */
     public function getSmallVClock()
     {
-        return $this->get(self::SMALL_VCLOCK);
+        return $this->smallVclock;
     }
 
     /**
@@ -173,7 +310,7 @@ class BucketProperties
      */
     public function getBackend()
     {
-        return $this->get(self::BACKEND);
+        return $this->backend;
     }
 
     /**
@@ -181,7 +318,7 @@ class BucketProperties
      */
     public function getNVal()
     {
-        return $this->get(self::N_VAL);
+        return $this->nVal;
     }
 
     /**
@@ -189,23 +326,23 @@ class BucketProperties
      */
     public function getLastWriteWins()
     {
-        return $this->get(self::LAST_WRITE_WINS);
+        return $this->lastWriteWins;
     }
 
     /**
      * @return boolean
      */
-    public function getAllowSiblings()
+    public function getAllowMult()
     {
-        return $this->get(self::ALLOW_MULT);
+        return $this->allowMult;
     }
 
     /**
-     * @return string
+     * @return boolean
      */
     public function getSearch()
     {
-        return $this->get(self::SEARCH);
+        return $this->search;
     }
 
     /**
@@ -213,6 +350,22 @@ class BucketProperties
      */
     public function getSearchIndex()
     {
-        return $this->get(self::SEARCH_INDEX);
+        return $this->searchIndex;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDatatype()
+    {
+        return $this->datatype;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsistent()
+    {
+        return $this->consistent;
     }
 }

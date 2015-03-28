@@ -14,8 +14,8 @@ class GetResponse extends Response
     public $nVal;
     public $allowMult;
     public $lastWriteWins;
-    public $preCommitList;
-    public $postcommitList;
+    public $precommitHooks;
+    public $postcommitHooks;
     public $oldVclock;
     public $youngVclock;
     public $bigVclock;
