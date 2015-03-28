@@ -291,4 +291,5 @@ Contents
    datatype
    secondary-indexes
    yokozuna-search
+   mapreduce
    siblings
