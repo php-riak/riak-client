@@ -244,7 +244,7 @@ class BucketProperties
     /**
      * @return \Riak\Client\Core\Query\Func\RiakFunction
      */
-    function getLinkwalkFunction()
+    public function getLinkwalkFunction()
     {
         return $this->linkwalkFunction;
     }

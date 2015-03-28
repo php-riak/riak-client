@@ -31,6 +31,8 @@ class BucketKeyMapReduceBuilder extends Builder
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
      * @param mixed                                $data
+     *
+     * @return \Riak\Client\Command\MapReduce\Input\BucketKeyInput
      */
     public function withLocation(RiakLocation $location, $data = null)
     {

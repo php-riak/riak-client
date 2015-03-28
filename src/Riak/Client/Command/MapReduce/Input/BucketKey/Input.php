@@ -23,8 +23,8 @@ class Input implements JsonSerializable
     private $data;
 
     /**
-     * @param RiakLocation $location
-     * @param mixed        $data
+     * @param \Riak\Client\Core\Query\RiakLocation $location
+     * @param mixed                                $data
      */
     public function __construct(RiakLocation $location, $data = null)
     {
