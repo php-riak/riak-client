@@ -44,11 +44,10 @@ abstract class BucketPropertiesTest extends TestCase
         $namespace = new RiakNamespace('default', 'bucket_quorum');
 
         $store = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::N_VAL, RiakOption::QUORUM)
-            ->withProperty(BucketProperties::PR, RiakOption::ALL)
-            ->withProperty(BucketProperties::R, RiakOption::ALL)
-            ->withProperty(BucketProperties::W, RiakOption::ONE)
+            ->withProperty(BucketProperties::R, RiakOption::QUORUM)
             ->withProperty(BucketProperties::PW, RiakOption::ONE)
+            ->withProperty(BucketProperties::PR, RiakOption::ONE)
+            ->withProperty(BucketProperties::W, RiakOption::ONE)
             ->withProperty(BucketProperties::DW, 'all')
             ->withProperty(BucketProperties::RW, 'one')
             ->withNamespace($namespace)
@@ -65,11 +64,10 @@ abstract class BucketPropertiesTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\StoreBucketPropertiesResponse', $storeResponse);
         $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\FetchBucketPropertiesResponse', $fetchResponse);
         $this->assertInstanceOf('Riak\Client\Core\Query\BucketProperties', $fetchProperties);
-        $this->assertEquals('quorum', $fetchProperties->getNVal());
-        $this->assertEquals('all', $fetchProperties->getPr());
-        $this->assertEquals('all', $fetchProperties->getR());
+        $this->assertEquals('quorum', $fetchProperties->getR());
         $this->assertEquals('one', $fetchProperties->getW());
         $this->assertEquals('one', $fetchProperties->getPw());
+        $this->assertEquals('one', $fetchProperties->getPr());
         $this->assertEquals('all', $fetchProperties->getDw());
         $this->assertEquals('one', $fetchProperties->getRw());
     }

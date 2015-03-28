@@ -27,13 +27,13 @@ class ProtoPut extends ProtoStrategy
         $rpbPutReq = new RpbSetBucketReq();
         $rpbProps  = new RpbBucketProps();
 
-        $rpbProps->n_val           = $this->encodeQuorum($request->nVal);
-        $rpbProps->pr              = $this->encodeQuorum($request->pr);
         $rpbProps->r               = $this->encodeQuorum($request->r);
         $rpbProps->w               = $this->encodeQuorum($request->w);
-        $rpbProps->pw              = $this->encodeQuorum($request->pw);
         $rpbProps->dw              = $this->encodeQuorum($request->dw);
         $rpbProps->rw              = $this->encodeQuorum($request->rw);
+        $rpbProps->pr              = $this->encodeQuorum($request->pr);
+        $rpbProps->pw              = $this->encodeQuorum($request->pw);
+        $rpbProps->n_val           = $request->nVal;
         $rpbProps->allow_mult      = $request->allowMult;
         $rpbProps->last_write_wins = $request->lastWriteWins;
         $rpbProps->old_vclock      = $request->oldVclock;

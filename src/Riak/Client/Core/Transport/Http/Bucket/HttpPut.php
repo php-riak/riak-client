@@ -69,13 +69,13 @@ class HttpPut extends BaseHttpStrategy
     public function requestToArray(Request $request)
     {
         $values = [
-            'dw'              => $this->encodeQuorum($request->dw),
-            'n_val'           => $this->encodeQuorum($request->nVal),
-            'pr'              => $this->encodeQuorum($request->pr),
-            'pw'              => $this->encodeQuorum($request->pw),
-            'r'               => $this->encodeQuorum($request->r),
-            'rw'              => $this->encodeQuorum($request->rw),
-            'w'               => $this->encodeQuorum( $request->w),
+            'dw'              => $request->dw,
+            'n_val'           => $request->nVal,
+            'pr'              => $request->pr,
+            'pw'              => $request->pw,
+            'r'               => $request->r,
+            'rw'              => $request->rw,
+            'w'               => $request->w,
             'allow_mult'      => $request->allowMult,
             'backend'         => $request->backend,
             'basic_quorum'    => $request->basicQuorum,

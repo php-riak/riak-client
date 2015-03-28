@@ -41,13 +41,13 @@ class ProtoGet extends ProtoStrategy
     {
         $response = new GetResponse();
 
-        $response->nVal          = $this->decodeQuorum($props->n_val);
-        $response->pr            = $this->decodeQuorum($props->pr);
-        $response->pw            = $this->decodeQuorum($props->pw);
         $response->r             = $this->decodeQuorum($props->r);
         $response->rw            = $this->decodeQuorum($props->rw);
         $response->w             = $this->decodeQuorum($props->w);
         $response->dw            = $this->decodeQuorum($props->dw);
+        $response->pw            = $this->decodeQuorum($props->pw);
+        $response->pr            = $this->decodeQuorum($props->pr);
+        $response->nVal          = $props->n_val;
         $response->allowMult     = $props->allow_mult;
         $response->basicQuorum   = $props->basic_quorum;
         $response->bigVclock     = $props->big_vclock;

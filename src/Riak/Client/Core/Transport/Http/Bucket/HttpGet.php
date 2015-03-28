@@ -65,13 +65,13 @@ class HttpGet extends BaseHttpStrategy
     {
         $response = new GetResponse();
 
-        $response->dw            = $this->decodeQuorum($props['dw']);
-        $response->nVal          = $this->decodeQuorum($props['n_val']);
-        $response->pr            = $this->decodeQuorum($props['pr']);
-        $response->pw            = $this->decodeQuorum($props['pw']);
-        $response->r             = $this->decodeQuorum($props['r']);
-        $response->rw            = $this->decodeQuorum($props['rw']);
-        $response->w             = $this->decodeQuorum($props['w']);
+        $response->dw            = $props['dw'];
+        $response->nVal          = $props['n_val'];
+        $response->pr            = $props['pr'];
+        $response->pw            = $props['pw'];
+        $response->r             = $props['r'];
+        $response->rw            = $props['rw'];
+        $response->w             = $props['w'];
         $response->allowMult     = $props['allow_mult'];
         $response->basicQuorum   = $props['basic_quorum'];
         $response->bigVclock     = $props['big_vclock'];

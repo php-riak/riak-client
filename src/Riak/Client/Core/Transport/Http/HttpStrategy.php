@@ -4,7 +4,6 @@ namespace Riak\Client\Core\Transport\Http;
 
 use GuzzleHttp\ClientInterface;
 use Riak\Client\Core\Transport\Strategy;
-use Riak\Client\Core\Transport\QuorumEncoder;
 
 /**
  * Base http strategy.
@@ -13,8 +12,6 @@ use Riak\Client\Core\Transport\QuorumEncoder;
  */
 abstract class HttpStrategy implements Strategy
 {
-    use QuorumEncoder;
-
     /**
      * @var \GuzzleHttp\ClientInterface
      */
