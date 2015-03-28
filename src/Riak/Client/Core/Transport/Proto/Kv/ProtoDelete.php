@@ -29,27 +29,27 @@ class ProtoDelete extends BaseProtoStrategy
         $rpbDelReq->setKey($request->key);
 
         if ($request->r !== null) {
-            $rpbDelReq->setR($request->r);
+            $rpbDelReq->setR($this->encodeQuorum($request->r));
         }
 
         if ($request->pr !== null) {
-            $rpbDelReq->setPr($request->pr);
+            $rpbDelReq->setPr($this->encodeQuorum($request->pr));
         }
 
         if ($request->w !== null) {
-            $rpbDelReq->setW($request->w);
+            $rpbDelReq->setW($this->encodeQuorum($request->w));
         }
 
         if ($request->rw !== null) {
-            $rpbDelReq->setRw($request->rw);
+            $rpbDelReq->setRw($this->encodeQuorum($request->rw));
         }
 
         if ($request->dw !== null) {
-            $rpbDelReq->setDw($request->dw);
+            $rpbDelReq->setDw($this->encodeQuorum($request->dw));
         }
 
         if ($request->pw !== null) {
-            $rpbDelReq->setPw($request->pw);
+            $rpbDelReq->setPw($this->encodeQuorum($request->pw));
         }
 
         if ($request->vClock !== null) {

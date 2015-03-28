@@ -45,7 +45,6 @@ class ProtoPutIndex extends ProtoStrategy
         $response   = new PutIndexResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
 
-        // PUT RESP.. WTF ?
         $this->client->send($rpbPutReq, RiakMessageCodes::YOKOZUNA_INDEX_PUT_REQ, RiakMessageCodes::PUT_RESP);
 
         return $response;

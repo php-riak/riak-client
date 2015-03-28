@@ -30,11 +30,11 @@ class ProtoGet extends BaseProtoStrategy
         $message->setKey($request->key);
 
         if ($request->r !== null) {
-            $message->setR($request->r);
+            $message->setR($this->encodeQuorum($request->r));
         }
 
         if ($request->pr !== null) {
-            $message->setPr($request->pr);
+            $message->setPr($this->encodeQuorum($request->pr));
         }
 
         if ($request->basicQuorum !== null) {

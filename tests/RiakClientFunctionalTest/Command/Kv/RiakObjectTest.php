@@ -37,13 +37,13 @@ abstract class RiakObjectTest extends TestCase
         $object->setContentType('application/json');
 
         $store = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withOption(RiakOption::W, RiakOption::QUORUM)
+            ->withOption(RiakOption::PW, RiakOption::ONE)
             ->build();
 
         $fetch  = FetchValue::builder($location)
             ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, 1)
+            ->withOption(RiakOption::R, RiakOption::QUORUM)
             ->build();
 
         $this->client->execute($store);

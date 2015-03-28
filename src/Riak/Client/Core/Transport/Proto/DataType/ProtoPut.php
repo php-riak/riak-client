@@ -31,15 +31,15 @@ class ProtoPut extends BaseProtoStrategy
         $rpbPutReq->setKey($request->key);
 
         if ($request->w !== null) {
-            $rpbPutReq->setW($request->w);
+            $rpbPutReq->setW($this->encodeQuorum($request->w));
         }
 
         if ($request->dw !== null) {
-            $rpbPutReq->setDw($request->dw);
+            $rpbPutReq->setDw($this->encodeQuorum($request->dw));
         }
 
         if ($request->pw !== null) {
-            $rpbPutReq->setPw($request->pw);
+            $rpbPutReq->setPw($this->encodeQuorum($request->pw));
         }
 
         if ($request->returnBody !== null) {

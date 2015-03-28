@@ -68,7 +68,7 @@ class HttpPut extends BaseHttpStrategy
      */
     public function requestToArray(Request $request)
     {
-        $values = [
+        return array_filter([
             'dw'              => $request->dw,
             'n_val'           => $request->nVal,
             'pr'              => $request->pr,
@@ -89,8 +89,6 @@ class HttpPut extends BaseHttpStrategy
             'search_index'    => $request->searchIndex,
             'small_vclock'    => $request->smallVclock,
             'young_vclock'    => $request->youngVclock,
-        ];
-
-        return array_filter($values);
+        ]);
     }
 }

@@ -31,11 +31,11 @@ class ProtoGet extends BaseProtoStrategy
         $rpbRequest->setKey($request->key);
 
         if ($request->r !== null) {
-            $rpbRequest->setR($request->r);
+            $rpbRequest->setR($this->encodeQuorum($request->r));
         }
 
         if ($request->pr !== null) {
-            $rpbRequest->setPr($request->pr);
+            $rpbRequest->setPr($this->encodeQuorum($request->pr));
         }
 
         if ($request->basicQuorum !== null) {

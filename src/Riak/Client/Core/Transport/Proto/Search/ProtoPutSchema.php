@@ -44,7 +44,6 @@ class ProtoPutSchema extends ProtoStrategy
         $response   = new PutSchemaResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
 
-        // PUT RESP.. WTF ?
         $this->client->send($rpbPutReq, RiakMessageCodes::YOKOZUNA_SCHEMA_PUT_REQ, RiakMessageCodes::PUT_RESP);
 
         return $response;
