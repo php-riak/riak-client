@@ -156,7 +156,7 @@ Here is the general syntax for setting up a bucket map over a secondary index:
     $result = $this->client->execute($command);
     $values = $result->getResultsFromAllPhases();
 
-    echo implode(',', $values[0]->getResponse());
+    echo implode(",", $values[0]->getResponse());
     // fabio.bat.silva@gmail.com,dev@gmail.com,riak@basho.com,...
 
 .. _reference-mapreduce-search:
