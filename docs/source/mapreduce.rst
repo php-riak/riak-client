@@ -51,7 +51,7 @@ Here is the general syntax for setting up a bucket map reduce combination to han
 .. code-block:: php
 
     <?php
-    use Riak\Client\Command\MapReduce\IndexMapReduce;
+    use Riak\Client\Command\MapReduce\BucketMapReduce;
     use Riak\Client\Core\Query\Func\NamedJsFunction;
     use Riak\Client\Command\MapReduce\KeyFilters;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -83,21 +83,21 @@ See `Basho KeyFilters Docs`_. for more details on filters
 ``BucketKeyMapReduce``
 ----------------------
 
-Command used to perform a Map Reduce operation over a bucket in Riak.
+Command used to perform a map reduce operation over a specific set of keys in a bucket.
 
-Here is the general syntax for setting up a bucket map reduce combination to handle a range of keys:
+Here is the general syntax for setting up a bucket map over a specific set of keys:
 
 .. code-block:: php
 
     <?php
+    use Riak\Client\Command\MapReduce\BucketKeyMapReduce;
     use Riak\Client\Core\Query\Func\AnonymousJsFunction;
     use Riak\Client\Core\Query\Func\ErlangFunction;
-    use Riak\Client\Command\MapReduce\IndexMapReduce;
-    use Riak\Client\Command\MapReduce\KeyFilters;
     use Riak\Client\Core\Query\RiakNamespace;
+    use Riak\Client\Core\Query\RiakLocation;
 
     $reduce = new ErlangFunction('riak_kv_mapreduce', 'reduce_sum');
-    map     = new AnonymousJsFunction('function(entry) {
+    $map    = new AnonymousJsFunction('function(entry) {
         return [JSON.parse(entry.values[0].data)];
     }');
 
@@ -110,7 +110,7 @@ Here is the general syntax for setting up a bucket map reduce combination to han
         ->withLocation(new RiakLocation($namespace, 'key3'))
         ->build();
 
-    /* @var $result \Riak\Client\Command\MapReduce\Response\BucketMapReduceResponse */
+    /* @var $result \Riak\Client\Command\MapReduce\Response\BucketKeyMapReduceResponse */
     /* @var $values \Riak\Client\Command\MapReduce\Response\MapReduceEntry[] */
     $result = $this->client->execute($command);
     $values = $result->getResultForPhase(1);
@@ -120,7 +120,6 @@ Here is the general syntax for setting up a bucket map reduce combination to han
     echo $values[0]->getResponse()
     // 10
 
-See `Basho KeyFilters Docs`_. for more details on filters
 
 .. _reference-mapreduce-index:
 
@@ -128,6 +127,37 @@ See `Basho KeyFilters Docs`_. for more details on filters
 ``IndexMapReduce``
 ------------------
 
+Command used to perform a map reduce operation using a secondary index (2i) as input.
+
+Here is the general syntax for setting up a bucket map over a secondary index:
+
+.. code-block:: php
+
+    <?php
+    use Riak\Client\Command\MapReduce\IndexMapReduce;
+    use Riak\Client\Core\Query\Func\AnonymousJsFunction;
+    use Riak\Client\Core\Query\Func\ErlangFunction;
+
+    $reduce = new ErlangFunction('riak_kv_mapreduce', 'reduce_sort');
+    $map    = new AnonymousJsFunction('function(entry) {
+        return [JSON.parse(entry.values[0].data).email];
+    }');
+
+    $command = IndexMapReduce::builder()
+        ->withMapPhase($map)
+        ->withReducePhase($reduce, null, true)
+        ->withNamespace($this->namespace)
+        ->withIndexBin('department_index')
+        ->withMatchValue('dev')
+        ->build();
+
+    /* @var $result \Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse */
+    /* @var $values \Riak\Client\Command\MapReduce\Response\MapReduceEntry[] */
+    $result = $this->client->execute($command);
+    $values = $result->getResultsFromAllPhases();
+
+    echo implode(',', $values[0]->getResponse());
+    // fabio.bat.silva@gmail.com,dev@gmail.com,riak@basho.com,...
 
 .. _reference-mapreduce-search:
 
