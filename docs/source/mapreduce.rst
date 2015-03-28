@@ -40,6 +40,7 @@ MapReduce Commands
 
 .. _reference-mapreduce-bucket:
 
+-------------------
 ``BucketMapReduce``
 -------------------
 
@@ -53,6 +54,7 @@ Here is the general syntax for setting up a bucket map reduce combination to han
     use Riak\Client\Command\MapReduce\IndexMapReduce;
     use Riak\Client\Core\Query\Func\NamedJsFunction;
     use Riak\Client\Command\MapReduce\KeyFilters;
+    use Riak\Client\Core\Query\RiakNamespace;
 
     $map       = new NamedJsFunction('Riak.mapValuesJson');
     $namespace = new RiakNamespace('bucket_type', 'bucket_name');
@@ -77,18 +79,59 @@ See `Basho KeyFilters Docs`_. for more details on filters
 
 .. _reference-mapreduce-bucketkey:
 
+----------------------
 ``BucketKeyMapReduce``
 ----------------------
 
+Command used to perform a Map Reduce operation over a bucket in Riak.
+
+Here is the general syntax for setting up a bucket map reduce combination to handle a range of keys:
+
+.. code-block:: php
+
+    <?php
+    use Riak\Client\Core\Query\Func\AnonymousJsFunction;
+    use Riak\Client\Core\Query\Func\ErlangFunction;
+    use Riak\Client\Command\MapReduce\IndexMapReduce;
+    use Riak\Client\Command\MapReduce\KeyFilters;
+    use Riak\Client\Core\Query\RiakNamespace;
+
+    $reduce = new ErlangFunction('riak_kv_mapreduce', 'reduce_sum');
+    map     = new AnonymousJsFunction('function(entry) {
+        return [JSON.parse(entry.values[0].data)];
+    }');
+
+    $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+    $command   = BucketKeyMapReduce::builder([])
+        ->withMapPhase($map)
+        ->withReducePhase($reduce, null, true)
+        ->withLocation(new RiakLocation($namespace, 'key1'))
+        ->withLocation(new RiakLocation($namespace, 'key2'))
+        ->withLocation(new RiakLocation($namespace, 'key3'))
+        ->build();
+
+    /* @var $result \Riak\Client\Command\MapReduce\Response\BucketMapReduceResponse */
+    /* @var $values \Riak\Client\Command\MapReduce\Response\MapReduceEntry[] */
+    $result = $this->client->execute($command);
+    $values = $result->getResultForPhase(1);
+
+    echo $values[0]->getPhase();
+    // 1
+    echo $values[0]->getResponse()
+    // 10
+
+See `Basho KeyFilters Docs`_. for more details on filters
 
 .. _reference-mapreduce-index:
 
+------------------
 ``IndexMapReduce``
 ------------------
 
 
 .. _reference-mapreduce-search:
 
+-------------------
 ``SearchMapReduce``
 -------------------
 
