@@ -10,6 +10,22 @@ namespace Riak\Client;
 class RiakOption
 {
     /**
+     * A majority of the replicas must respond, that is, "half plus one".
+     * For the default N value of 3, this calculates to 2
+     */
+    const QUORUM = 'quorum';
+
+    /**
+     * All replicas must reply. This is the same as setting R or W equal to N.
+     */
+    const ALL = 'all';
+
+    /**
+     * This is the same as sending 1 as the R or W value.
+     */
+    const ONE = 'one';
+
+    /**
      * Read Quorum.
      * How many replicas need to agree when fetching the object.
      */

@@ -3,6 +3,7 @@
 namespace Riak\Client\Core\Transport\Proto;
 
 use Riak\Client\Core\Transport\Strategy;
+use Riak\Client\Core\Transport\QuorumEncoder;
 use Riak\Client\Core\Transport\Proto\ProtoClient;
 
 /**
@@ -12,6 +13,8 @@ use Riak\Client\Core\Transport\Proto\ProtoClient;
  */
 abstract class ProtoStrategy implements Strategy
 {
+    use QuorumEncoder;
+
     /**
      * @var \Riak\Client\Core\Transport\Proto\ProtoClient
      */
