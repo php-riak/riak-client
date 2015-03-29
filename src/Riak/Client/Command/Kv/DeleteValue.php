@@ -33,24 +33,14 @@ class DeleteValue implements RiakCommand
 
     /**
      * @param \Riak\Client\Command\Kv\RiakLocation $location
+     * @param \Riak\Client\Core\Query\VClock       $vClock
      * @param array                                $options
      */
-    public function __construct(RiakLocation $location, $options)
+    public function __construct(RiakLocation $location, VClock $vClock = null, array $options = [])
     {
         $this->location = $location;
         $this->options  = $options;
-    }
-
-    /**
-     * @param \Riak\Client\Core\Query\VClock $vClock
-     *
-     * @return \Riak\Client\Command\DeleteValue
-     */
-    public function withVClock(VClock $vClock)
-    {
-        $this->vClock = $vClock;
-
-        return $this;
+        $this->vClock   = $vClock;
     }
 
     /**

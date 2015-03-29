@@ -2,7 +2,9 @@
 
 namespace Riak\Client\Command\DataType\Builder;
 
+use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Command\DataType\StoreSet;
+use Riak\Client\Command\DataType\SetUpdate;
 
 /**
  * Used to construct a StoreSet command.
@@ -12,14 +14,20 @@ use Riak\Client\Command\DataType\StoreSet;
 class StoreSetBuilder extends Builder
 {
     /**
-     * @var array
+     * @var \Riak\Client\Command\DataType\SetUpdate
      */
-    private $adds = [];
+    protected $update;
 
     /**
-     * @var array
+     * @param \Riak\Client\Core\Query\RiakLocation $location
+     * @param array                                $options
      */
-    private $removes = [];
+    public function __construct(RiakLocation $location = null, array $options = array())
+    {
+        parent::__construct($location, $options);
+
+        $this->update = new SetUpdate();
+    }
 
     /**
      * Add the provided value to the set in Riak.
@@ -30,7 +38,7 @@ class StoreSetBuilder extends Builder
      */
     public function add($value)
     {
-        $this->adds[] = $value;
+        $this->update->add($value);
 
         return $this;
     }
@@ -44,7 +52,7 @@ class StoreSetBuilder extends Builder
      */
     public function remove($value)
     {
-        $this->removes[] = $value;
+        $this->update->remove($value);
 
         return $this;
     }
@@ -56,15 +64,6 @@ class StoreSetBuilder extends Builder
      */
     public function build()
     {
-        $command = new StoreSet($this->location, $this->options);
-
-        if ($this->context != null) {
-            $command->withContext($this->context);
-        }
-
-        array_walk($this->adds, [$command, 'add']);
-        array_walk($this->removes, [$command, 'remove']);
-
-        return $command;
+        return new StoreSet($this->location, $this->update, $this->context, $this->options);
     }
 }

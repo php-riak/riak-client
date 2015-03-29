@@ -48,14 +48,6 @@ class Search implements RiakCommand
     }
 
     /**
-     * @param \Riak\Client\Core\Query\RiakSearchQuery $query
-     */
-    public function setSearchQuery(RiakSearchQuery $query)
-    {
-        $this->query = $query;
-    }
-
-    /**
      * @return \Riak\Client\Command\Search\Builder\SearchBuilder
      */
     public static function builder()

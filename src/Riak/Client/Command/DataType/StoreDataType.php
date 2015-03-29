@@ -35,26 +35,14 @@ abstract class StoreDataType implements RiakCommand
     /**
      * @param \Riak\Client\Core\Query\RiakLocation         $location
      * @param \Riak\Client\Command\DataType\DataTypeUpdate $update
+     * @param string                                       $context
      * @param array                                        $options
      */
-    public function __construct(RiakLocation $location, DataTypeUpdate $update, array $options = [])
+    public function __construct(RiakLocation $location, DataTypeUpdate $update, $context, array $options = [])
     {
         $this->location = $location;
         $this->options  = $options;
+        $this->context  = $context;
         $this->update   = $update;
-    }
-
-    /**
-     * Include the context from a previous fetch.
-     *
-     * @param string $context
-     *
-     * @return \Riak\Client\Command\DataType\StoreDataType
-     */
-    public function withContext($context)
-    {
-        $this->context = $context;
-
-        return $this;
     }
 }

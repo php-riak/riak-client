@@ -3,6 +3,7 @@
 namespace Riak\Client\Command\DataType\Builder;
 
 use Riak\Client\Command\DataType\StoreCounter;
+use Riak\Client\Command\DataType\CounterUpdate;
 
 /**
  * Used to construct a StoreCounter command.
@@ -35,16 +36,6 @@ class StoreCounterBuilder extends Builder
      */
     public function build()
     {
-        $command = new StoreCounter($this->location, $this->options);
-
-        if ($this->delta != null) {
-            $command->withDelta($this->delta);
-        }
-
-        if ($this->context != null) {
-            $command->withContext($this->context);
-        }
-
-        return $command;
+        return new StoreCounter($this->location, new CounterUpdate($this->delta), $this->context, $this->options);
     }
 }

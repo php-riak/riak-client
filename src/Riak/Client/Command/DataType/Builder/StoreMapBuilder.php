@@ -2,7 +2,13 @@
 
 namespace Riak\Client\Command\DataType\Builder;
 
+use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Command\DataType\StoreMap;
+use Riak\Client\Core\Query\Crdt\Op\FlagOp;
+use Riak\Client\Command\DataType\SetUpdate;
+use Riak\Client\Command\DataType\MapUpdate;
+use Riak\Client\Core\Query\Crdt\Op\CounterOp;
+use Riak\Client\Core\Query\Crdt\Op\RegisterOp;
 
 /**
  * Used to construct a StoreMap command.
@@ -12,37 +18,31 @@ use Riak\Client\Command\DataType\StoreMap;
 class StoreMapBuilder extends Builder
 {
     /**
-     * @var array
+     * @var \Riak\Client\Command\DataType\MapUpdate
      */
-    private $removes = [
-        'register'  => [],
-        'counter'   => [],
-        'flag'      => [],
-        'map'       => [],
-        'set'       => [],
-    ];
+    protected $update;
 
     /**
-     * @var array
+     * @param \Riak\Client\Core\Query\RiakLocation $location
+     * @param array                                $options
      */
-    private $updates = [
-        'register'  => [],
-        'counter'   => [],
-        'flag'      => [],
-        'map'       => [],
-        'set'       => [],
-    ];
+    public function __construct(RiakLocation $location = null, array $options = array())
+    {
+        parent::__construct($location, $options);
+
+        $this->update = new MapUpdate();
+    }
 
     /**
      * Update the map in Riak by removing the counter mapped to the provided key.
      *
      * @param string $key
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function removeCounter($key)
     {
-        $this->removes['counter'][] = $key;
+        $this->update->removeCounter($key);
 
         return $this;
     }
@@ -52,11 +52,11 @@ class StoreMapBuilder extends Builder
      *
      * @param string $key
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function removeRegister($key)
     {
-        $this->removes['register'][] = $key;
+        $this->update->removeRegister($key);
 
         return $this;
     }
@@ -66,11 +66,11 @@ class StoreMapBuilder extends Builder
      *
      * @param string $key
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function removeFlag($key)
     {
-        $this->removes['flag'][] = $key;
+        $this->update->removeFlag($key);
 
         return $this;
     }
@@ -80,11 +80,11 @@ class StoreMapBuilder extends Builder
      *
      * @param string $key
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function removeSet($key)
     {
-        $this->removes['set'][] = $key;
+        $this->update->removeSet($key);
 
         return $this;
     }
@@ -94,11 +94,11 @@ class StoreMapBuilder extends Builder
      *
      * @param string $key
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function removeMap($key)
     {
-        $this->removes['map'][] = $key;
+        $this->update->removeMap($key);
 
         return $this;
     }
@@ -109,11 +109,15 @@ class StoreMapBuilder extends Builder
      * @param string                                        $key
      * @param \Riak\Client\Command\DataType\MapUpdate|array $value
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function updateMap($key, $value)
     {
-        $this->updates['map'][$key] = $value;
+        $update = ( ! $value instanceof MapUpdate)
+            ? MapUpdate::createFromArray($value)
+            : $value;
+
+        $this->update->updateMap($key, $update->getOp());
 
         return $this;
     }
@@ -124,11 +128,15 @@ class StoreMapBuilder extends Builder
      * @param string                                        $key
      * @param \Riak\Client\Command\DataType\SetUpdate|array $value
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function updateSet($key, $value)
     {
-        $this->updates['set'][$key] = $value;
+        $update = ( ! $value instanceof SetUpdate)
+            ? SetUpdate::createFromArray($value)
+            : $value;
+
+        $this->update->updateSet($key, $update->getOp());
 
         return $this;
     }
@@ -139,11 +147,11 @@ class StoreMapBuilder extends Builder
      * @param string  $key
      * @param integer $value
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function updateCounter($key, $value)
     {
-        $this->updates['counter'][$key] = $value;
+        $this->update->updateCounter($key, new CounterOp($value));
 
         return $this;
     }
@@ -154,11 +162,11 @@ class StoreMapBuilder extends Builder
      * @param string $key
      * @param string $value
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function updateRegister($key, $value)
     {
-        $this->updates['register'][$key] = $value;
+        $this->update->updateRegister($key, new RegisterOp($value));
 
         return $this;
     }
@@ -169,11 +177,11 @@ class StoreMapBuilder extends Builder
      * @param string  $key
      * @param boolean $value
      *
-     * @return \Riak\Client\Command\DataType\Builder\StoreMapBuilder
+     * @return \Riak\Client\Command\DataType\StoreMap
      */
     public function updateFlag($key, $value)
     {
-        $this->updates['flag'][$key] = $value;
+        $this->update->updateFlag($key, new FlagOp($value));
 
         return $this;
     }
@@ -185,24 +193,6 @@ class StoreMapBuilder extends Builder
      */
     public function build()
     {
-        $command = new StoreMap($this->location, $this->options);
-
-        if ($this->context != null) {
-            $command->withContext($this->context);
-        }
-
-        array_map([$command, 'updateRegister'], array_keys($this->updates['register']), $this->updates['register']);
-        array_map([$command, 'updateCounter'], array_keys($this->updates['counter']), $this->updates['counter']);
-        array_map([$command, 'updateFlag'], array_keys($this->updates['flag']), $this->updates['flag']);
-        array_map([$command, 'updateMap'], array_keys($this->updates['map']), $this->updates['map']);
-        array_map([$command, 'updateSet'], array_keys($this->updates['set']), $this->updates['set']);
-
-        array_map([$command, 'removeRegister'], $this->removes['register']);
-        array_map([$command, 'removecounter'], $this->removes['counter']);
-        array_map([$command, 'removeFlag'], $this->removes['flag']);
-        array_map([$command, 'removeMap'], $this->removes['map']);
-        array_map([$command, 'removeSet'], $this->removes['set']);
-
-        return $command;
+        return new StoreMap($this->location, $this->update, $this->context, $this->options);
     }
 }

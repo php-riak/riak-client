@@ -15,43 +15,6 @@ use Riak\Client\Core\Operation\DataType\StoreSetOperation;
 class StoreSet extends StoreDataType
 {
     /**
-     * @param \Riak\Client\Command\Kv\RiakLocation $location
-     * @param array                                $options
-     */
-    public function __construct(RiakLocation $location, array $options = [])
-    {
-        parent::__construct($location, new SetUpdate(), $options);
-    }
-
-    /**
-     * Add the provided value to the set in Riak.
-     *
-     * @param mixed $value
-     *
-     * @return \Riak\Client\Command\DataType\StoreSet
-     */
-    public function add($value)
-    {
-        $this->update->add($value);
-
-        return $this;
-    }
-
-    /**
-     * Remove the provided value from the set in Riak.
-     *
-     * @param mixed $value
-     *
-     * @return \Riak\Client\Command\DataType\StoreSet
-     */
-    public function remove($value)
-    {
-        $this->update->remove($value);
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)

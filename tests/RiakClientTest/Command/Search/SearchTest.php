@@ -46,13 +46,10 @@ class SearchTest extends TestCase
 
     public function testRiakSearchQuery()
     {
-        $query1 = new RiakSearchQuery();
-        $query2 = new RiakSearchQuery();
-        $comamd = new Search($query1);
+        $query  = new RiakSearchQuery();
+        $comamd = new Search($query);
 
-        $this->assertSame($query1, $comamd->getSearchQuery());
-        $comamd->setSearchQuery($query2);
-        $this->assertSame($query2, $comamd->getSearchQuery());
+        $this->assertSame($query, $comamd->getSearchQuery());
     }
 
     public function testExecuteCommand()

@@ -62,12 +62,6 @@ class DeleteValueBuilder extends Builder
      */
     public function build()
     {
-        $command = new DeleteValue($this->location, $this->options);
-
-        if ($this->vClock !== null) {
-            $command->withVClock($this->vClock);
-        }
-
-        return $command;
+        return new DeleteValue($this->location, $this->vClock, $this->options);
     }
 }

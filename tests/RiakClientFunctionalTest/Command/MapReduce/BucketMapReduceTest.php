@@ -45,7 +45,7 @@ abstract class BucketMapReduceTest extends TestCase
     protected function tearDown()
     {
         foreach ($this->locations as $location) {
-            $this->client->execute(new DeleteValue($location, []));
+            $this->client->execute(new DeleteValue($location));
         }
 
         parent::tearDown();

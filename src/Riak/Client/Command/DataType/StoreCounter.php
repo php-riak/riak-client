@@ -15,27 +15,6 @@ use Riak\Client\Core\Operation\DataType\StoreCounterOperation;
 class StoreCounter extends StoreDataType
 {
     /**
-     * @param \Riak\Client\Command\Kv\RiakLocation $location
-     * @param array                                $options
-     */
-    public function __construct(RiakLocation $location, array $options = [])
-    {
-        parent::__construct($location, new CounterUpdate(), $options);
-    }
-
-    /**
-     * @param integer $delta
-     *
-     * @return \Riak\Client\Command\DataType\Builder\StoreCounterBuilder
-     */
-    public function withDelta($delta)
-    {
-        $this->update->withDelta($delta);
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)
