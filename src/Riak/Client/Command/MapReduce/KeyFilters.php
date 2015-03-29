@@ -5,6 +5,8 @@ namespace Riak\Client\Command\MapReduce;
 use JsonSerializable;
 
 /**
+ * Filter class for building up lists of key filters
+ *
  * @method \Riak\Client\Command\MapReduce\KeyFilters intToString() Turns an integer (previously extracted with string_to_int), into a string.
  * @method \Riak\Client\Command\MapReduce\KeyFilters stringToInt() Turns a string into an integer.
  * @method \Riak\Client\Command\MapReduce\KeyFilters floatToString() Turns a floating point number (previously extracted with string_to_float), into a string.
@@ -27,8 +29,6 @@ use JsonSerializable;
  * @method \Riak\Client\Command\MapReduce\KeyFilters and(KeyFilters $left, KeyFilters $right) Joins two key-filter operations with a logical AND operation.
  * @method \Riak\Client\Command\MapReduce\KeyFilters or(KeyFilters $left, KeyFilters $right) Joins two key-filter operations with a logical OR operation.
  * @method \Riak\Client\Command\MapReduce\KeyFilters not(KeyFilters $filter) Negates the result of key-filter operations.
- *
- * Filter class for building up lists of key filters
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */

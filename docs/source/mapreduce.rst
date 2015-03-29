@@ -66,13 +66,10 @@ Here is the general syntax for setting up a bucket map reduce combination to han
         ->build();
 
     /* @var $result \Riak\Client\Command\MapReduce\Response\BucketMapReduceResponse */
-    /* @var $values \Riak\Client\Command\MapReduce\Response\MapReduceEntry[] */
     $result = $this->client->execute($command);
     $values = $result->getResultForPhase(0);
 
-    echo $values[0]->getPhase();
-    // 0
-    var_dump($values[0]->getResponse());
+    echo $values[0];
     // ... first element response
 
 See `Basho KeyFilters Docs`_. for more details on filters
@@ -111,13 +108,10 @@ Here is the general syntax for setting up a bucket map over a specific set of ke
         ->build();
 
     /* @var $result \Riak\Client\Command\MapReduce\Response\BucketKeyMapReduceResponse */
-    /* @var $values \Riak\Client\Command\MapReduce\Response\MapReduceEntry[] */
     $result = $this->client->execute($command);
     $values = $result->getResultForPhase(1);
 
-    echo $values[0]->getPhase();
-    // 1
-    echo $values[0]->getResponse()
+    echo $values[0];
     // 10
 
 
@@ -129,7 +123,7 @@ Here is the general syntax for setting up a bucket map over a specific set of ke
 
 Command used to perform a map reduce operation using a secondary index (2i) as input.
 
-Here is the general syntax for setting up a bucket map over a secondary index:
+Here is the general syntax for setting up a bin secondary index map-reduce:
 
 .. code-block:: php
 
@@ -137,27 +131,56 @@ Here is the general syntax for setting up a bucket map over a secondary index:
     use Riak\Client\Command\MapReduce\IndexMapReduce;
     use Riak\Client\Core\Query\Func\AnonymousJsFunction;
     use Riak\Client\Core\Query\Func\ErlangFunction;
+    use Riak\Client\Core\Query\RiakNamespace;
 
     $reduce = new ErlangFunction('riak_kv_mapreduce', 'reduce_sort');
     $map    = new AnonymousJsFunction('function(entry) {
         return [JSON.parse(entry.values[0].data).email];
     }');
 
-    $command = IndexMapReduce::builder()
+    $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+    $command   = IndexMapReduce::builder()
         ->withMapPhase($map)
         ->withReducePhase($reduce, null, true)
-        ->withNamespace($this->namespace)
+        ->withNamespace($namespace)
         ->withIndexBin('department_index')
         ->withMatchValue('dev')
         ->build();
 
     /* @var $result \Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse */
-    /* @var $values \Riak\Client\Command\MapReduce\Response\MapReduceEntry[] */
     $result = $this->client->execute($command);
     $values = $result->getResultsFromAllPhases();
 
-    echo implode(",", $values[0]->getResponse());
+    echo implode(",", $values);
     // fabio.bat.silva@gmail.com,dev@gmail.com,riak@basho.com,...
+
+
+For a int secondary index map-reduce:
+
+.. code-block:: php
+
+    <?php
+    use Riak\Client\Command\MapReduce\IndexMapReduce;
+    use Riak\Client\Core\Query\Func\AnonymousJsFunction;
+    use Riak\Client\Core\Query\Func\ErlangFunction;
+    use Riak\Client\Core\Query\RiakNamespace;
+
+    $reduce = new ErlangFunction('riak_kv_mapreduce', 'reduce_sort');
+    $map    = new AnonymousJsFunction('function(entry) {
+        return [JSON.parse(entry.values[0].data).email];
+    }');
+
+    $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+    $command   = IndexMapReduce::builder()
+        ->withMapPhase($map)
+        ->withReducePhase($reduce, null, true)
+        ->withNamespace($namespace)
+        ->withIndexInt('year')
+        ->withRange(2010, 2015)
+        ->build();
+
+    /* @var $result \Riak\Client\Command\MapReduce\Response\IndexMapReduceResponse */
+    $result = $this->client->execute($command);
 
 .. _reference-mapreduce-search:
 
@@ -165,6 +188,48 @@ Here is the general syntax for setting up a bucket map over a secondary index:
 ``SearchMapReduce``
 -------------------
 
+.. code-block:: php
+
+    <?php
+    use Riak\Client\Command\MapReduce\SearchMapReduce;
+    use Riak\Client\Core\Query\Func\AnonymousJsFunction;
+    use Riak\Client\Core\Query\Func\ErlangFunction;
+    use Riak\Client\Core\Query\RiakNamespace;
+
+    $reduce = new ErlangFunction('riak_kv_mapreduce', 'reduce_sort');
+    $map    = new AnonymousJsFunction('function(entry) {
+        return [JSON.parse(entry.values[0].data).email];
+    }');
+
+    $namespace = new RiakNamespace('cats_type', 'cats_bucket');
+    $command   = SearchMapReduce::builder()
+        ->withMapPhase($map)
+        ->withReducePhase($reduce, null, true)
+        ->withQuery('name_s:Snarf')
+        ->withIndex('famous')
+        ->build();
+
+    /* @var $result \Riak\Client\Command\MapReduce\Response\SearchMapReduceResponse */
+    /* @var $iterator \Iterator*/
+    $result   = $this->client->execute($command);
+    $iterator = $result->getIterator();
+
+    /** @var $entry \Riak\Client\Command\MapReduce\Response\MapReduceEntry */
+    foreach ($iterator as $entry) {
+        echo $entry->getPhase();
+        // 1
+
+        echo $entry->getResponse();
+        // ["Snarf"]
+    }
+
+.. note::
+    Map-reduce operations are always made using streaming,
+    ``Response#getIterator()`` will return a stream iterator
+    that can be used to iterate over the response entries.
+
+    Notice that is not possible to rewind a stream iterator,
+    If you need to re-use the result use ``Response#getResults()`` instead.
 
 
 .. _`Basho MapReduce Docs`: http://docs.basho.com/riak/latest/dev/advanced/mapreduce/

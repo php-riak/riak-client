@@ -226,7 +226,7 @@ Query a binary index :
 Pagination
 -----------
 
-When asking for large result sets, it is often desirable to ask the servers to return chunks of results instead of a firehose. 
+When asking for large result sets, it is often desirable to ask the servers to return chunks of results instead of a firehose.
 You can do so using max_results=<n>, where n is the number of results you'd like to receive.
 
 Assuming more keys are available, a continuation value will be included in the results to allow the client to request the next page.
@@ -234,7 +234,7 @@ Here is an example of a range query with both return_terms and pagination agains
 
 
 .. note::
-    Index queries are always made using streaming, 
+    Index queries are always made using streaming,
     ``IndexQueryResponse#getIterator()`` will return a stream iterator
     that can be used to iterate over the response entries.
 
