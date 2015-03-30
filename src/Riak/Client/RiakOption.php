@@ -106,6 +106,11 @@ class RiakOption
     const PW = 'pw';
 
     /**
+     * Quorum for both operations (get and put) involved in deleting an object 
+     */
+    const RW = 'rw';
+
+    /**
      * If Not Modified.
      * Update the value only if the vclock in the supplied object matches the one in the database.
      */

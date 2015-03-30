@@ -23,7 +23,7 @@ abstract class Builder
      *
      * @return \Riak\Client\Command\Builder\Builder
      */
-    public function withOption($option, $value)
+    protected function withOption($option, $value)
     {
         $this->options[$option] = $value;
 

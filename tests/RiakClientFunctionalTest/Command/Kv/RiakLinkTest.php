@@ -71,12 +71,12 @@ abstract class RiakLinkTest extends TestCase
         $object->getLinks()->get(1)->setTag('bar');
 
         $store = StoreValue::builder($this->location, $object)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(1)
             ->build();
 
         $fetch  = FetchValue::builder($this->location)
-            ->withOption(RiakOption::R, 1)
+            ->withR(1)
             ->build();
 
         $this->client->execute($store);

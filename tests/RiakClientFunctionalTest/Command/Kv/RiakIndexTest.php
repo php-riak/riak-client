@@ -10,7 +10,6 @@ use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\Index\RiakIndexBin;
 use Riak\Client\Core\Query\Index\RiakIndexInt;
 use Riak\Client\Core\Query\Index\RiakIndexList;
@@ -50,14 +49,14 @@ abstract class RiakIndexTest extends TestCase
         $object->setIndexes($indexes);
 
         $store = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withReturnBody(true)
+            ->withPw(1)
+            ->withW(1)
             ->build();
 
         $fetch  = FetchValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withR(1)
             ->build();
 
         $this->client->execute($store);
@@ -105,16 +104,16 @@ abstract class RiakIndexTest extends TestCase
         $object2->setValue('{"name": "fabio"}');
 
         $this->client->execute(StoreValue::builder($location, $object1)
-            ->withOption(RiakOption::W, 3)
+            ->withW(3)
             ->build());
 
         $this->client->execute(StoreValue::builder($location, $object2)
-            ->withOption(RiakOption::W, 3)
+            ->withW(3)
             ->build());
 
         $result = $this->client->execute(FetchValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withR(1)
             ->build());
 
         $this->assertInstanceOf('Riak\Client\Command\Kv\Response\FetchValueResponse', $result);

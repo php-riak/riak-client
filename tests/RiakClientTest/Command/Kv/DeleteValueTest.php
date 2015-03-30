@@ -37,9 +37,14 @@ class DeleteValueTest extends TestCase
     {
         $deleteResponse = new DeleteResponse();
         $command        = DeleteValue::builder()
-            ->withOption(RiakOption::PR, 3)
             ->withLocation($this->location)
             ->withVClock($this->vClock)
+            ->withPr(1)
+            ->withPw(1)
+            ->withRw(2)
+            ->withDw(2)
+            ->withW(3)
+            ->withR(3)
             ->build();
 
         $this->adapter->expects($this->once())

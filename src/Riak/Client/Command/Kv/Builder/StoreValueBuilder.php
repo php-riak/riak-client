@@ -4,6 +4,7 @@ namespace Riak\Client\Command\Kv\Builder;
 
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Command\Kv\StoreValue;
+use Riak\Client\RiakOption;
 
 /**
  * Used to construct a StoreValue command.
@@ -54,6 +55,54 @@ class StoreValueBuilder extends Builder
         $this->value = $value;
 
         return $this;
+    }
+
+    /**
+     * Set the pw value.
+     *
+     * @param integer $pw
+     *
+     * @return \Riak\Client\Command\Bucket\Builder\StoreBucketPropertiesBuilder
+     */
+    public function withPw($pw)
+    {
+        return $this->withOption(RiakOption::PW, $pw);
+    }
+
+    /**
+     * Set the dw value.
+     *
+     * @param integer $dw
+     *
+     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     */
+    public function withDw($dw)
+    {
+        return $this->withOption(RiakOption::DW, $dw);
+    }
+
+    /**
+     * Set the w value.
+     *
+     * @param integer $w
+     *
+     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     */
+    public function withW($w)
+    {
+        return $this->withOption(RiakOption::W, $w);
+    }
+
+    /**
+     * Set the returnbody value.
+     *
+     * @param integer $flag
+     *
+     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     */
+    public function withReturnBody($flag)
+    {
+        return $this->withOption(RiakOption::RETURN_BODY, $flag);
     }
 
     /**

@@ -4,7 +4,6 @@ namespace RiakClientTest\Command\Kv;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\StoreValue;
@@ -38,9 +37,12 @@ class StoreValueTest extends TestCase
         $riakObject  = new RiakObject();
         $putResponse = new PutResponse();
         $command     = StoreValue::builder()
-            ->withOption(RiakOption::RETURN_BODY, true)
             ->withLocation($this->location)
             ->withValue($riakObject)
+            ->withReturnBody(true)
+            ->withDw(1)
+            ->withPw(2)
+            ->withW(3)
             ->build();
 
         $riakObject->setContentType('application/json');

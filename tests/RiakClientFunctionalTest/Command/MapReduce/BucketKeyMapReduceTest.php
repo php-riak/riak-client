@@ -2,14 +2,12 @@
 
 namespace RiakClientFunctionalTest\Command\MapReduce;
 
-use Riak\Client\RiakOption;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\StoreValue;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\Func\ErlangFunction;
 use Riak\Client\Core\Query\Func\AnonymousJsFunction;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
@@ -53,9 +51,9 @@ abstract class BucketKeyMapReduceTest extends TestCase
     private function setUpBucket()
     {
         $this->client->execute(StoreBucketProperties::builder()
+            ->withNamespace($this->namespace)
             ->withAllowMulti(true)
             ->withNVal(3)
-            ->withNamespace($this->namespace)
             ->build());
     }
 
@@ -73,8 +71,8 @@ abstract class BucketKeyMapReduceTest extends TestCase
         $location = new RiakLocation($this->namespace, $key);
 
         $this->client->execute(StoreValue::builder($location, $object)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(2)
             ->build());
 
         $this->locations[] = $location;

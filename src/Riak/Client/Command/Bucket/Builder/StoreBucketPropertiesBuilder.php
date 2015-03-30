@@ -154,8 +154,7 @@ class StoreBucketPropertiesBuilder extends Builder
     }
 
     /**
-     * Set the w value. Individual requests (or buckets in a bucket type)
-     * can override this.
+     * Set the w value.
      *
      * @param integer $w
      *

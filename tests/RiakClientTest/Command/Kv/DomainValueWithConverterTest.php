@@ -4,7 +4,6 @@ namespace RiakClientTest\Command\Kv;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Command\Kv\StoreValue;
@@ -82,7 +81,6 @@ class DomainValueWithConverterTest extends TestCase
     {
         $getResponse = new GetResponse();
         $command     = FetchValue::builder()
-            ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
             ->build();
 

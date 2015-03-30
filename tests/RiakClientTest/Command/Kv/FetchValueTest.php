@@ -4,7 +4,6 @@ namespace RiakClientTest\Command\Kv;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Core\Query\RiakLocation;
@@ -36,8 +35,11 @@ class FetchValueTest extends TestCase
     {
         $getResponse = new GetResponse();
         $command     = FetchValue::builder()
-            ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
+            ->withBasicQuorum(true)
+            ->withNotFoundOk(true)
+            ->withPr(2)
+            ->withR(2)
             ->build();
 
         $c1 = new Content();

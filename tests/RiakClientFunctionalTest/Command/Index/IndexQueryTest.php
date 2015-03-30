@@ -2,7 +2,6 @@
 
 namespace RiakClientFunctionalTest\Command\Index;
 
-use Riak\Client\RiakOption;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\StoreValue;
@@ -11,7 +10,6 @@ use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\Index\IntIndexQuery;
 use Riak\Client\Command\Index\BinIndexQuery;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\Index\RiakIndexBin;
 use Riak\Client\Core\Query\Index\RiakIndexInt;
 use Riak\Client\Command\Index\Response\IndexEntry;
@@ -88,9 +86,9 @@ abstract class IndexQueryTest extends TestCase
     private function setUpBucket()
     {
         $this->client->execute(StoreBucketProperties::builder()
+            ->withNamespace($this->namespace)
             ->withAllowMulti(true)
             ->withNVal(3)
-            ->withNamespace($this->namespace)
             ->build());
     }
 
@@ -111,8 +109,8 @@ abstract class IndexQueryTest extends TestCase
         $object   = new RiakObject($json, 'application/json');
         $location = new RiakLocation($this->namespace, $key);
         $command  = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(2)
             ->build();
 
         $object->addIndex(new RiakIndexInt('groups', $groups));

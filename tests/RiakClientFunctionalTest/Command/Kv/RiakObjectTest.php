@@ -37,13 +37,13 @@ abstract class RiakObjectTest extends TestCase
         $object->setContentType('application/json');
 
         $store = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::W, RiakOption::QUORUM)
-            ->withOption(RiakOption::PW, RiakOption::ONE)
+            ->withW(RiakOption::QUORUM)
+            ->withPw(RiakOption::ONE)
             ->build();
 
         $fetch  = FetchValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, RiakOption::QUORUM)
+            ->withNotFoundOk(true)
+            ->withR(RiakOption::QUORUM)
             ->build();
 
         $this->client->execute($store);
@@ -73,17 +73,17 @@ abstract class RiakObjectTest extends TestCase
         $object2->setContentType('application/json');
 
         $store1 = StoreValue::builder($location, $object1)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(1)
             ->build();
 
         $store2 = StoreValue::builder($location, $object2)
-            ->withOption(RiakOption::W, 1)
+            ->withW(1)
             ->build();
 
         $fetch  = FetchValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withR(1)
             ->build();
 
         $delete  = DeleteValue::builder($location)
@@ -122,13 +122,13 @@ abstract class RiakObjectTest extends TestCase
         $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $store = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(1)
             ->build();
 
         $fetch  = FetchValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withR(1)
             ->build();
 
         $this->client->execute($store);
@@ -153,17 +153,17 @@ abstract class RiakObjectTest extends TestCase
         $location = new RiakLocation(new RiakNamespace('default', 'bucket'), $key);
 
         $store1 = StoreValue::builder($location, $object1)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(1)
             ->build();
 
         $store2 = StoreValue::builder($location, $object2)
-            ->withOption(RiakOption::W, 1)
+            ->withW(1)
             ->build();
 
         $fetch  = FetchValue::builder($location)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withR(1)
             ->build();
 
         $delete  = DeleteValue::builder($location)
@@ -211,9 +211,9 @@ abstract class RiakObjectTest extends TestCase
         $object->setContentType('application/json');
 
         $store = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withReturnBody(true)
+            ->withPw(1)
+            ->withW(1)
             ->build();
 
         $result     = $this->client->execute($store);
