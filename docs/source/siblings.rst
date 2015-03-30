@@ -93,7 +93,7 @@ Finally whe can fetch the object with siblings and resolve any possible conflict
     $namespace = new RiakNamespace('bucket_type', 'bucket_name');
     $location  = new RiakLocation($namespace, 'object_key');
     $fetch     = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
+        ->withNotFoundOk(true)
         ->build();
 
     /** @var $domain \MyDomainObject */

@@ -52,7 +52,6 @@ Once that object is created, we create a ``StoreValue`` operation that will stor
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -67,8 +66,8 @@ Once that object is created, we create a ``StoreValue`` operation that will stor
 
     // store object
     $store  = StoreValue::builder($location, $object)
-        ->withOption(RiakOption::PW, 1)
-        ->withOption(RiakOption::W, 2)
+        ->withPw(1)
+        ->withW(2)
         ->build();
 
     // Use our client object to execute the store operation
@@ -89,7 +88,6 @@ This requires us to fetch the object by way of a ``FetchValue`` operation:
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -99,8 +97,8 @@ This requires us to fetch the object by way of a ``FetchValue`` operation:
 
     // fetch object
     $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+        ->withNotFoundOk(true)
+        ->withR(1)
         ->build();
 
     /** @var $result \Riak\Client\Command\Kv\Response\FetchValueResponse */
@@ -125,7 +123,6 @@ we can delete it by creating and executing a ``DeleteValue`` operation:
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\DeleteValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -135,8 +132,8 @@ we can delete it by creating and executing a ``DeleteValue`` operation:
 
     // delete object
     $delete  = DeleteValue::builder($location)
-        ->withOption(RiakOption::PW, 1)
-        ->withOption(RiakOption::W, 2)
+        ->withPw(1)
+        ->withW(2)
         ->build();
 
     $this->client->execute($delete);
@@ -202,7 +199,6 @@ Now we can store that Object object just like we stored the riak object earlier:
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -212,8 +208,8 @@ Now we can store that Object object just like we stored the riak object earlier:
 
     /** @var $mobyDick \Book */
     $store  = StoreValue::builder($location, $mobyDick)
-        ->withOption(RiakOption::PW, 1)
-        ->withOption(RiakOption::W, 2)
+        ->withPw(1)
+        ->withW(2)
         ->build();
 
     $client->execute($store);
@@ -224,7 +220,6 @@ If we fetch the object using the same method we showed up above, we should get t
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakLocation;
     use Riak\Client\Core\Query\RiakNamespace;
@@ -234,8 +229,8 @@ If we fetch the object using the same method we showed up above, we should get t
 
     // fetch object
     $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+        ->withNotFoundOk(true)
+        ->withR(1)
         ->build();
 
     /** @var $result \Riak\Client\Command\Kv\Response\FetchValueResponse */

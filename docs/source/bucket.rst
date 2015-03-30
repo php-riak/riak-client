@@ -21,8 +21,8 @@ as in the following example read request:
 
     // fetch object
     $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+        ->withNotFoundOk(true)
+        ->withR(1)
         ->build();
 
     /** @var $result \Riak\Client\Command\Kv\Response\FetchValueResponse */
@@ -38,11 +38,28 @@ To modify the properties of a bucket in Riak:
     use Riak\Client\Core\Query\RiakNamespace;
 
     $namespace = new RiakNamespace('<bucket_type>', '<bucket_name>');
-    $store     = StoreBucketProperties::builder()
-        ->withProperty(BucketProperties::ALLOW_MULT, true)
-        ->withProperty(BucketProperties::N_VAL, 3)
-        ->withNamespace($namespace)
-        ->build();
+    $store     =StoreBucketProperties::builder($namespace)
+        ->withLinkwalkFunction($linkwalkFunction)
+        ->withChashkeyFunction($chashkeyFunction)
+        ->withPostcommitHook($postcommitFunction)
+        ->withPrecommitHook($precommitFunction)
+        ->withSearchIndex($searchIndex)
+        ->withBasicQuorum($basicQuorum)
+        ->withLastWriteWins($wins)
+        ->withBackend($backend)
+        ->withAllowMulti($allow)
+        ->withNotFoundOk($ok)
+        ->withSmallVClock($smallVClock)
+        ->withYoungVClock($youngVClock)
+        ->withOldVClock($ldVClock)
+        ->withBigVClock($bigVClock)
+        ->withNVal($nVal)
+        ->withRw($rw)
+        ->withDw($dw)
+        ->withPr($pr)
+        ->withPw($pw)
+        ->withW($w)
+        ->withR($w);
 
     $this->client->execute($store);
 

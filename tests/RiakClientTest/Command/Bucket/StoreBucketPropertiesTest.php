@@ -42,7 +42,7 @@ class StoreBucketPropertiesTest extends TestCase
 
     public function testBuildCommand()
     {
-        $builder = StoreBucketProperties::builder()
+        $builder = StoreBucketProperties::builder($this->namespace)
             ->withLinkwalkFunction(new ErlangFunction('module_linkwalk', 'function'))
             ->withChashkeyFunction(new ErlangFunction('module_chashkey', 'function'))
             ->withPostcommitHook(new ErlangFunction('module_postcommit', 'function'))

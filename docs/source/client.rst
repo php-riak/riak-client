@@ -20,7 +20,6 @@ Once you have a $client, commands from the `Riak\Client\Command*` namespace are 
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -31,8 +30,8 @@ Once you have a $client, commands from the `Riak\Client\Command*` namespace are 
 
     // fetch object
     $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+        ->withNotFoundOk(true)
+        ->withR(1)
         ->build();
 
     $result = $client->execute($fetch);

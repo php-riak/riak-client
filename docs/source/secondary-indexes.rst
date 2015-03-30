@@ -29,7 +29,6 @@ Let's say that an application would like add a Twitter handle and an email addre
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -46,8 +45,8 @@ Let's say that an application would like add a Twitter handle and an email addre
     $object->addIndex(new RiakIndexBin('email', ['jsmith@basho.com']));
 
     $command = StoreValue::builder($location)
-        ->withOption(RiakOption::W, 3)
         ->withValue($object)
+        ->withW(3)
         ->build();
 
     // store object
@@ -197,7 +196,7 @@ Query a integer index :
 Range with terms
 ----------------
 
-When performing a range query, it is possible to retrieve the matched index values alongside the Riak keys using ``return_terms=true``. 
+When performing a range query, it is possible to retrieve the matched index values alongside the Riak keys using ``return_terms=true``.
 An example from a small sampling of Twitter data with indexed hash tags:
 
 

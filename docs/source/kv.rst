@@ -9,7 +9,6 @@ Key/Value commands
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\StoreValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -24,27 +23,13 @@ Key/Value commands
 
     // store object
     $store  = StoreValue::builder($location)
-        ->withOption(RiakOption::RETURN_BODY, true)
-        ->withOption(RiakOption::PW, 1)
-        ->withOption(RiakOption::W, 2)
+        ->withReturnBody(true)
+        ->withPw(1)
+        ->withW(2)
         ->build();
 
     $result = $client->execute($store);
     $object = $result->getValue();
-
-
-===========================  ==========
-Parameter                    Type
-===========================  ==========
-RiakOption::RETURN_BODY      boolean
-RiakOption::IF_NOT_MODIFIED  boolean
-RiakOption::IF_NONE_MATCH    boolean
-RiakOption::RETURN_HEAD      boolean
-RiakOption::W                integer
-RiakOption::PW               integer
-RiakOption::DW               integer
-===========================  ==========
-
 
 
 .. _reference-command-kv-fetch-value:
@@ -55,7 +40,6 @@ RiakOption::DW               integer
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -66,26 +50,12 @@ RiakOption::DW               integer
 
     // fetch object
     $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+        ->withNotFoundOk(true)
+        ->withR(1)
         ->build();
 
     $result = $client->execute($fetch);
     $object = $result->getValue();
-
-
-===========================  ==========
-Parameter                    Type
-===========================  ==========
-RiakOption::BASIC_QUORUM     boolean
-RiakOption::DELETED_VCLOCK   string
-RiakOption::IF_MODIFIED      string
-RiakOption::NOTFOUND_OK      boolean
-RiakOption::PR               integer
-RiakOption::R                integer
-RiakOption::SLOPPY_QUORUM    boolean
-RiakOption::TIMEOUT          integer
-===========================  ==========
 
 
 .. _reference-command-kv-delete-value:
@@ -96,7 +66,6 @@ RiakOption::TIMEOUT          integer
 .. code-block:: php
 
     <?php
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Kv\DeleteValue;
     use Riak\Client\Core\Query\RiakObject;
     use Riak\Client\Core\Query\RiakLocation;
@@ -107,24 +76,8 @@ RiakOption::TIMEOUT          integer
 
     // delete object
     $delete  = DeleteValue::builder($location)
-        ->withOption(RiakOption::PW, 1)
-        ->withOption(RiakOption::W, 2)
+        ->withPw(1)
+        ->withW(2)
         ->build();
 
     $this->client->execute($delete);
-
-
-===========================  ==========
-Parameter                    Type
-===========================  ==========
-RiakOption::NOTFOUND_OK      boolean
-RiakOption::PR               integer
-RiakOption::R                integer
-RiakOption::RW               integer
-RiakOption::W                integer
-RiakOption::PW               integer
-RiakOption::DW               integer
-RiakOption::SLOPPY_QUORUM    boolean
-RiakOption::TIMEOUT          integer
-===========================  ==========
-

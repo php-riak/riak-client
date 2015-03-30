@@ -87,7 +87,7 @@ if you have existing data with a type-free bucket (i.e. under the default bucket
 
     $namespace = new RiakNamespace("cats")
     $command   = StoreBucketProperties::builder()
-        ->withProperty(BucketProperties::SEARCH_INDEX, 'famous')
+        ->withSearchIndex('famous')
         ->withNamespace($namespace)
         ->build();
 
@@ -150,8 +150,8 @@ we're ready to start using Riak Search. First, populate the cat bucket with valu
     $namespace  = new RiakNamespace('default', 'cats');
     $location   = new RiakLocation($namespace, $key);
     $lionoStore = StoreValue::builder($location, $lionoObject)
-        ->withOption(RiakOption::PW, 1)
-        ->withOption(RiakOption::W, 2)
+        ->withPw(1)
+        ->withW(2)
         ->build();
 
     // The other storage operations can be performed the same way
@@ -209,7 +209,6 @@ This depends on your schema. If they are not stored, you'll have to perform a se
 
     <?php
 
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\Search\Search;
     use Riak\Client\Command\Kv\FetchValue;
     use Riak\Client\Core\Query\RiakLocation;
@@ -236,8 +235,8 @@ This depends on your schema. If they are not stored, you'll have to perform a se
 
     // fetch object
     $fetch  = FetchValue::builder($location)
-        ->withOption(RiakOption::NOTFOUND_OK, true)
-        ->withOption(RiakOption::R, 1)
+        ->withNotFoundOk(true)
+        ->withR(1)
         ->build();
 
     /** @var $result \Riak\Client\Command\Kv\Response\FetchValueResponse */
