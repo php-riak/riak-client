@@ -47,7 +47,6 @@ below.
 ## Getting Data In
 
 ```php
-use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\StoreValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
@@ -62,8 +61,8 @@ $object->setContentType('application/json');
 
 // store object
 $store    = StoreValue::builder($location, $object)
-    ->withOption(RiakOption::PW, 1)
-    ->withOption(RiakOption::W, 2)
+    ->withPw(1)
+    ->withW(2)
     ->build();
 
 $client->execute($store);
@@ -72,7 +71,6 @@ $client->execute($store);
 ## Getting Data Out
 
 ```php
-use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
@@ -83,8 +81,8 @@ $location  = new RiakLocation($namespace, 'object_key');
 
 // fetch object
 $fetch  = FetchValue::builder($location)
-    ->withOption(RiakOption::NOTFOUND_OK, true)
-    ->withOption(RiakOption::R, 1)
+    ->withNotFoundOk(true)
+    ->withR(1)
     ->build();
 
 $result = $client->execute($fetch);
@@ -94,7 +92,6 @@ $object = $result->getValue();
 ## Removing Data
 
 ```php
-use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
@@ -105,8 +102,8 @@ $location  = new RiakLocation($namespace, 'object_key');
 
 // delete object
 $delete  = DeleteValue::builder($location)
-    ->withOption(RiakOption::PW, 1)
-    ->withOption(RiakOption::W, 2)
+    ->withPw(1)
+    ->withW(2)
     ->build();
 
 $this->client->execute($delete);
@@ -156,8 +153,8 @@ $client = $builder
 $namespace = new RiakNamespace('bucket_name', 'bucket_type');
 $location  = new RiakLocation($namespace, 'object_key');
 $fetch     = FetchValue::builder($location)
-    ->withOption(RiakOption::NOTFOUND_OK, true)
-    ->withOption(RiakOption::R, 1)
+    ->withNotFoundOk(true)
+    ->withR(1)
     ->build();
 
 /** @var $domain \MyDomainObject */
