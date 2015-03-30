@@ -2,7 +2,6 @@
 
 namespace RiakClientFixture\Data\Search;
 
-use Riak\Client\RiakOption;
 use Riak\Client\RiakClient;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\StoreValue;
@@ -10,7 +9,6 @@ use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\Search\FetchIndex;
 use Riak\Client\Command\Search\StoreIndex;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Core\Query\Search\YokozunaIndex;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
 use RiakClientFunctionalTest\TestHelper;
@@ -116,8 +114,8 @@ class ThunderCatsData
 
         $location = new RiakLocation($this->namespace, $key);
         $command  = StoreValue::builder($location, $object)
-            ->withOption(RiakOption::PW, 1)
-            ->withOption(RiakOption::W, 2)
+            ->withPw(1)
+            ->withW(2)
             ->build();
 
         $this->client->execute($command);
