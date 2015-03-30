@@ -7,7 +7,7 @@ namespace Riak\Client\Core\Query\Func;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class ErlangFunction implements RiakFunction
+class ErlangFunction implements RiakFunction, RiakPropertyFunction
 {
     /**
      * @var string
@@ -55,5 +55,19 @@ class ErlangFunction implements RiakFunction
             'module'   => $this->module,
             'function' => $this->function
         ];
+    }
+
+    /**
+     * @param array $func
+     *
+     * @return \Riak\Client\Core\Query\Func\ErlangFunction
+     */
+    public static function createFromArray(array $func)
+    {
+        if ( ! isset($func['module']) ||  ! isset($func['function'])) {
+            throw new \InvalidArgumentException("Invalid function : " . json_encode($func));
+        }
+
+        return new ErlangFunction($func['module'], $func['function']);
     }
 }

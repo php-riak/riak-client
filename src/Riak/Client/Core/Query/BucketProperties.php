@@ -22,6 +22,8 @@ class BucketProperties
     const CHASH_KEY_FUNCTION = 'chashKeyFunction';
     const PRECOMMIT_HOOKS = 'precommitHooks';
     const POSTCOMMIT_HOOKS = 'postcommitHooks';
+    const PRECOMMIT = 'precommit';
+    const POSTCOMMIT = 'postcommit';
     const OLD_VCLOCK = 'oldVclock';
     const YOUNG_VCLOCK = 'youngVclock';
     const BIG_VCLOCK = 'bigVclock';

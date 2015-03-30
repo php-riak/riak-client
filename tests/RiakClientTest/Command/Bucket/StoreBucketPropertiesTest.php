@@ -42,7 +42,9 @@ class StoreBucketPropertiesTest extends TestCase
     public function testBuildCommand()
     {
         $builder = StoreBucketProperties::builder()
-            ->withNamespace($this->namespace);
+            ->withNamespace($this->namespace)
+            ->withLastWriteWins(true)
+            ->withAllowMulti(true);
 
         $this->assertInstanceOf('Riak\Client\Command\Bucket\StoreBucketProperties', $builder->build());
     }

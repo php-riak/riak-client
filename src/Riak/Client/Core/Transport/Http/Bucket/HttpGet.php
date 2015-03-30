@@ -88,6 +88,20 @@ class HttpGet extends BaseHttpStrategy
         $response->consistent  = isset($props['consistent']) ? $props['consistent'] : null;
         $response->searchIndex = isset($props['search_index']) ? $props['search_index'] : null;
 
+        if (isset($props['linkfun'])) {
+            $response->linkwalkFunction = [
+                'module'   => $props['linkfun']['mod'],
+                'function' => $props['linkfun']['fun'],
+            ];
+        }
+
+        if (isset($props['chash_keyfun'])) {
+            $response->chashKeyFunction = [
+                'module'   => $props['chash_keyfun']['mod'],
+                'function' => $props['chash_keyfun']['fun'],
+            ];
+        }
+
         return $response;
     }
 }

@@ -7,7 +7,7 @@ namespace Riak\Client\Core\Query\Func;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class NamedJsFunction implements RiakFunction
+class NamedJsFunction implements RiakFunction, RiakPropertyFunction
 {
     /**
      * @var string
@@ -39,5 +39,19 @@ class NamedJsFunction implements RiakFunction
             'language' => 'javascript',
             'name'     => $this->name
         ];
+    }
+
+    /**
+     * @param array $func
+     *
+     * @return \Riak\Client\Core\Query\Func\NamedJsFunction
+     */
+    public static function createFromArray(array $func)
+    {
+        if ( ! isset($func['name'])) {
+            throw new \InvalidArgumentException("Invalid function : " . json_encode($func));
+        }
+
+        return new NamedJsFunction($func['name']);
     }
 }

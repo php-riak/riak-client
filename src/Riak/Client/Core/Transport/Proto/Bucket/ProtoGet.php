@@ -64,6 +64,20 @@ class ProtoGet extends ProtoStrategy
         $response->consistent   = $props->consistent;
         $response->datatype     = $props->datatype;
 
+        if ($props->hasLinkfun()) {
+            $response->linkwalkFunction = [
+                'module'   => $props->linkfun->module,
+                'function' => $props->linkfun->function
+            ];
+        }
+
+        if ($props->hasChashKeyfun()) {
+            $response->chashKeyFunction = [
+                'module'   => $props->chash_keyfun->module,
+                'function' => $props->chash_keyfun->function
+            ];
+        }
+
         return $response;
     }
 

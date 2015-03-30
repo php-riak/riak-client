@@ -5,7 +5,6 @@ namespace RiakClientFunctionalTest\Command\Bucket;
 use Riak\Client\RiakOption;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Core\Query\RiakNamespace;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Command\Bucket\ListBuckets;
 use Riak\Client\Command\Bucket\FetchBucketProperties;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
@@ -17,9 +16,9 @@ abstract class BucketPropertiesTest extends TestCase
         $namespace = new RiakNamespace('default', 'buckets');
 
         $store = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::ALLOW_MULT, true)
-            ->withProperty(BucketProperties::N_VAL, 3)
             ->withNamespace($namespace)
+            ->withAllowMulti(true)
+            ->withNVal(3)
             ->build();
 
         $fetch = FetchBucketProperties::builder()
@@ -44,13 +43,13 @@ abstract class BucketPropertiesTest extends TestCase
         $namespace = new RiakNamespace('default', 'bucket_quorum');
 
         $store = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::R, RiakOption::QUORUM)
-            ->withProperty(BucketProperties::PW, RiakOption::ONE)
-            ->withProperty(BucketProperties::PR, RiakOption::ONE)
-            ->withProperty(BucketProperties::W, RiakOption::ONE)
-            ->withProperty(BucketProperties::DW, 'all')
-            ->withProperty(BucketProperties::RW, 'one')
             ->withNamespace($namespace)
+            ->withR(RiakOption::QUORUM)
+            ->withPr(RiakOption::ONE)
+            ->withPW(RiakOption::ONE)
+            ->withW(RiakOption::ONE)
+            ->withDw('all')
+            ->withRW('one')
             ->build();
 
         $fetch = FetchBucketProperties::builder()
@@ -70,6 +69,30 @@ abstract class BucketPropertiesTest extends TestCase
         $this->assertEquals('one', $fetchProperties->getPr());
         $this->assertEquals('all', $fetchProperties->getDw());
         $this->assertEquals('one', $fetchProperties->getRw());
+    }
+
+    public function testConfigureBucketFunctions()
+    {
+        $namespace = new RiakNamespace(null, 'bucket_func');
+
+        $store = StoreBucketProperties::builder()
+            ->withNamespace($namespace)
+            ->withAllowMulti(true)
+            ->build();
+
+        $fetch = FetchBucketProperties::builder()
+            ->withNamespace($namespace)
+            ->build();
+
+        $storeResponse   = $this->client->execute($store);
+        $fetchResponse   = $this->client->execute($fetch);
+        $fetchProperties = $fetchResponse->getProperties();
+
+        $this->assertInstanceOf('Riak\Client\Core\Query\BucketProperties', $fetchProperties);
+        $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\StoreBucketPropertiesResponse', $storeResponse);
+        $this->assertInstanceOf('Riak\Client\Command\Bucket\Response\FetchBucketPropertiesResponse', $fetchResponse);
+        $this->assertInstanceOf('Riak\Client\Core\Query\Func\ErlangFunction', $fetchProperties->getChashKeyFunction());
+        $this->assertInstanceOf('Riak\Client\Core\Query\Func\ErlangFunction', $fetchProperties->getLinkwalkFunction());
     }
 
     public function testListBuckets()

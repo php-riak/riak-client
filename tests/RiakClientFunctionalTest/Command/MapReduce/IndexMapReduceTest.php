@@ -55,8 +55,8 @@ abstract class IndexMapReduceTest extends TestCase
     private function setUpBucket()
     {
         $this->client->execute(StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::ALLOW_MULT, true)
-            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withAllowMulti(true)
+            ->withNVal(3)
             ->withNamespace($this->namespace)
             ->build());
     }

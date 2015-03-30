@@ -30,8 +30,8 @@ abstract class CounterTest extends TestCase
 
         $namespace = new RiakNamespace('counters', 'counters');
         $command   = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::ALLOW_MULT, true)
-            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withAllowMulti(true)
+            ->withNVal(3)
             ->withNamespace($namespace)
             ->build();
 

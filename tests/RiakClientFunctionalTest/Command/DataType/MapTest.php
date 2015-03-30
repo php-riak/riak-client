@@ -30,8 +30,8 @@ abstract class MapTest extends TestCase
 
         $namespace = new RiakNamespace('maps', 'maps');
         $command   = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::ALLOW_MULT, true)
-            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withAllowMulti(true)
+            ->withNVal(3)
             ->withNamespace($namespace)
             ->build();
 

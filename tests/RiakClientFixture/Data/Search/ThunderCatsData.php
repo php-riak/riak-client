@@ -52,9 +52,9 @@ class ThunderCatsData
     private function setUpBucket()
     {
         $store = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::SEARCH_INDEX, $this->indexName)
-            ->withProperty(BucketProperties::ALLOW_MULT, false)
+            ->withSearchIndex($this->indexName)
             ->withNamespace($this->namespace)
+            ->withAllowMulti(false)
             ->build();
 
         $this->client->execute($store);

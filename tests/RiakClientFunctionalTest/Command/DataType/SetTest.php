@@ -30,8 +30,8 @@ abstract class SetTest extends TestCase
 
         $namespace = new RiakNamespace('sets', 'sets');
         $command   = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::ALLOW_MULT, true)
-            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withAllowMulti(true)
+            ->withNVal(3)
             ->withNamespace($namespace)
             ->build();
 

@@ -24,8 +24,8 @@ abstract class RiakIndexTest extends TestCase
 
         $namespace = new RiakNamespace('default', 'bucket');
         $store     = StoreBucketProperties::builder()
-            ->withProperty(BucketProperties::ALLOW_MULT, true)
-            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withAllowMulti(true)
+            ->withNVal(3)
             ->withNamespace($namespace)
             ->build();
 
