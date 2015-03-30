@@ -103,8 +103,6 @@ For a counter to be useful, you need to be able to decrement it in addition to i
 
     $client->execute($store);
 
-See :ref:`reference-command-datatype-store-options` and :ref:`reference-command-datatype-fetch-options` for options avalible.
-
 
 .. _reference-crdt-sets:
 
@@ -190,9 +188,6 @@ but if we visit them, we won't have time to visit Montreal, so we need to remove
     var_dump($value);
     // ["Ottawa","Vancouver","Toronto"]
 
-
-
-See :ref:`reference-command-datatype-store-options` and :ref:`reference-command-datatype-fetch-options` for options avalible.
 
 .. _reference-crdt-maps:
 
@@ -547,51 +542,6 @@ If we wanted to add store information about one of Annika's specific purchases, 
         ->build();
 
     $client->execute($store);
-
-
-See :ref:`reference-command-datatype-store-options` and :ref:`reference-command-datatype-fetch-options` for options avalible.
-
-.. _reference-command-datatype-store-options:
-
-``Store Options``
-------------------
-
-For all store commands the following options are available :
-
-===========================  ==========
-Parameter                    Type
-===========================  ==========
-RiakOption::INCLUDE_CONTEXT  boolean
-RiakOption::RETURN_BODY      boolean
-RiakOption::BASIC_QUORUM     boolean
-RiakOption::N_VAL            integer
-RiakOption::W                integer
-RiakOption::PW               integer
-RiakOption::DW               integer
-RiakOption::TIMEOUT          integer
-===========================  ==========
-
-
-.. _reference-command-datatype-fetch-options:
-
-``Fetch Options``
-------------------
-
-For all fetch commands the following options are available :
-
-===========================  ==========
-Parameter                    Type
-===========================  ==========
-RiakOption::INCLUDE_CONTEXT  boolean
-RiakOption::BASIC_QUORUM     boolean
-RiakOption::NOTFOUND_OK      boolean
-RiakOption::BASIC_QUORUM     boolean
-RiakOption::R                integer
-RiakOption::PR               integer
-RiakOption::N_VAL            integer
-RiakOption::TIMEOUT          integer
-===========================  ==========
-
 
 
 .. _`Basho CRDT Docs`: http://docs.basho.com/riak/latest/dev/using/data-types
