@@ -9,7 +9,7 @@ use Riak\Client\Command\DataType\FetchMap;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class FetchMapBuilder extends Builder
+class FetchMapBuilder extends FetchDataTypeBuilder
 {
     /**
      * Build a command object

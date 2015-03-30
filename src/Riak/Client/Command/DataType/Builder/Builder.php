@@ -39,7 +39,7 @@ abstract class Builder
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
      *
-     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
+     * @return \Riak\Client\Command\DataType\Builder\Builder
      */
     public function withLocation(RiakLocation $location)
     {
@@ -55,25 +55,11 @@ abstract class Builder
      * @param string $option
      * @param mixed  $value
      *
-     * @return \Riak\Client\Command\DataType\Builder
+     * @return \Riak\Client\Command\DataType\Builder\Builder
      */
-    public function withOption($option, $value)
+    protected function withOption($option, $value)
     {
         $this->options[$option] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Include the context from a previous fetch.
-     *
-     * @param string $context
-     *
-     * @return \Riak\Client\Command\DataType\Builder
-     */
-    public function withContext($context)
-    {
-        $this->context = $context;
 
         return $this;
     }

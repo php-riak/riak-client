@@ -36,7 +36,7 @@ class StoreValueBuilder extends Builder
     /**
      * @param \Riak\Client\Core\Query\RiakLocation $location
      *
-     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
+     * @return \Riak\Client\Command\Kv\Builder\StoreValueBuilder
      */
     public function withLocation(RiakLocation $location)
     {
@@ -48,7 +48,7 @@ class StoreValueBuilder extends Builder
     /**
      * @param \Riak\Client\Core\Query\RiakObject|mixed $value
      *
-     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
+     * @return \Riak\Client\Command\Kv\Builder\StoreValueBuilder
      */
     public function withValue($value)
     {
@@ -62,7 +62,7 @@ class StoreValueBuilder extends Builder
      *
      * @param integer $pw
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreBucketPropertiesBuilder
+     * @return \Riak\Client\Command\Kv\Builder\StoreValueBuilder
      */
     public function withPw($pw)
     {
@@ -74,7 +74,7 @@ class StoreValueBuilder extends Builder
      *
      * @param integer $dw
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\StoreValueBuilder
      */
     public function withDw($dw)
     {
@@ -86,7 +86,7 @@ class StoreValueBuilder extends Builder
      *
      * @param integer $w
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\StoreValueBuilder
      */
     public function withW($w)
     {
@@ -98,7 +98,7 @@ class StoreValueBuilder extends Builder
      *
      * @param integer $flag
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\StoreValueBuilder
      */
     public function withReturnBody($flag)
     {

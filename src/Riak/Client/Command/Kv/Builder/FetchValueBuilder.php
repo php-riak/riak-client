@@ -43,7 +43,7 @@ class FetchValueBuilder extends Builder
      *
      * @param integer $r
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
      */
     public function withR($r)
     {
@@ -55,7 +55,7 @@ class FetchValueBuilder extends Builder
      *
      * @param integer $pr
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
      */
     public function withPr($pr)
     {
@@ -67,7 +67,7 @@ class FetchValueBuilder extends Builder
      *
      * @param boolean $use
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
      */
     public function withBasicQuorum($use)
     {
@@ -79,7 +79,7 @@ class FetchValueBuilder extends Builder
      *
      * @param boolean $ok
      *
-     * @return \Riak\Client\Command\Bucket\Builder\StoreRiakOptionBuilder
+     * @return \Riak\Client\Command\Kv\Builder\FetchValueBuilder
      */
     public function withNotFoundOk($ok)
     {

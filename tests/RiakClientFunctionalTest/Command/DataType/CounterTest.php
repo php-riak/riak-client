@@ -3,13 +3,11 @@
 namespace RiakClientFunctionalTest\Command\DataType;
 
 use RiakClientFunctionalTest\TestCase;
-use Riak\Client\RiakOption;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Command\DataType\FetchCounter;
 use Riak\Client\Command\DataType\StoreCounter;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
 
 abstract class CounterTest extends TestCase
@@ -30,9 +28,9 @@ abstract class CounterTest extends TestCase
 
         $namespace = new RiakNamespace('counters', 'counters');
         $command   = StoreBucketProperties::builder()
+            ->withNamespace($namespace)
             ->withAllowMulti(true)
             ->withNVal(3)
-            ->withNamespace($namespace)
             ->build();
 
         $this->client->execute($command);
@@ -55,20 +53,19 @@ abstract class CounterTest extends TestCase
     {
 
         $store = StoreCounter::builder()
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 2)
-            ->withOption(RiakOption::DW, 1)
-            ->withOption(RiakOption::W, 3)
             ->withLocation($this->location)
+            ->withReturnBody(true)
+            ->withPw(2)
+            ->withDw(2)
+            ->withW(3)
             ->withDelta(10)
             ->build();
 
         $fetch = FetchCounter::builder()
-            ->withOption(RiakOption::BASIC_QUORUM, true)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::PR, 1)
-            ->withOption(RiakOption::R, 1)
             ->withLocation($this->location)
+            ->withNotFoundOk(true)
+            ->withPr(1)
+            ->withR(1)
             ->build();
 
         $fetchResponse1 = $this->client->execute($fetch);

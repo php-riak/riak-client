@@ -4,13 +4,13 @@ namespace RiakClientTest\Command\DataType;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\DataType\StoreMap;
 use Riak\Client\Command\DataType\MapUpdate;
 use Riak\Client\Command\DataType\SetUpdate;
+use Riak\Client\Command\DataType\CounterUpdate;
 
 class StoreMapTest extends TestCase
 {
@@ -45,8 +45,8 @@ class StoreMapTest extends TestCase
 
     public function testBuildCommand()
     {
-        $command = StoreMap::builder($this->location, [])
-            ->withOption(RiakOption::N_VAL, 1)
+        $counter = new CounterUpdate();
+        $builder = StoreMap::builder($this->location, [])
             ->withLocation($this->location)
             ->withContext('context-hash')
             ->removeMap('map_key_remove')
@@ -59,8 +59,15 @@ class StoreMapTest extends TestCase
             ->updateRegister('map_register', 'foo')
             ->updateCounter('map_counter', 1)
             ->updateFlag('flag_key', true)
-            ->build();
+            ->withContext('context-hash')
+            ->withReturnBody(true)
+            ->withDw(1)
+            ->withPw(2)
+            ->withW(3);
 
-        $this->assertInstanceOf('Riak\Client\Command\DataType\StoreMap', $command);
+        $counter->withDelta(1);
+        $builder->updateCounter('other_counter', $counter);
+
+        $this->assertInstanceOf('Riak\Client\Command\DataType\StoreMap', $builder->build());
     }
 }

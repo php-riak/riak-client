@@ -45,9 +45,12 @@ class StoreCounterTest extends TestCase
     {
         $builder = StoreCounter::builder($this->location, [])
             ->withLocation($this->location)
-            ->withOption(RiakOption::W, 1)
             ->withContext('context-hash')
-            ->withDelta(1);
+            ->withReturnBody(true)
+            ->withDelta(1)
+            ->withDw(1)
+            ->withPw(2)
+            ->withW(3);
 
         $this->assertInstanceOf('Riak\Client\Command\DataType\StoreCounter', $builder->build());
     }

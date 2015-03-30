@@ -54,10 +54,10 @@ abstract class MapTest extends TestCase
     public function testStoreAndFetchSimpleMap()
     {
         $store = StoreMap::builder()
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 2)
-            ->withOption(RiakOption::DW, 1)
-            ->withOption(RiakOption::W, 3)
+            ->withReturnBody(true)
+            ->withPw(2)
+            ->withDw(2)
+            ->withW(3)
             ->withLocation($this->location)
             ->updateRegister('url', 'google.com')
             ->updateCounter('clicks', 100)
@@ -65,10 +65,9 @@ abstract class MapTest extends TestCase
             ->build();
 
         $fetch = FetchMap::builder()
-            ->withOption(RiakOption::BASIC_QUORUM, true)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::PR, 1)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withPr(1)
+            ->withR(1)
             ->withLocation($this->location)
             ->build();
 
@@ -88,19 +87,18 @@ abstract class MapTest extends TestCase
     public function testStoreAndFetchSetsWithinMaps()
     {
         $store = StoreMap::builder()
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 2)
-            ->withOption(RiakOption::DW, 1)
-            ->withOption(RiakOption::W, 3)
+            ->withReturnBody(true)
+            ->withPw(2)
+            ->withDw(2)
+            ->withW(3)
             ->withLocation($this->location)
             ->updateSet('interests', ['robots', 'opera', 'motorcycles'])
             ->build();
 
         $fetch = FetchMap::builder()
-            ->withOption(RiakOption::BASIC_QUORUM, true)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::PR, 1)
-            ->withOption(RiakOption::R, 1)
+            ->withNotFoundOk(true)
+            ->withPr(1)
+            ->withR(1)
             ->withLocation($this->location)
             ->build();
 
@@ -122,10 +120,10 @@ abstract class MapTest extends TestCase
     public function testStoreAndFetchMapsWithinMaps()
     {
         $store = StoreMap::builder()
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 2)
-            ->withOption(RiakOption::DW, 1)
-            ->withOption(RiakOption::W, 3)
+            ->withReturnBody(true)
+            ->withPw(2)
+            ->withDw(2)
+            ->withW(3)
             ->withLocation($this->location)
             ->updateRegister('username', 'FabioBatSilva')
             ->updateMap('info', [
@@ -137,11 +135,10 @@ abstract class MapTest extends TestCase
             ->build();
 
         $fetch = FetchMap::builder()
-            ->withOption(RiakOption::BASIC_QUORUM, true)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::PR, 1)
-            ->withOption(RiakOption::R, 1)
             ->withLocation($this->location)
+            ->withNotFoundOk(true)
+            ->withPr(1)
+            ->withR(1)
             ->build();
 
         $this->client->execute($store);
@@ -170,8 +167,8 @@ abstract class MapTest extends TestCase
     public function testUpdateMapUsingContext()
     {
         $storeRespose1 = $this->client->execute(StoreMap::builder()
-            ->withOption(RiakOption::INCLUDE_CONTEXT, true)
-            ->withOption(RiakOption::RETURN_BODY, true)
+            ->withIncludeContext(true)
+            ->withReturnBody(true)
             ->withLocation($this->location)
             ->updateRegister('username', 'FabioBatSilva')
             ->updateFlag('active', false)
@@ -182,8 +179,8 @@ abstract class MapTest extends TestCase
         $this->assertInternalType('string', $storeRespose1->getContext());
 
         $store2Response = $this->client->execute(StoreMap::builder()
-            ->withOption(RiakOption::INCLUDE_CONTEXT, true)
-            ->withOption(RiakOption::RETURN_BODY, true)
+            ->withIncludeContext(true)
+            ->withReturnBody(true)
             ->withContext($storeRespose1->getContext())
             ->withLocation($this->location)
             ->updateCounter('clicks', 1)
@@ -196,7 +193,7 @@ abstract class MapTest extends TestCase
         $this->assertInternalType('string', $store2Response->getContext());
 
         $fetchResponse = $this->client->execute(FetchMap::builder()
-            ->withOption(RiakOption::INCLUDE_CONTEXT, true)
+            ->withIncludeContext(true)
             ->withLocation($this->location)
             ->build());
 

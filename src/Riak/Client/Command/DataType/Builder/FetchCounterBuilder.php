@@ -9,7 +9,7 @@ use Riak\Client\Command\DataType\FetchCounter;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class FetchCounterBuilder extends Builder
+class FetchCounterBuilder extends FetchDataTypeBuilder
 {
     /**
      * Build a command object

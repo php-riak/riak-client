@@ -11,7 +11,7 @@ use Riak\Client\Command\DataType\SetUpdate;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class StoreSetBuilder extends Builder
+class StoreSetBuilder extends StoreDataTypeBuilder
 {
     /**
      * @var \Riak\Client\Command\DataType\SetUpdate

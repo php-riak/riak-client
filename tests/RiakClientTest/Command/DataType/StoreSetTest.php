@@ -45,12 +45,15 @@ class StoreSetTest extends TestCase
     public function testBuildCommand()
     {
         $builder = StoreSet::builder($this->location, [])
-            ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
-            ->withContext('context-hash')
             ->add(new RiakCounter(1))
             ->remove(new RiakCounter(1))
             ->add(new RiakCounter(2))
+            ->withContext('context-hash')
+            ->withReturnBody(true)
+            ->withDw(1)
+            ->withPw(2)
+            ->withW(3)
             ->build();
 
         $this->assertInstanceOf('Riak\Client\Command\DataType\StoreSet', $builder);

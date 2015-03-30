@@ -54,21 +54,20 @@ abstract class SetTest extends TestCase
     public function testStoreAndFetchSet()
     {
         $store = StoreSet::builder()
-            ->withOption(RiakOption::RETURN_BODY, true)
-            ->withOption(RiakOption::PW, 2)
-            ->withOption(RiakOption::DW, 1)
-            ->withOption(RiakOption::W, 3)
             ->withLocation($this->location)
+            ->withReturnBody(true)
             ->add("Ottawa")
             ->add("Toronto")
+            ->withPw(2)
+            ->withDw(2)
+            ->withW(3)
             ->build();
 
         $fetch = FetchSet::builder()
-            ->withOption(RiakOption::BASIC_QUORUM, true)
-            ->withOption(RiakOption::NOTFOUND_OK, true)
-            ->withOption(RiakOption::PR, 1)
-            ->withOption(RiakOption::R, 1)
             ->withLocation($this->location)
+            ->withNotFoundOk(true)
+            ->withPr(1)
+            ->withR(1)
             ->build();
 
         $storeResponse = $this->client->execute($store);

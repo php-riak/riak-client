@@ -10,7 +10,7 @@ use Riak\Client\Command\DataType\CounterUpdate;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class StoreCounterBuilder extends Builder
+class StoreCounterBuilder extends StoreDataTypeBuilder
 {
     /**
      * @var integer

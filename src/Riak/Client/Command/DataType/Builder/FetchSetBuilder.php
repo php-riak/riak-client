@@ -9,7 +9,7 @@ use Riak\Client\Command\DataType\FetchSet;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class FetchSetBuilder extends Builder
+class FetchSetBuilder extends FetchDataTypeBuilder
 {
     /**
      * Build a command object

@@ -44,8 +44,11 @@ class FetchMapTest extends TestCase
     public function testBuildCommand()
     {
         $builder = FetchMap::builder()
-            ->withOption(RiakOption::R, 1)
-            ->withLocation($this->location);
+            ->withLocation($this->location)
+            ->withIncludeContext(true)
+            ->withNotFoundOk(true)
+            ->withPr(2)
+            ->withR(2);
 
         $this->assertInstanceOf('Riak\Client\Command\DataType\FetchMap', $builder->build());
     }

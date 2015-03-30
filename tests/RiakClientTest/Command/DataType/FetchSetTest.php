@@ -44,8 +44,11 @@ class FetchSetTest extends TestCase
     public function testBuildCommand()
     {
         $builder = FetchSet::builder()
-            ->withOption(RiakOption::N_VAL, 1)
-            ->withLocation($this->location);
+            ->withLocation($this->location)
+            ->withIncludeContext(true)
+            ->withNotFoundOk(true)
+            ->withPr(2)
+            ->withR(2);
 
         $this->assertInstanceOf('Riak\Client\Command\DataType\FetchSet', $builder->build());
     }

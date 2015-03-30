@@ -15,7 +15,7 @@ use Riak\Client\Core\Query\Crdt\Op\RegisterOp;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class StoreMapBuilder extends Builder
+class StoreMapBuilder extends StoreDataTypeBuilder
 {
     /**
      * @var \Riak\Client\Command\DataType\MapUpdate

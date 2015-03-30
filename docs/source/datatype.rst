@@ -53,13 +53,12 @@ If we happen to get a ticket that afternoon, we would need to increment the coun
 
 .. code-block:: php
 
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreCounter;
 
     <?php
     // Increment the counter by 1 and fetch the current value
     $store = StoreCounter::builder()
-        ->withOption(RiakOption::RETURN_BODY, true)
+        ->withReturnBody(true)
         ->withLocation($location)
         ->withDelta(1)
         ->build();
@@ -76,14 +75,13 @@ If we're curious about how many tickets we have accumulated, we can simply retri
 
 .. code-block:: php
 
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\FetchCounter;
 
     <?php
     // fetch counter
     $fetch = FetchCounter::builder()
-        ->withOption(RiakOption::R, 1)
         ->withLocation($location)
+        ->withR(1)
         ->build();
 
     $result  = $client->execute($store);
@@ -141,8 +139,8 @@ Let's add them to our cities set:
 
     // Store new cities and return the current value
     $store = StoreCounter::builder()
-        ->withOption(RiakOption::RETURN_BODY, true)
         ->withLocation($location)
+        ->withReturnBody(true)
         ->build();
 
     $store->add("Toronto")
@@ -176,9 +174,9 @@ but if we visit them, we won't have time to visit Montreal, so we need to remove
     $fetchContext = $result->getContext();
 
     $store = StoreCounter::builder()
-        ->withOption(RiakOption::RETURN_BODY, true)
         ->withContext($fetchContext)
         ->withLocation($location)
+        ->withReturnBody(true)
         ->build();
 
     $store->add("Ottawa");
@@ -234,12 +232,11 @@ We'll also create an  `enterprise_customer` flag to track whether Ahmed has sign
     use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\StoreMap;
 
-    $store = StoreMap::builder()
-        ->withOption(RiakOption::RETURN_BODY, true)
-        ->withLocation($location)
+    $store = StoreMap::builder($location)
         ->updateRegister('first_name', 'Ahmed')
         ->updateRegister('phone_number', '5551234567')
         ->updateFlag('enterprise_customer', false)
+        ->withReturnBody(true)
         ->build();
 
     $result = $client->execute($store);
@@ -326,7 +323,6 @@ He's much more keen on indie pop. Let's change the interests set to reflect that
 
     <?php
 
-    use Riak\Client\RiakOption;
     use Riak\Client\Command\DataType\FetchMap;
     use Riak\Client\Command\DataType\StoreMap;
     use Riak\Client\Command\DataType\SetUpdate;
@@ -345,7 +341,7 @@ He's much more keen on indie pop. Let's change the interests set to reflect that
         ->withLocation($location)
         ->withContext($fetchContext)
         ->updateSet('interests', $setUpdate)
-        ->withOption(RiakOption::RETURN_BODY, true)
+        ->withReturnBody(true)
         ->build();
 
     $result = $client->execute($store);
@@ -380,7 +376,7 @@ First, we'll store Annika's first name, last name, and phone number in registers
     $fetchContext = $fetchResult->getContext();
 
     $store = StoreMap::builder()
-        ->withOption(RiakOption::RETURN_BODY, true)
+        ->withReturnBody(true)
         ->withContext($fetchContext)
         ->withLocation($location)
         ->updateMap('annika_info', [
@@ -495,6 +491,7 @@ It's also important to track the number of purchases that Annika has made with o
 
     $fetch = FetchMap::builder()
         ->withLocation($location)
+        ->withIncludeContext(true)
         ->build();
 
     $fetchResult  = $client->execute($fetch);
