@@ -27,8 +27,11 @@ class BucketPropertiesTest extends TestCase
             BucketProperties::SMALL_VCLOCK     => 11,
             BucketProperties::BASIC_QUORUM     => true,
             BucketProperties::NOTFOUND_OK      => false,
+            BucketProperties::SEARCH           => true,
+            BucketProperties::CONSISTENT       => false,
             BucketProperties::BACKEND          => 'backend',
-            BucketProperties::SEARCH           => 'search'
+            BucketProperties::DATATYPE         => 'data-type',
+            BucketProperties::SEARCH_INDEX     => 'search-index',
         ]);
 
         $this->assertEquals(1, $props->getR());
@@ -48,7 +51,19 @@ class BucketPropertiesTest extends TestCase
         $this->assertEquals(11, $props->getSmallVClock());
         $this->assertEquals(true, $props->getBasicQuorum());
         $this->assertEquals(false, $props->getNotFoundOk());
+        $this->assertEquals(true, $props->getSearch());
+        $this->assertEquals(false, $props->getConsistent());
         $this->assertEquals('backend', $props->getBackend());
-        $this->assertEquals('search', $props->getSearch());
+        $this->assertEquals('data-type', $props->getDatatype());
+        $this->assertEquals('search-index', $props->getSearchIndex());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unknown property 'UNKNOWN_PROPERTY' on 'Riak\Client\Core\Query\BucketProperties'
+     */
+    public function testUnknownPropertyException()
+    {
+        new BucketProperties(['UNKNOWN_PROPERTY' => 'UNKNOWN_VALUE']);
     }
 }

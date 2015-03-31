@@ -2,13 +2,15 @@
 
 namespace Riak\Client\Core\Transport\Proto\Bucket;
 
+use Riak\Client\ProtoBuf\RpbModFun;
 use Riak\Client\Core\Message\Request;
+use Riak\Client\ProtoBuf\RpbCommitHook;
 use Riak\Client\ProtoBuf\RpbBucketProps;
 use Riak\Client\ProtoBuf\RpbSetBucketReq;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
-use Riak\Client\Core\Transport\Proto\ProtoStrategy;
 use Riak\Client\Core\Message\Bucket\PutRequest;
 use Riak\Client\Core\Message\Bucket\PutResponse;
+use Riak\Client\Core\Transport\Proto\ProtoStrategy;
 
 /**
  * rpb put implementation.
@@ -48,11 +50,62 @@ class ProtoPut extends ProtoStrategy
         $rpbProps->datatype        = $request->datatype;
         $rpbProps->consistent      = $request->consistent;
 
+        if ($request->linkwalkFunction) {
+            $rpbProps->setLinkfun($this->createRpbModFun($request->linkwalkFunction));
+        }
+
+        if ($request->chashKeyFunction) {
+            $rpbProps->setChashKeyfun($this->createRpbModFun($request->chashKeyFunction));
+        }
+
+        foreach ($request->precommitHooks as $hook) {
+            $rpbProps->addPrecommit($this->createRpbCommitHook($hook));
+        }
+
+        foreach ($request->postcommitHooks as $hook) {
+            $rpbProps->addPostcommit($this->createRpbCommitHook($hook));
+        }
+
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);
         $rpbPutReq->setProps($rpbProps);
 
         return $rpbPutReq;
+    }
+
+    /**
+     * @param array $hook
+     *
+     * @return \Riak\Client\ProtoBuf\RpbCommitHook
+     */
+    private function createRpbCommitHook(array $hook)
+    {
+        $func = new RpbCommitHook();
+
+        if (isset($hook['name'])) {
+            $func->setName($hook['name']);
+
+            return $func;
+        }
+
+        $func->setModfun($this->createRpbModFun($hook));
+
+        return $func;
+    }
+
+    /**
+     * @param array $function
+     *
+     * @return \Riak\Client\ProtoBuf\RpbModFun
+     */
+    private function createRpbModFun(array $function)
+    {
+        $func = new RpbModFun();
+
+        $func->setModule($function['module']);
+        $func->setFunction($function['function']);
+
+        return $func;
     }
 
     /**

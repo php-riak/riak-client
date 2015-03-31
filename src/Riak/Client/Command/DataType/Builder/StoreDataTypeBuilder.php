@@ -78,7 +78,7 @@ abstract class StoreDataTypeBuilder extends Builder
      *
      * @param boolean $include
      *
-     * @return Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
+     * @return \Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
      */
     public function withIncludeContext($include)
     {

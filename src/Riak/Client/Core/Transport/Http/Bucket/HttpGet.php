@@ -87,21 +87,42 @@ class HttpGet extends BaseHttpStrategy
         $response->datatype    = isset($props['datatype']) ? $props['datatype'] : null;
         $response->consistent  = isset($props['consistent']) ? $props['consistent'] : null;
         $response->searchIndex = isset($props['search_index']) ? $props['search_index'] : null;
+        $postcommit            = isset($props['postcommit']) ? $props['postcommit'] : [];
+        $precommit             = isset($props['precommit']) ? $props['precommit'] : [];
 
         if (isset($props['linkfun'])) {
-            $response->linkwalkFunction = [
-                'module'   => $props['linkfun']['mod'],
-                'function' => $props['linkfun']['fun'],
-            ];
+            $response->linkwalkFunction = $this->parseFunction($props['linkfun']);
         }
 
         if (isset($props['chash_keyfun'])) {
-            $response->chashKeyFunction = [
-                'module'   => $props['chash_keyfun']['mod'],
-                'function' => $props['chash_keyfun']['fun'],
-            ];
+            $response->chashKeyFunction = $this->parseFunction($props['chash_keyfun']);
+        }
+
+        foreach ($precommit as $hook) {
+            $response->precommitHooks[] = $this->parseFunction($hook);
+        }
+
+        foreach ($postcommit as $hook) {
+            $response->postcommitHooks[] = $this->parseFunction($hook);
         }
 
         return $response;
+    }
+
+    /**
+     * @param array $func
+     *
+     * @return array
+     */
+    private function parseFunction($func)
+    {
+        if (isset($func['name'])) {
+            return ['name' => $func['name']];
+        }
+
+        return [
+            'module'   => $func['mod'],
+            'function' => $func['fun']
+        ];
     }
 }

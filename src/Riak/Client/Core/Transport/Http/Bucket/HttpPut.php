@@ -31,7 +31,7 @@ class HttpPut extends BaseHttpStrategy
     private function createHttpRequest(PutRequest $putRequest)
     {
         $request = $this->createRequest('PUT', $putRequest->type, $putRequest->bucket);
-        $props   = $this->requestToArray($putRequest);
+        $props   = $this->createDataMessage($putRequest);
 
         $request->setHeader('Accept', 'application/json');
         $request->setHeader('Content-Type', 'application/json');
@@ -66,9 +66,9 @@ class HttpPut extends BaseHttpStrategy
      *
      * @return \Riak\Client\Core\Message\Request
      */
-    public function requestToArray(Request $request)
+    private function createDataMessage(Request $request)
     {
-        return array_filter([
+        $data = array_filter([
             'dw'              => $request->dw,
             'n_val'           => $request->nVal,
             'pr'              => $request->pr,
@@ -90,5 +90,40 @@ class HttpPut extends BaseHttpStrategy
             'small_vclock'    => $request->smallVclock,
             'young_vclock'    => $request->youngVclock,
         ]);
+
+        if ($request->linkwalkFunction) {
+            $data['linkfun'] = $this->createFuncData($request->linkwalkFunction);
+        }
+
+        if ($request->chashKeyFunction) {
+            $data['chash_keyfun'] = $this->createFuncData($request->chashKeyFunction);
+        }
+
+        foreach ($request->precommitHooks as $hook) {
+            $data['precommit'][] = $this->createFuncData($hook);
+        }
+
+        foreach ($request->postcommitHooks as $hook) {
+            $data['postcommit'][] = $this->createFuncData($hook);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $hook
+     *
+     * @return array
+     */
+    private function createFuncData(array $hook)
+    {
+        if (isset($hook['name'])) {
+            return ['name' => $hook['name']];
+        }
+
+        return [
+            'mod'  => $hook['module'],
+            'fun' => $hook['function']
+        ];
     }
 }

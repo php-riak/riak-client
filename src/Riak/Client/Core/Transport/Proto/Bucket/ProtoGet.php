@@ -2,13 +2,15 @@
 
 namespace Riak\Client\Core\Transport\Proto\Bucket;
 
+use Riak\Client\ProtoBuf\RpbModFun;
 use Riak\Client\Core\Message\Request;
+use Riak\Client\ProtoBuf\RpbCommitHook;
 use Riak\Client\ProtoBuf\RpbGetBucketReq;
 use Riak\Client\ProtoBuf\RpbBucketProps;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
-use Riak\Client\Core\Transport\Proto\ProtoStrategy;
 use Riak\Client\Core\Message\Bucket\GetRequest;
 use Riak\Client\Core\Message\Bucket\GetResponse;
+use Riak\Client\Core\Transport\Proto\ProtoStrategy;
 
 /**
  * rpb get implementation.
@@ -65,20 +67,49 @@ class ProtoGet extends ProtoStrategy
         $response->datatype     = $props->datatype;
 
         if ($props->hasLinkfun()) {
-            $response->linkwalkFunction = [
-                'module'   => $props->linkfun->module,
-                'function' => $props->linkfun->function
-            ];
+            $response->linkwalkFunction = $this->parseRpbModFun($props->linkfun);
         }
 
         if ($props->hasChashKeyfun()) {
-            $response->chashKeyFunction = [
-                'module'   => $props->chash_keyfun->module,
-                'function' => $props->chash_keyfun->function
-            ];
+            $response->chashKeyFunction = $this->parseRpbModFun($props->chash_keyfun);
+        }
+
+        foreach ($props->getPrecommitList() as $hook) {
+            $response->precommitHooks[] = $this->parseRpbCommitHook($hook);
+        }
+
+        foreach ($props->getPostcommitList() as $hook) {
+            $response->postcommitHooks[] = $this->parseRpbCommitHook($hook);
         }
 
         return $response;
+    }
+
+    /**
+     * @param \Riak\Client\ProtoBuf\RpbCommitHook $hook
+     *
+     * @return array
+     */
+    private function parseRpbCommitHook(RpbCommitHook $hook)
+    {
+        if ($hook->hasName()) {
+            return ['name' => $hook->name];
+        }
+
+        return $this->parseRpbModFun($hook->modfun);
+    }
+
+    /**
+     * @param \Riak\Client\ProtoBuf\RpbModFun $function
+     *
+     * @return array
+     */
+    private function parseRpbModFun(RpbModFun $function)
+    {
+        return [
+            'module'   => $function->module,
+            'function' => $function->function
+        ];
     }
 
     /**

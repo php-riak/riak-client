@@ -223,7 +223,7 @@ class StoreBucketPropertiesBuilder extends Builder
      */
     public function withPrecommitHook(RiakPropertyFunction $hook)
     {
-        $this->properties[BucketProperties::PRECOMMIT][] = $hook->jsonSerialize();
+        $this->properties[BucketProperties::PRECOMMIT_HOOKS][] = $hook->jsonSerialize();
 
         return $this;
     }
@@ -238,7 +238,7 @@ class StoreBucketPropertiesBuilder extends Builder
      */
     public function withPostcommitHook(RiakPropertyFunction $hook)
     {
-        $this->properties[BucketProperties::POSTCOMMIT][] = $hook->jsonSerialize();
+        $this->properties[BucketProperties::POSTCOMMIT_HOOKS][] = $hook->jsonSerialize();
 
         return $this;
     }

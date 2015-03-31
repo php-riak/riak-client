@@ -16,7 +16,7 @@ abstract class FetchDataTypeBuilder extends Builder
      *
      * @param integer $r
      *
-     * @return Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
+     * @return \Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
      */
     public function withR($r)
     {
@@ -28,7 +28,7 @@ abstract class FetchDataTypeBuilder extends Builder
      *
      * @param integer $pr
      *
-     * @return Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
+     * @return \Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
      */
     public function withPr($pr)
     {
@@ -40,7 +40,7 @@ abstract class FetchDataTypeBuilder extends Builder
      *
      * @param boolean $ok
      *
-     * @return Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
+     * @return \Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
      */
     public function withNotFoundOk($ok)
     {
@@ -52,7 +52,7 @@ abstract class FetchDataTypeBuilder extends Builder
      *
      * @param boolean $include
      *
-     * @return Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
+     * @return \Riak\Client\Command\DataType\Builder\FetchDataTypeBuilder
      */
     public function withIncludeContext($include)
     {

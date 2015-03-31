@@ -44,4 +44,22 @@ class RiakFunctionsTest extends TestCase
         $this->assertEquals('riak-key', $function->getKey());
         $this->assertEquals('{"language":"javascript","bucket":"riak-bucket","key":"riak-key"}', json_encode($function));
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Invalid function : {"UNKNOWN_PROPERTY":"UNKNOWN_VALUE"}
+     */
+    public function testNamedJsFunctionInvalidArgumentException()
+    {
+        NamedJsFunction::createFromArray(['UNKNOWN_PROPERTY' => 'UNKNOWN_VALUE']);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Invalid function : {"UNKNOWN_PROPERTY":"UNKNOWN_VALUE"}
+     */
+    public function testErlangFunctionInvalidArgumentException()
+    {
+        ErlangFunction::createFromArray(['UNKNOWN_PROPERTY' => 'UNKNOWN_VALUE']);
+    }
 }

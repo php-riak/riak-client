@@ -33,6 +33,8 @@ class BucketProperties
     const SEARCH_INDEX = 'searchIndex';
     const BACKEND = 'backend';
     const SEARCH = 'search';
+    const DATATYPE = 'datatype';
+    const CONSISTENT = 'consistent';
 
     /**
      * @var mixed $rw
