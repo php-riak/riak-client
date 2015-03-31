@@ -2,17 +2,16 @@
 
 namespace RiakClientFunctionalTest\Command\Kv;
 
-use RiakClientFunctionalTest\TestCase;
 use Riak\Client\RiakOption;
+use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Command\Kv\StoreValue;
 use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
-use Riak\Client\Core\Query\BucketProperties;
-use Riak\Client\Command\Bucket\StoreBucketProperties;
 use RiakClientFixture\Domain\SimpleObject;
+use Riak\Client\Command\Bucket\StoreBucketProperties;
 
 abstract class RiakObjectTest extends TestCase
 {
