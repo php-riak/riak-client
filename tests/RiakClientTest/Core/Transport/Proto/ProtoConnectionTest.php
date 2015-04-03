@@ -3,10 +3,7 @@
 namespace RiakClientTest\Core\Transport\Proto;
 
 use Riak\Client\Core\Transport\Proto\ProtoConnection;
-use malkusch\phpmock\phpunit\MockDelegateFunction;
-use malkusch\phpmock\phpunit\MockObjectProxy;
-use malkusch\phpmock\MockBuilder;
-use malkusch\phpmock\Mock;
+use phpmock\phpunit\PHPMock;
 use RiakClientTest\TestCase;
 
 /**
@@ -15,6 +12,9 @@ use RiakClientTest\TestCase;
  */
 class ProtoConnectionTest extends TestCase
 {
+
+    use PHPMock;
+
     const MOCK_NAMESPACE = 'Riak\Client\Core\Transport\Proto';
 
     /**
@@ -29,40 +29,14 @@ class ProtoConnectionTest extends TestCase
         $this->instance = new ProtoConnection('riak.local', 8087);
     }
 
-    protected function tearDown()
-    {
-        parent::tearDown();
-        Mock::disableAll();
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getFunctionMock($name)
-    {
-        $mock = $this->getMockBuilder('malkusch\phpmock\phpunit\MockDelegate')->getMock();
-
-        $functionMockBuilder = new MockBuilder();
-        $functionMockBuilder->setNamespace(self::MOCK_NAMESPACE)
-            ->setFunctionProvider(new MockDelegateFunction($mock))
-            ->setName($name);
-
-        $functionMock = $functionMockBuilder->build();
-        $functionMock->enable();
-
-        return new MockObjectProxy($mock);
-    }
-
     protected function createMockFunctions()
     {
         return [
-            'fread'                => $this->getFunctionMock('fread'),
-            'fwrite'               => $this->getFunctionMock('fwrite'),
-            'is_resource'          => $this->getFunctionMock('is_resource'),
-            'stream_set_timeout'   => $this->getFunctionMock('stream_set_timeout'),
-            'stream_socket_client' => $this->getFunctionMock('stream_socket_client'),
+            'fread'                => $this->getFunctionMock(self::MOCK_NAMESPACE, 'fread'),
+            'fwrite'               => $this->getFunctionMock(self::MOCK_NAMESPACE, 'fwrite'),
+            'is_resource'          => $this->getFunctionMock(self::MOCK_NAMESPACE, 'is_resource'),
+            'stream_set_timeout'   => $this->getFunctionMock(self::MOCK_NAMESPACE, 'stream_set_timeout'),
+            'stream_socket_client' => $this->getFunctionMock(self::MOCK_NAMESPACE, 'stream_socket_client'),
         ];
     }
 
