@@ -29,7 +29,7 @@ class FetchValue implements RiakCommand
      * @param \Riak\Client\Command\Kv\RiakLocation $location
      * @param array                                $options
      */
-    public function __construct(RiakLocation $location, $options)
+    public function __construct(RiakLocation $location, array $options = [])
     {
         $this->location = $location;
         $this->options  = $options;
