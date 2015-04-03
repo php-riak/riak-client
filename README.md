@@ -162,6 +162,13 @@ $result = $client->execute($fetch);
 $domain = $result->getValue('MyDomainObject');
 ```
 
+### Performance
+
+This library is faster than most riak clients written in php,
+It is about 50% percent faster is some cases, mostly because it uses protocol buffer and and iterators every where it is possible.
+
+For more details and riak clients performance comparison see : https://github.com/FabioBatSilva/riak-clients-performance-comparison
+
 ### Unit & Integration Tests
 
 We want to ensure that all code that is included in a release has proper coverage with unit tests.
