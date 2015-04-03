@@ -288,3 +288,4 @@ Contents
    yokozuna-search
    mapreduce
    siblings
+   performance
