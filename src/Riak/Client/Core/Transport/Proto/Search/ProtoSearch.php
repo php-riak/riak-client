@@ -79,7 +79,18 @@ class ProtoSearch extends ProtoStrategy
         }
 
         foreach ($doc->fields as $pair) {
-            $values[$pair->key] = $pair->value;
+
+            if ( ! isset($values[$pair->key])) {
+                $values[$pair->key] = $pair->value;
+
+                continue;
+            }
+
+            if ( ! is_array($values[$pair->key])) {
+                $values[$pair->key] = [$values[$pair->key]];
+            }
+
+            $values[$pair->key][] = $pair->value;
         }
 
         return $values;

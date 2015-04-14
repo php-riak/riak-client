@@ -11,7 +11,7 @@ use Riak\Client\Core\Message\Response;
  */
 class SearchResponse extends Response
 {
-    public $docs;
+    public $docs = [];
     public $maxScore;
     public $numFound;
 }

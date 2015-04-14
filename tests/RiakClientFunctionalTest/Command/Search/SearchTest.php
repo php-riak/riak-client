@@ -83,6 +83,10 @@ abstract class SearchTest extends TestCase
         $numResults = $searchResult->getNumResults();
         $results    = $searchResult->getResults();
 
+        usort($results, function($arg1, $arg2) {
+            return strcmp($arg2['name_s'], $arg1['name_s']);
+        });
+
         $this->assertCount(2, $results);
         $this->assertEquals(2, $numResults);
         $this->assertCount(2, $results[0]);

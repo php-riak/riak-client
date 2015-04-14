@@ -194,6 +194,20 @@ class ProtoSearchTest extends TestCase
         $this->assertEquals('FabioBatSilva', $result['username']);
     }
 
+    public function testDocToArrayMulti()
+    {
+        $rpbDoc = new RpbSearchDoc();
+
+        $rpbDoc->addFields($this->createRpbPair('multi_ss', '1'));
+        $rpbDoc->addFields($this->createRpbPair('multi_ss', '2'));
+        $rpbDoc->addFields($this->createRpbPair('multi_ss', '3'));
+
+        $result = $this->invokeMethod($this->instance, 'docToArray', [$rpbDoc]);
+
+        $this->assertArrayHasKey('multi_ss', $result);
+        $this->assertEquals(['1', '2', '3'], $result['multi_ss']);
+    }
+
     public function testEnptyDocToArray()
     {
         $this->assertEquals([], $this->invokeMethod($this->instance, 'docToArray', [new RpbSearchDoc()]));

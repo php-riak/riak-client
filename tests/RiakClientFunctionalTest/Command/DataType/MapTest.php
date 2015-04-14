@@ -3,13 +3,11 @@
 namespace RiakClientFunctionalTest\Command\DataType;
 
 use RiakClientFunctionalTest\TestCase;
-use Riak\Client\RiakOption;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 use Riak\Client\Command\DataType\FetchMap;
 use Riak\Client\Command\DataType\StoreMap;
-use Riak\Client\Core\Query\BucketProperties;
 use Riak\Client\Command\Bucket\StoreBucketProperties;
 
 abstract class MapTest extends TestCase

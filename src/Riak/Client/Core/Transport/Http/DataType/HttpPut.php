@@ -19,7 +19,8 @@ class HttpPut extends BaseHttpStrategy
      * @var array
      */
     protected $validResponseCodes = [
-        200 => true
+        200 => true,
+        204 => true
     ];
 
     /**
@@ -80,7 +81,7 @@ class HttpPut extends BaseHttpStrategy
             throw RiakTransportException::unexpectedStatusCode($code);
         }
 
-        $json  = $httpResponse->json();
+        $json    = $httpResponse->json();
         $context = isset($json['context']) ? $json['context'] : null;
         $value   = $json['value'];
         $type    = $json['type'];
