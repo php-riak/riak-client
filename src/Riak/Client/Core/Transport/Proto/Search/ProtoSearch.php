@@ -79,7 +79,11 @@ class ProtoSearch extends ProtoStrategy
         }
 
         foreach ($doc->fields as $pair) {
-            $values[$pair->key] = $pair->value;
+            if(substr($pair->key, -4) === '_set') {
+                $values[$pair->key][] = $pair->value;
+            } else {
+                $values[$pair->key] = $pair->value;
+            }
         }
 
         return $values;
