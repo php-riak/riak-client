@@ -54,7 +54,7 @@ class SearchResponse extends Response
      */
     public function getSingleResults()
     {
-        return array_map(function($result) {
+        return array_map(function ($result) {
             return array_map('reset', $result);
         }, $this->results);
     }
