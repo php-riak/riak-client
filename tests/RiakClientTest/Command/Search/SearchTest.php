@@ -73,16 +73,16 @@ class SearchTest extends TestCase
         $response->numFound = 2;
         $response->docs     = [
             [
-                'email'     => 'fabio.bat.silva@gmail.com',
-                'name'      => 'Fabio B. Silva',
-                'username'  => 'FabioBatSilva',
-                'age'       => '30',
+                'email'     => ['fabio.bat.silva@gmail.com'],
+                'name'      => ['Fabio B. Silva'],
+                'username'  => ['FabioBatSilva'],
+                'age'       => ['30'],
             ],
             [
-                'email'     => 'fabio.bat.silva@gmail.com',
-                'name'      => 'Fabio B. Silva',
-                'username'  => 'fabios',
-                'age'       => '30',
+                'email'     => ['fabio.bat.silva@gmail.com'],
+                'name'      => ['Fabio B. Silva'],
+                'username'  => ['fabios'],
+                'age'       => ['30'],
             ]
         ];
 
@@ -117,6 +117,20 @@ class SearchTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $result);
         $this->assertEquals($response->numFound, $result->getNumResults());
         $this->assertEquals($response->maxScore, $result->getMaxScore());
-        $this->assertEquals($response->docs, $result->getResults());
+        $this->assertEquals($response->docs, $result->getAllResults());
+        $this->assertEquals([
+            [
+                'email'     => 'fabio.bat.silva@gmail.com',
+                'name'      => 'Fabio B. Silva',
+                'username'  => 'FabioBatSilva',
+                'age'       => '30',
+            ],
+            [
+                'email'     => 'fabio.bat.silva@gmail.com',
+                'name'      => 'Fabio B. Silva',
+                'username'  => 'fabios',
+                'age'       => '30',
+            ]
+        ], $result->getResults());
     }
 }

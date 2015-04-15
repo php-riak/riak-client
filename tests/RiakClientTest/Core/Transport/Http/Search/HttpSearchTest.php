@@ -122,4 +122,37 @@ class HttpSearchTest extends TestCase
         $this->assertArrayHasKey('username', $result->docs[0]);
         $this->assertArrayHasKey('username', $result->docs[1]);
     }
+
+    public function testDocToArray()
+    {
+        $doc = [
+            'name'     => 'Fabio B. Silva',
+            'username' => 'FabioBatSilva'
+        ];
+
+        $result = $this->invokeMethod($this->instance, 'docToArray', [$doc]);
+
+        $this->assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('username', $result);
+
+        $this->assertEquals(['Fabio B. Silva'], $result['name']);
+        $this->assertEquals(['FabioBatSilva'], $result['username']);
+    }
+
+    public function testDocToArrayMulti()
+    {
+        $doc = [
+            'multi_ss' => ['1','2','3']
+        ];
+
+        $result = $this->invokeMethod($this->instance, 'docToArray', [$doc]);
+
+        $this->assertArrayHasKey('multi_ss', $result);
+        $this->assertEquals(['1', '2', '3'], $result['multi_ss']);
+    }
+
+    public function testEnptyDocToArray()
+    {
+        $this->assertEquals([], $this->invokeMethod($this->instance, 'docToArray', [[]]));
+    }
 }

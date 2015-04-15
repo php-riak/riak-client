@@ -70,26 +70,15 @@ class ProtoSearch extends ProtoStrategy
      *
      * @return array
      */
-    private function docToArray(RpbSearchDoc $doc)
+    protected function docToArray(RpbSearchDoc $doc)
     {
-        $values = [];
-
         if ( ! $doc->hasFields()) {
-            return $values;
+            return [];
         }
 
+        $values = [];
+
         foreach ($doc->fields as $pair) {
-
-            if ( ! isset($values[$pair->key])) {
-                $values[$pair->key] = $pair->value;
-
-                continue;
-            }
-
-            if ( ! is_array($values[$pair->key])) {
-                $values[$pair->key] = [$values[$pair->key]];
-            }
-
             $values[$pair->key][] = $pair->value;
         }
 

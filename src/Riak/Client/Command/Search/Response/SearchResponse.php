@@ -37,14 +37,31 @@ class SearchResponse extends Response
     }
 
     /**
-     * @return array
+     * Returns the entire list of results from the search query.
+     *
+     * @return array A list containing all the result sets
      */
-    public function getResults()
+    public function getAllResults()
     {
         return $this->results;
     }
 
     /**
+     * Returns the first entry of each element from the search query result.
+     * If your result contains a multi-valued field you might whant to use  @see SearchResponse::getAllResults()
+     *
+     * @return array
+     */
+    public function getResults()
+    {
+        return array_map(function($result) {
+            return array_map('reset', $result);
+        }, $this->results);
+    }
+
+    /**
+     * Returns the max score from the search query.
+     *
      * @return integer
      */
     public function getMaxScore()
@@ -53,6 +70,8 @@ class SearchResponse extends Response
     }
 
     /**
+     * Returns the number of results from the search query.
+     *
      * @return integer
      */
     public function getNumResults()

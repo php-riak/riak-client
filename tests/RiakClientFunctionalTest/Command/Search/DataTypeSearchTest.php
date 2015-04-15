@@ -103,13 +103,13 @@ abstract class DataTypeSearchTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchResult);
 
         $numResults = $searchResult->getNumResults();
-        $results    = $searchResult->getResults();
+        $results    = $searchResult->getAllResults();
 
         $this->assertCount(1, $results);
         $this->assertEquals(1, $numResults);
-        $this->assertEquals('Riak for dummies', $results[0]['name_s']);
+        $this->assertEquals(['Riak for dummies'], $results[0]['name_s']);
         $this->assertEquals(['it', 'comedy'], $results[0]['category_ss']);
-        $this->assertEquals('Fabio B. Silva', $results[0]['author_name_s']);
-        $this->assertEquals('fabio.bat.silva@gmail.com', $results[0]['author_email_s']);
+        $this->assertEquals(['Fabio B. Silva'], $results[0]['author_name_s']);
+        $this->assertEquals(['fabio.bat.silva@gmail.com'], $results[0]['author_email_s']);
     }
 }

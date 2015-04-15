@@ -62,6 +62,29 @@ class HttpSearch extends BaseHttpStrategy
     }
 
     /**
+     * @param array $doc
+     *
+     * @return array
+     */
+    protected function docToArray(array $doc)
+    {
+        $values = [];
+
+        foreach ($doc as $key => $value) {
+
+            if ( ! is_array($value)) {
+                $values[$key][] = $value;
+
+                continue;
+            }
+
+            $values[$key] = $value;
+        }
+
+        return $values;
+    }
+
+    /**
      * @param \Riak\Client\Core\Message\Bucket\GetRequest $request
      *
      * @return \Riak\Client\Core\Message\Bucket\GetResponse
@@ -77,6 +100,7 @@ class HttpSearch extends BaseHttpStrategy
         $response->docs     = $result['docs'];
         $response->numFound = $result['numFound'];
         $response->maxScore = $result['maxScore'];
+        $response->docs     = array_map([$this, 'docToArray'], $result['docs']);
 
         return $response;
     }

@@ -181,6 +181,7 @@ This example searches for all documents in which the name_s value begins with Li
 
     $searchResult = $this->client->execute($search);
     $numResults = $searchResult->getNumResults();
+    $allResults = $searchResult->getAllResults();
     $results    = $searchResult->getResults();
 
     echo $numResults;
@@ -189,9 +190,15 @@ This example searches for all documents in which the name_s value begins with Li
     echo $results[0]['name_s'];
     // Lion-o
 
+    echo json_encode($allResults[0]['name_s']);
+    // ["Lion-o"]
+
 The response to a query will be an object containing details about the response,
 such as a query's max score and a list of documents which match the given query.
 
+.. note::
+    While ``SearchResponse#getResults()`` returns only the first entry of each element from the search query result.
+    ``SearchResponse#getAllResults()`` will return a list containing all the result sets, so if you have a multi-valued field you should probably use ``getAllResults``
 
 --------------
 Range Queries

@@ -190,8 +190,8 @@ class ProtoSearchTest extends TestCase
         $this->assertArrayHasKey('name', $result);
         $this->assertArrayHasKey('username', $result);
 
-        $this->assertEquals('Fabio B. Silva', $result['name']);
-        $this->assertEquals('FabioBatSilva', $result['username']);
+        $this->assertEquals(['Fabio B. Silva'], $result['name']);
+        $this->assertEquals(['FabioBatSilva'], $result['username']);
     }
 
     public function testDocToArrayMulti()
