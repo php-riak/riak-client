@@ -56,7 +56,7 @@ abstract class SearchTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchSnarfResult);
 
         $numResults = $searchSnarfResult->getNumResults();
-        $results    = $searchSnarfResult->getResults();
+        $results    = $searchSnarfResult->getSingleResults();
 
         $this->assertCount(1, $results);
         $this->assertEquals(1, $numResults);
@@ -81,7 +81,7 @@ abstract class SearchTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchResult);
 
         $numResults = $searchResult->getNumResults();
-        $results    = $searchResult->getResults();
+        $results    = $searchResult->getSingleResults();
 
         usort($results, function($arg1, $arg2) {
             return strcmp($arg2['name_s'], $arg1['name_s']);

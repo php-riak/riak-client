@@ -52,7 +52,7 @@ class SearchResponse extends Response
      *
      * @return array
      */
-    public function getResults()
+    public function getSingleResults()
     {
         return array_map(function($result) {
             return array_map('reset', $result);

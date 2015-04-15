@@ -131,6 +131,6 @@ class SearchTest extends TestCase
                 'username'  => 'fabios',
                 'age'       => '30',
             ]
-        ], $result->getResults());
+        ], $result->getSingleResults());
     }
 }

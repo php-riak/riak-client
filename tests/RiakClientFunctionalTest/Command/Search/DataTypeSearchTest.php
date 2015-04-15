@@ -79,7 +79,7 @@ abstract class DataTypeSearchTest extends TestCase
         $this->assertInstanceOf('Riak\Client\Command\Search\Response\SearchResponse', $searchResult);
 
         $numResults = $searchResult->getNumResults();
-        $results    = $searchResult->getResults();
+        $results    = $searchResult->getSingleResults();
 
         $this->assertCount(1, $results);
         $this->assertEquals(1, $numResults);

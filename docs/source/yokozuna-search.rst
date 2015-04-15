@@ -179,15 +179,15 @@ This example searches for all documents in which the name_s value begins with Li
         ->withIndex("famous")
         ->build();
 
-    $searchResult = $this->client->execute($search);
-    $numResults = $searchResult->getNumResults();
-    $allResults = $searchResult->getAllResults();
-    $results    = $searchResult->getResults();
+    $searchResult  = $this->client->execute($search);
+    $numResults    = $searchResult->getNumResults();
+    $allResults    = $searchResult->getAllResults();
+    $singleResults = $searchResult->getSingleResults();
 
     echo $numResults;
     // 1
 
-    echo $results[0]['name_s'];
+    echo $singleResults[0]['name_s'];
     // Lion-o
 
     echo json_encode($allResults[0]['name_s']);
@@ -197,7 +197,7 @@ The response to a query will be an object containing details about the response,
 such as a query's max score and a list of documents which match the given query.
 
 .. note::
-    While ``SearchResponse#getResults()`` returns only the first entry of each element from the search query result.
+    While ``SearchResponse#getSingleResults()`` returns only the first entry of each element from the search query result.
     ``SearchResponse#getAllResults()`` will return a list containing all the result sets, so if you have a multi-valued field you should probably use ``getAllResults``
 
 --------------
@@ -229,7 +229,7 @@ This depends on your schema. If they are not stored, you'll have to perform a se
     /** @var $result \Riak\Client\Command\Search\Response\SearchResponse */
     /** @var $results array */
     $searchResult = $this->client->execute($search);
-    $results      = $searchResult->getResults();
+    $results      = $searchResult->getSingleResults();
 
     //  retrieve ``_yz_`` values
     $bucketType = $results[0]["_yz_rt"];
@@ -289,6 +289,6 @@ For example, assuming we want two results per page, getting the second page is e
     /** @var $result \Riak\Client\Command\Search\Response\SearchResponse */
     /** @var $results array */
     $searchResult = $this->client->execute($search);
-    $results      = $searchResult->getResults();
+    $results      = $searchResult->getAllResults();
 
 .. _`Basho Search Docs`: http://docs.basho.com/riak/latest/dev/using/search/
