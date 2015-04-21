@@ -12,6 +12,23 @@ use Riak\Client\Command\Kv\Builder\DeleteValueBuilder;
 /**
  * Command used to delete a value from Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Core\Query\RiakLocation;
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\DataType\DeleteValue;
+ *
+ *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+ *  $location  = new RiakLocation($namespace, 'object_key');
+ *  $command   = FetchValue::builder()
+ *      ->withLocation($location)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Kv\Response\DeleteValueResponse
+ *  $response = $client->execute($command);
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class DeleteValue implements RiakCommand

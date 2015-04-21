@@ -11,6 +11,22 @@ use Riak\Client\Core\Operation\Search\StoreSchemaOperation;
 /**
  * Command used to store a search schema in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Command\Search\StoreSchema;
+ *  use Riak\Client\Core\Query\Search\YokozunaSchema;
+ *
+ *  $content = file_get_contents('search_schema.xml');
+ *  $schema  = new YokozunaSchema('search_schema', $content);
+ *  $command = StoreSchema::builder()
+ *      ->withSchema($schema)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Search\Response\StoreSchemaResponse
+ *  $response = $client->execute($command);
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class StoreSchema implements RiakCommand

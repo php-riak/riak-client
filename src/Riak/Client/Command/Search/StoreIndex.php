@@ -11,6 +11,21 @@ use Riak\Client\Core\Operation\Search\StoreIndexOperation;
 /**
  * Command used to store a search index in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Command\Search\StoreIndex;
+ *  use Riak\Client\Core\Query\Search\YokozunaIndex;
+ *
+ *  $index   = new YokozunaIndex('search_index', '_yz_default');
+ *  $command = StoreIndex::builder()
+ *      ->withIndex($index)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Search\Response\StoreIndexResponse
+ *  $response = $client->execute($command);
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class StoreIndex implements RiakCommand

@@ -10,6 +10,24 @@ use Riak\Client\Core\Operation\Bucket\ListBucketsOperation;
 /**
  * Command used to list the buckets contained in a bucket type.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Command\Bucket\ListBuckets;
+ *
+ *  $command = ListBuckets::builder()
+ *      ->withBucketType('bucket_type')
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Bucket\Response\ListBucketsResponse
+ *  // @var $buckets string[]
+ *  $response = $client->execute($command);
+ *  $buckets  = $response->getBuckets();
+ *
+ *  var_dump($buckets);
+ *  // ["bucket_name1", "bucket_name2", "bucket_name3"]
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class ListBuckets implements RiakCommand

@@ -11,6 +11,26 @@ use Riak\Client\Command\Bucket\Builder\FetchBucketPropertiesBuilder;
 /**
  * Command used to fetch the properties of a bucket in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\Bucket\FetchBucketProperties;
+ *
+ *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+ *  $command   = FetchBucketProperties::builder()
+ *      ->withNamespace($namespace)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Bucket\Response\FetchBucketPropertiesResponse
+ *  // @var $properties \Riak\Client\Core\Query\BucketProperties
+ *  $response   = $client->execute($command);
+ *  $properties = $response->getProperties();
+ *
+ *  echo $fetchProperties->getNVal();
+ *  // 3
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class FetchBucketProperties implements RiakCommand

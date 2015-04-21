@@ -111,7 +111,7 @@ abstract class Response implements RiakResponse
      *
      * @param string $type
      *
-     * @return \Riak\Client\Core\Query\RiakObject
+     * @return \Riak\Client\Core\Query\RiakObject|object
      *
      * @throws \Riak\Client\Resolver\UnresolvedConflictException
      */

@@ -10,6 +10,19 @@ use Riak\Client\Core\Operation\Search\DeleteIndexOperation;
 /**
  * Command used to delete a search index in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Command\Search\DeleteIndex;
+ *
+ *  $command = DeleteIndex::builder()
+ *      ->withIndexName('search_index')
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Search\Response\DeleteIndexResponse
+ *  $response = $client->execute($command);
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class DeleteIndex implements RiakCommand

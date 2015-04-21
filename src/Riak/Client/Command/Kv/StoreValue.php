@@ -11,6 +11,35 @@ use Riak\Client\Command\Kv\Builder\StoreValueBuilder;
 /**
  * Command used to store a value in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\RiakOption;
+ *  use Riak\Client\Core\Query\RiakObject;
+ *  use Riak\Client\Core\Query\RiakLocation;
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\DataType\StoreValue;
+ *
+ *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+ *  $object    = new RiakObject('[1,1,1]', 'application/json');
+ *  $location  = new RiakLocation($namespace, 'object_key');
+ *  $command   = StoreValue::builder()
+ *      ->withW(RiakOption::QUORUM)
+ *      ->withPw(RiakOption::ONE)
+ *      ->withLocation($location)
+ *      ->withReturnBody(true)
+ *      ->withValue($object)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Kv\Response\StoreValueResponse
+ *  // @var $object \Riak\Client\Core\Query\RiakObject
+ *  $response = $client->execute($command);
+ *  $object   = $response->getValue();
+ *
+ *  var_dump($object->getValue());
+ *  // '[1,1,1]'
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class StoreValue implements RiakCommand

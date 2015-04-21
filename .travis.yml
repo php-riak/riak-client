@@ -24,7 +24,8 @@ script:
     - ./vendor/bin/phpcs -p --extensions=php  --standard=ruleset.xml src
 
 after_script:
-    - php ./vendor/bin/coveralls -v
+    - ./vendor/bin/coveralls -v
+    - ./vendor/bin/apigen generate -s src -d build/api --title "PHP Riak Client" --template-theme bootstrap
 
 matrix:
   allow_failures:

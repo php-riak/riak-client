@@ -10,6 +10,24 @@ use Riak\Client\Core\Operation\Search\FetchSchemaOperation;
 /**
  * Command used to fetch a search schema in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Command\Search\FetchSchema;
+ *
+ *  $command = FetchSchema::builder()
+ *      ->withSchemaName('search_schema')
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Search\Response\StoreSchemaResponse
+ *  // @var $response \Riak\Client\Core\Query\Search\YokozunaSchema
+ *  $response = $client->execute($command);
+ *  $schema   = $response->getSchema();
+ *
+ *  var_dump($schema->getContent());
+ *  // "<xml>...</xml>"
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class FetchSchema implements RiakCommand

@@ -10,6 +10,33 @@ use Riak\Client\Command\Index\Builder\BinIndexQueryBuilder;
 /**
  * Performs a 2i query where the 2i keys are ints.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\Index\BinIndexQuery;
+ *
+ *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+ *  $command   = BinIndexQuery::builder()
+ *      ->withNamespace($namespace)
+ *      ->withTermFilter('@gmail.com')
+ *      ->withReturnTerms(true)
+ *      ->withStart('user1')
+ *      ->withEnd('user4')
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Index\Response\IndexQueryResponse
+ *  // @var $entries  \Riak\Client\Command\Index\Response\IndexEntry[]
+ *  $response = $client->execute($command);
+ *  $entries  = $response->getEntries();
+ *
+ *  var_dump($entries[0]->getIndexKey());
+ *  // "user1@gmail.com"
+ *
+ *  var_dump($entries[0]->getLocation());
+ *  // object(Riak\Client\Core\Query\RiakLocation)#1 (0) {}
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class BinIndexQuery extends IndexQuery

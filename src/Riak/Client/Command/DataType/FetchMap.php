@@ -11,6 +11,32 @@ use Riak\Client\Core\Operation\DataType\FetchMapOperation;
 /**
  * Command used to fetch a counter datatype from Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Core\Query\RiakLocation;
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\DataType\FetchMap;
+ *
+ *  $namespace = new RiakNamespace('map_type', 'map_bucket');
+ *  $location  = new RiakLocation($namespace, 'map_key');
+ *  $command   = FetchMap::builder()
+ *      ->withLocation($location)
+ *      ->withIncludeContext(true)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\DataType\Response\FetchMapResponse
+ *  // @var $datatype \Riak\Client\Core\Query\Crdt\RiakMap
+ *  $response = $client->execute($command);
+ *  $datatype = $response->getDatatype();
+ *
+ *  var_dump($datatype->getValue());
+ *  // {"name":"Fabio B. Silva","email":"fabio.bat.silva@gmail.com"}
+ *
+ *  var_dump($datatype->get('name'));
+ *  // "Fabio B. Silva"
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class FetchMap implements RiakCommand

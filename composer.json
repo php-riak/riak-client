@@ -26,6 +26,7 @@
         "squizlabs/php_codesniffer":             "~1.5",
         "satooshi/php-coveralls":                "~0.6",
         "php-mock/php-mock-phpunit":             "^0.2",
+        "apigen/apigen":                         "dev-master",
         "instaclick/object-calisthenics-sniffs": "dev-master",
         "instaclick/symfony2-coding-standard":   "dev-remaster"
     },

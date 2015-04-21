@@ -11,6 +11,32 @@ use Riak\Client\Command\Kv\Builder\FetchValueBuilder;
 /**
  * Command used to fetch a value from Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\RiakOption;
+ *  use Riak\Client\Core\Query\RiakLocation;
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\DataType\FetchValue;
+ *
+ *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+ *  $location  = new RiakLocation($namespace, 'object_key');
+ *  $command   = FetchValue::builder()
+ *      ->withW(RiakOption::QUORUM)
+ *      ->withPw(RiakOption::ONE)
+ *      ->withLocation($location)
+ *      ->withNotFoundOk(true)
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Kv\Response\FetchValueResponse
+ *  // @var $object \Riak\Client\Core\Query\RiakObject
+ *  $response = $client->execute($command);
+ *  $object   = $response->getValue();
+ *
+ *  var_dump($object->getValue());
+ *  // '[1,1,1]'
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class FetchValue implements RiakCommand

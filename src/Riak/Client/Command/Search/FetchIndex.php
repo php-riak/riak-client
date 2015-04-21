@@ -10,6 +10,24 @@ use Riak\Client\Core\Operation\Search\FetchIndexOperation;
 /**
  * Command used to fetch a search schema in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Command\Search\FetchIndex;
+ *
+ *  $command = FetchIndex::builder()
+ *      ->withIndexName('search_index')
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\Search\Response\FetchIndexResponse
+ *  // @var $response \Riak\Client\Core\Query\Search\YokozunaIndex
+ *  $response = $client->execute($command);
+ *  $index    = $response->getIndex();
+ *
+ *  var_dump($index->getSchema());
+ *  // "_yz_default"
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class FetchIndex implements RiakCommand

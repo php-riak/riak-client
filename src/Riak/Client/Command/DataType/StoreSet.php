@@ -10,6 +10,31 @@ use Riak\Client\Core\Operation\DataType\StoreSetOperation;
 /**
  * Command used to update or create a set datatype in Riak.
  *
+ * Example:
+ * <code>
+ * <?php
+ *  use Riak\Client\Core\Query\RiakLocation;
+ *  use Riak\Client\Core\Query\RiakNamespace;
+ *  use Riak\Client\Command\DataType\FetchSet;
+ *
+ *  $namespace = new RiakNamespace('set_type', 'set_bucket');
+ *  $location  = new RiakLocation($namespace, 'set_key');
+ *  $command   = FetchSet::builder()
+ *      ->withLocation($location)
+ *      ->withReturnBody(true)
+ *      ->add("Toronto")
+ *      ->add("Ottawa")
+ *      ->build();
+ *
+ *  // @var $response \Riak\Client\Command\DataType\Response\StoreSetResponse
+ *  // @var $datatype \Riak\Client\Core\Query\Crdt\RiakSet
+ *  $response = $client->execute($command);
+ *  $datatype = $response->getDatatype();
+ *
+ *  var_dump($datatype->getValue());
+ *  // ["Ottawa","Toronto"]
+ * </code>
+ *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class StoreSet extends StoreDataType
