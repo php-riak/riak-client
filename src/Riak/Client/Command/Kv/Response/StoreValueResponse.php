@@ -7,7 +7,7 @@ namespace Riak\Client\Command\Kv\Response;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class StoreValueResponse extends Response
+class StoreValueResponse extends ObjectResponse
 {
     /**
      * @var string

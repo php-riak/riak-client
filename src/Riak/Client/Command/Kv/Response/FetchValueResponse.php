@@ -7,7 +7,7 @@ namespace Riak\Client\Command\Kv\Response;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class FetchValueResponse extends Response
+class FetchValueResponse extends ObjectResponse
 {
     /**
      * @var boolean

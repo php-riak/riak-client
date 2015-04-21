@@ -4,7 +4,6 @@ namespace RiakClientTest\Command\Kv;
 
 use RiakClientTest\TestCase;
 use Riak\Client\Core\RiakNode;
-use Riak\Client\RiakOption;
 use Riak\Client\RiakClientBuilder;
 use Riak\Client\Command\Kv\DeleteValue;
 use Riak\Client\Core\Query\RiakLocation;
@@ -54,9 +53,5 @@ class DeleteValueTest extends TestCase
         $result = $this->client->execute($command);
 
         $this->assertInstanceOf('Riak\Client\Command\Kv\Response\DeleteValueResponse', $result);
-
-        $this->assertFalse($result->hasValues());
-        $this->assertCount(0, $result->getValues());
-        $this->assertEquals(0, $result->getNumberOfValues());
     }
 }

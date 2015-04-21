@@ -15,9 +15,9 @@ use Riak\Client\Command\Kv\Builder\DeleteValueBuilder;
  * Example:
  * <code>
  * <?php
+ *  use Riak\Client\Command\Kv\DeleteValue;
  *  use Riak\Client\Core\Query\RiakLocation;
  *  use Riak\Client\Core\Query\RiakNamespace;
- *  use Riak\Client\Command\DataType\DeleteValue;
  *
  *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
  *  $location  = new RiakLocation($namespace, 'object_key');

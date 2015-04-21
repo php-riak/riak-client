@@ -15,9 +15,9 @@ use Riak\Client\Command\Kv\Builder\FetchValueBuilder;
  * <code>
  * <?php
  *  use Riak\Client\RiakOption;
+ *  use Riak\Client\Command\Kv\FetchValue;
  *  use Riak\Client\Core\Query\RiakLocation;
  *  use Riak\Client\Core\Query\RiakNamespace;
- *  use Riak\Client\Command\DataType\FetchValue;
  *
  *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
  *  $location  = new RiakLocation($namespace, 'object_key');

@@ -48,7 +48,7 @@ class AbstractResponseTest extends TestCase
         $object   = new RiakObject();
         $vClock   = new VClock('vclock-hash');
         $values   = new RiakObjectList([$object]);
-        $instance = $this->getMockForAbstractClass('Riak\Client\Command\Kv\Response\Response', [
+        $instance = $this->getMockForAbstractClass('Riak\Client\Command\Kv\Response\ObjectResponse', [
             $this->converterFactory,
             $this->resolverFactory,
             $this->location,
@@ -70,7 +70,7 @@ class AbstractResponseTest extends TestCase
         $object   = new RiakObject();
         $vClock   = new VClock('vclock-hash');
         $list     = new RiakObjectList([$object]);
-        $instance = $this->getMockForAbstractClass('Riak\Client\Command\Kv\Response\Response', [
+        $instance = $this->getMockForAbstractClass('Riak\Client\Command\Kv\Response\ObjectResponse', [
             $this->converterFactory,
             $this->resolverFactory,
             $this->location,
@@ -98,7 +98,7 @@ class AbstractResponseTest extends TestCase
     public function testEmptyList()
     {
         $values   = new RiakObjectList([]);
-        $instance = $this->getMockForAbstractClass('Riak\Client\Command\Kv\Response\Response', [
+        $instance = $this->getMockForAbstractClass('Riak\Client\Command\Kv\Response\ObjectResponse', [
             $this->converterFactory,
             $this->resolverFactory,
             $this->location,

@@ -20,6 +20,7 @@ class RiakHttpTransport implements RiakTransport
         'Riak\Client\Core\Message\Kv\GetRequest'              => 'Riak\Client\Core\Transport\Http\Kv\HttpGet',
         'Riak\Client\Core\Message\Kv\PutRequest'              => 'Riak\Client\Core\Transport\Http\Kv\HttpPut',
         'Riak\Client\Core\Message\Kv\DeleteRequest'           => 'Riak\Client\Core\Transport\Http\Kv\HttpDelete',
+        'Riak\Client\Core\Message\Kv\ListKeysRequest'         => 'Riak\Client\Core\Transport\Http\Kv\HttpListKeys',
         // crdt
         'Riak\Client\Core\Message\DataType\GetRequest'        => 'Riak\Client\Core\Transport\Http\DataType\HttpGet',
         'Riak\Client\Core\Message\DataType\PutRequest'        => 'Riak\Client\Core\Transport\Http\DataType\HttpPut',

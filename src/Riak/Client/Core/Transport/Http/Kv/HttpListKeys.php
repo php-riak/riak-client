@@ -1,57 +1,68 @@
 <?php
 
-namespace Riak\Client\Core\Transport\Http\Bucket;
+namespace Riak\Client\Core\Transport\Http\Kv;
 
 use Riak\Client\Core\Message\Request;
-use Riak\Client\Core\Message\Bucket\ListRequest;
-use Riak\Client\Core\Message\Bucket\ListResponse;
+use Riak\Client\Core\Message\Kv\ListKeysRequest;
+use Riak\Client\Core\Message\Kv\ListKeysResponse;
 use Riak\Client\Core\Transport\RiakTransportException;
 
 /**
- * Http list implementation.
+ * Http list keys implementation.
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class HttpList extends BaseHttpStrategy
+class HttpListKeys extends BaseHttpStrategy
 {
     /**
      * @var array
      */
     protected $validResponseCodes = [
-        200 => true
+        200 => true,
+        300 => true
     ];
 
     /**
-     * @param \Riak\Client\Core\Message\Bucket\ListRequest $getRequest
+     * @param string $type
+     * @param string $bucket
+     *
+     * @return string
+     */
+    protected function buildKeysPath($type, $bucket)
+    {
+        if ($type === null) {
+            return sprintf('/buckets/%s/keys', $bucket);
+        }
+
+        return sprintf('/types/%s/buckets/%s/keys', $type, $bucket);
+    }
+
+    /**
+     * @param \Riak\Client\Core\Message\Kv\ListKeysRequest $listRequest
      *
      * @return \GuzzleHttp\Message\RequestInterface
      */
-    private function createHttpRequest(ListRequest $getRequest)
+    private function createHttpRequest(ListKeysRequest $listRequest)
     {
-        $type    = $getRequest->type;
-        $path    = $getRequest->type ? "/types/$type/buckets" : '/buckets';
+        $path    = $this->buildKeysPath($listRequest->type, $listRequest->bucket);
         $request = $this->client->createRequest('GET', $path);
         $query   = $request->getQuery();
 
         // stream result does not work propertly for http ? :(
         $request->setHeader('Accept', 'application/json');
-        $query->add('buckets', 'true');
-
-        if ($getRequest->timeout != null) {
-            $query->add('timeout', $getRequest->timeout);
-        }
+        $query->add('keys', 'true');
 
         return $request;
     }
 
     /**
-     * @param \Riak\Client\Core\Message\Bucket\ListRequest $request
+     * @param \Riak\Client\Core\Message\Kv\ListKeysRequest $request
      *
-     * @return \Riak\Client\Core\Message\Bucket\ListResponse
+     * @return \Riak\Client\Core\Message\Kv\ListKeysResponse
      */
     public function send(Request $request)
     {
-        $response     = new ListResponse();
+        $response     = new ListKeysResponse();
         $httpRequest  = $this->createHttpRequest($request);
         $httpResponse = $this->client->send($httpRequest);
         $code         = $httpResponse->getStatusCode();
@@ -63,7 +74,7 @@ class HttpList extends BaseHttpStrategy
         $json     = $httpResponse->json();
         $iterator = array_map(function ($item) {
             return new \ArrayIterator([$item]);
-        }, $json['buckets']);
+        }, $json['keys']);
 
         $response->iterator = new \ArrayIterator($iterator);
 

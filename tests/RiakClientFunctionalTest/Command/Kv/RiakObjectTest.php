@@ -3,6 +3,7 @@
 namespace RiakClientFunctionalTest\Command\Kv;
 
 use Riak\Client\RiakOption;
+use Riak\Client\Command\Kv\ListKeys;
 use RiakClientFunctionalTest\TestCase;
 use Riak\Client\Command\Kv\FetchValue;
 use Riak\Client\Command\Kv\StoreValue;
@@ -227,5 +228,43 @@ abstract class RiakObjectTest extends TestCase
 
         $this->client->execute(DeleteValue::builder($location)
             ->build());
+    }
+
+    public function testListKeys()
+    {
+        $key       = uniqid();
+        $object    = new RiakObject();
+        $namespace = new RiakNamespace('default', 'bucket');
+        $location  = new RiakLocation($namespace, $key);
+
+        $object->setValue('[1,1,1]');
+        $object->setContentType('application/json');
+
+        $this->client->execute(StoreValue::builder($location, $object)
+            ->withPw(RiakOption::ALL)
+            ->withW(RiakOption::ALL)
+            ->withReturnBody(true)
+            ->build());
+
+        $command = ListKeys::builder($namespace)
+            ->withNamespace($namespace)
+            ->build();
+
+        $result    = $this->client->execute($command);
+        $iterator  = $result->getIterator();
+        $locations = [];
+
+        $this->assertInternalType('array', $locations);
+        $this->assertInstanceOf('Iterator', $iterator);
+        $this->assertInstanceOf('Riak\Client\Command\Kv\Response\ListKeysResponse', $result);
+
+        foreach ($result->getLocations() as $location) {
+            $locations[$location->getKey()] = $location;
+        }
+
+        $this->assertArrayHasKey($key, $locations);
+        $this->assertInstanceOf('Riak\Client\Core\Query\RiakLocation', $locations[$key]);
+        $this->assertEquals($namespace, $locations[$key]->getNamespace());
+        $this->assertEquals($key, $locations[$key]->getKey());
     }
 }

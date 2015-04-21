@@ -18,6 +18,7 @@ class RiakProtoTransport implements RiakTransport
         'Riak\Client\Core\Message\Kv\GetRequest'              => 'Riak\Client\Core\Transport\Proto\Kv\ProtoGet',
         'Riak\Client\Core\Message\Kv\PutRequest'              => 'Riak\Client\Core\Transport\Proto\Kv\ProtoPut',
         'Riak\Client\Core\Message\Kv\DeleteRequest'           => 'Riak\Client\Core\Transport\Proto\Kv\ProtoDelete',
+        'Riak\Client\Core\Message\Kv\ListKeysRequest'         => 'Riak\Client\Core\Transport\Proto\Kv\ProtoListKeys',
         // crdt
         'Riak\Client\Core\Message\DataType\GetRequest'        => 'Riak\Client\Core\Transport\Proto\DataType\ProtoGet',
         'Riak\Client\Core\Message\DataType\PutRequest'        => 'Riak\Client\Core\Transport\Proto\DataType\ProtoPut',

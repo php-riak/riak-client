@@ -15,10 +15,10 @@ use Riak\Client\Command\Kv\Builder\StoreValueBuilder;
  * <code>
  * <?php
  *  use Riak\Client\RiakOption;
+ *  use Riak\Client\Command\Kv\StoreValue;
  *  use Riak\Client\Core\Query\RiakObject;
  *  use Riak\Client\Core\Query\RiakLocation;
  *  use Riak\Client\Core\Query\RiakNamespace;
- *  use Riak\Client\Command\DataType\StoreValue;
  *
  *  $namespace = new RiakNamespace('bucket_type', 'bucket_name');
  *  $object    = new RiakObject('[1,1,1]', 'application/json');
