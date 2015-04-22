@@ -52,6 +52,10 @@ class HttpListKeys extends BaseHttpStrategy
         $request->setHeader('Accept', 'application/json');
         $query->add('keys', 'true');
 
+        if ($listRequest->timeout != null) {
+            $query->add('timeout', $listRequest->timeout);
+        }
+
         return $request;
     }
 
