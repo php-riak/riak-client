@@ -80,4 +80,27 @@ Key/Value commands
         ->withW(2)
         ->build();
 
-    $this->client->execute($delete);
+    $client->execute($delete);
+
+    
+.. _reference-command-kv-list-keys:
+
+``ListKeys``
+---------------
+
+.. code-block:: php
+
+    <?php
+    use Riak\Client\Command\Kv\ListKeys;
+    use Riak\Client\Core\Query\RiakNamespace;
+
+    $namespace = new RiakNamespace('bucket_type', 'bucket_name');
+    $location  = new RiakLocation($namespace, 'object_key');
+
+    /** @var $result \Riak\Client\Command\Kv\Response\ListKeysResponse */
+    /** @var $locations \Riak\Client\Core\Query\RiakLocation[] */
+    $result    = $client->execute($command);
+    $locations = $result->getLocations();
+
+    echo $locations[0]->getKey();
+    // object_key
