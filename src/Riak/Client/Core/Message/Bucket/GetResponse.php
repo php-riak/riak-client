@@ -11,6 +11,7 @@ use Riak\Client\Core\Message\Response;
  */
 class GetResponse extends Response
 {
+    public $name;
     public $nVal;
     public $allowMult;
     public $lastWriteWins;

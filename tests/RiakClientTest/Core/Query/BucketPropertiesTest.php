@@ -9,7 +9,7 @@ class BucketPropertiesTest extends TestCase
 {
     public function testGetValuesFromMap()
     {
-        $props = new BucketProperties( [
+        $props = new BucketProperties([
             BucketProperties::R                => 1,
             BucketProperties::W                => 2,
             BucketProperties::PR               => 3,
@@ -32,6 +32,7 @@ class BucketPropertiesTest extends TestCase
             BucketProperties::BACKEND          => 'backend',
             BucketProperties::DATATYPE         => 'data-type',
             BucketProperties::SEARCH_INDEX     => 'search-index',
+            BucketProperties::NAME             => 'bucket-name',
         ]);
 
         $this->assertEquals(1, $props->getR());
@@ -55,6 +56,7 @@ class BucketPropertiesTest extends TestCase
         $this->assertEquals(false, $props->getConsistent());
         $this->assertEquals('backend', $props->getBackend());
         $this->assertEquals('data-type', $props->getDatatype());
+        $this->assertEquals('bucket-name', $props->getName());
         $this->assertEquals('search-index', $props->getSearchIndex());
     }
 

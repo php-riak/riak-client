@@ -50,10 +50,13 @@ class HttpGet extends BaseHttpStrategy
             throw RiakTransportException::unexpectedStatusCode($code);
         }
 
-        $json  = $httpResponse->json();
-        $props = $json['props'];
+        $json     = $httpResponse->json();
+        $props    = $json['props'];
+        $response = $this->createGetResponse($props);
 
-        return $this->createGetResponse($props);
+        $response->name = $request->bucket;
+
+        return $response;
     }
 
     /**

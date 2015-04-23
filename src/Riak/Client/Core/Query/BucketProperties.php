@@ -15,6 +15,7 @@ class BucketProperties
     const PW = 'pw';
     const DW = 'dw';
     const RW = 'rw';
+    const NAME = 'name';
     const N_VAL = 'nVal';
     const ALLOW_MULT = 'allowMult';
     const LAST_WRITE_WINS = 'lastWriteWins';
@@ -35,6 +36,11 @@ class BucketProperties
     const SEARCH = 'search';
     const DATATYPE = 'datatype';
     const CONSISTENT = 'consistent';
+
+    /**
+     * @var string $name
+     */
+    private $name;
 
     /**
      * @var mixed $rw
@@ -371,5 +377,13 @@ class BucketProperties
     public function getConsistent()
     {
         return $this->consistent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

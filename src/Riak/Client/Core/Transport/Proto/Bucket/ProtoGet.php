@@ -122,6 +122,9 @@ class ProtoGet extends ProtoStrategy
         $rpbGetReq  = $this->createRpbMessage($request);
         $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::GET_BUCKET_REQ, RiakMessageCodes::GET_BUCKET_RESP);
         $rpbProps   = $rpbGetResp->getProps();
+        $response   = $this->createGetResponse($rpbProps);
+
+        $response->name = $request->bucket;
 
         return $this->createGetResponse($rpbProps);
     }
