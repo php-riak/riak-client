@@ -4,7 +4,6 @@
     "homepage":     "http://github.com/php-riak/riak-client",
     "keywords":     ["riak", "client", "driver", "database", "nosql"],
     "license":      "MIT",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name":  "Fabio B. Silva",
