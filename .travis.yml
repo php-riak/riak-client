@@ -15,8 +15,6 @@ install:
     - sudo service riak restart
     - composer self-update
     - composer --prefer-source install
-    - composer global require satooshi/php-coveralls:~0.6
-    - composer global require codeclimate/php-test-reporter:~0.1
 
 before_script:
     - ./tests/travis/setup-riak.sh
@@ -26,8 +24,7 @@ script:
     - ./vendor/bin/phpcs -p --extensions=php  --standard=ruleset.xml src
 
 after_script:
-    - ~/.composer/vendor/bin/coveralls -v
-    - ~/.composer/vendor/bin/test-reporter -v
+    - ./vendor/bin/coveralls -v
 
 matrix:
   allow_failures:
