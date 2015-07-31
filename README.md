@@ -6,9 +6,6 @@
 A PHP client for [Riak](http://basho.com/riak/).
 
 
-**NOTICE: THIS CLIENT IS UNDER ACTIVE DEVELOPMENT, USE AT YOUR OWN RISK**
-
-
 ## Installation
 
 Run the following `composer` command:
