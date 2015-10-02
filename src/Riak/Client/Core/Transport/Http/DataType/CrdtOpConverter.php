@@ -126,8 +126,8 @@ class CrdtOpConverter
         }
 
         if ( ! empty($remove)) {
-            //remove_all ??
-            $value['remove'] = $remove;
+            //$remove is always array so we need remove_all
+            $value['remove_all'] = $remove;
         }
 
         return $value;
