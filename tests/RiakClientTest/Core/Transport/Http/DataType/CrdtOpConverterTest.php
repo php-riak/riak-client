@@ -46,9 +46,9 @@ class CrdtOpConverterTest extends TestCase
         $result = $this->invokeMethod($this->instance, 'convertSet', [$op]);
 
         $this->assertArrayHasKey('add_all', $result);
-        $this->assertArrayHasKey('remove', $result);
+        $this->assertArrayHasKey('remove_all', $result);
         $this->assertEquals([1, 2], $result['add_all']);
-        $this->assertEquals([3, 4], $result['remove']);
+        $this->assertEquals([3, 4], $result['remove_all']);
     }
 
     public function testConvertMap()
@@ -113,7 +113,7 @@ class CrdtOpConverterTest extends TestCase
         $this->assertEquals('enable', $updateResult['flag_update_flag']);
         $this->assertEquals('Register Value', $updateResult['register_update_register']);
         $this->assertEquals([1,2], $updateResult['set_update_set']['add_all']);
-        $this->assertEquals([3,4], $updateResult['set_update_set']['remove']);
+        $this->assertEquals([3,4], $updateResult['set_update_set']['remove_all']);
 
         $this->assertContains('map_remove_map', $removeResult);
         $this->assertContains('set_remove_set', $removeResult);
