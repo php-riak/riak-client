@@ -2,7 +2,6 @@
 
 namespace RiakClientTest\Core\Transport\Proto\Kv;
 
-use PhpOption\Option;
 use RiakClientTest\TestCase;
 
 class BaseProtoStrategyTest extends TestCase
@@ -35,27 +34,27 @@ class BaseProtoStrategyTest extends TestCase
 
         $rpbContent1->expects($this->once())
             ->method('getContentType')
-            ->willReturn(Option::fromValue('application/json'));
+            ->willReturn('application/json');
 
         $rpbContent2->expects($this->once())
             ->method('getContentType')
-            ->willReturn(Option::fromValue('application/json'));
+            ->willReturn('application/json');
 
         $rpbContent1->expects($this->once())
             ->method('getLastMod')
-            ->willReturn(Option::fromValue(1420229384));
+            ->willReturn(1420229384);
 
         $rpbContent2->expects($this->once())
             ->method('getLastMod')
-            ->willReturn(Option::fromValue(1420229377));
+            ->willReturn(1420229377);
 
         $rpbContent1->expects($this->once())
             ->method('getVtag')
-            ->willReturn(Option::fromValue('vtag-hash'));
+            ->willReturn('vtag-hash');
 
         $rpbContent2->expects($this->once())
             ->method('getVtag')
-            ->willReturn(Option::fromValue('vtag-hash'));
+            ->willReturn('vtag-hash');
 
         $rpbContent1->expects($this->once())
             ->method('getValue')

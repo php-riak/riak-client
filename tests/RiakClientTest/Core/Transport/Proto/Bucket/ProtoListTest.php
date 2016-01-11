@@ -37,7 +37,7 @@ class ProtoListTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$request]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbListBucketsReq', $message);
-        $this->assertEquals(60, $message->timeout);
+        $this->assertEquals(60, $message->getTimeout());
         $this->assertFalse($message->hasType());
     }
 
@@ -48,8 +48,8 @@ class ProtoListTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbListBucketsReq', $subject);
-            $this->assertEquals('bucket_type', $subject->type);
-            $this->assertEquals(120, $subject->timeout);
+            $this->assertEquals('bucket_type', $subject->getType());
+            $this->assertEquals(120, $subject->getTimeout());
 
             return true;
         };

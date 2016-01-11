@@ -2,8 +2,7 @@
 
 namespace Riak\Client\Core\Transport\Proto;
 
-use DrSlump\Protobuf\Message;
-use DrSlump\Protobuf\Protobuf;
+use Protobuf\Message;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\Core\Transport\Proto\ProtoStream;
 use Riak\Client\Core\Transport\RiakTransportException;
@@ -53,11 +52,11 @@ class ProtoClient
     /**
      * Send a Protobuf message and receive the response
      *
-     * @param \DrSlump\Protobuf\Message $message
-     * @param integer                   $messageCode
-     * @param integer                   $expectedResponseCode
+     * @param \Protobuf\Message $message
+     * @param integer           $messageCode
+     * @param integer           $expectedResponseCode
      *
-     * @return \DrSlump\Protobuf\Message
+     * @return \Protobuf\Message
      */
     public function send(Message $message, $messageCode, $expectedResponseCode)
     {
@@ -70,8 +69,8 @@ class ProtoClient
     /**
      * Send a Protobuf message using a new stream and return it for future usage
      *
-     * @param \DrSlump\Protobuf\Message $message
-     * @param integer                   $messageCode
+     * @param \Protobuf\Message $message
+     * @param integer           $messageCode
      *
      * @return \Riak\Client\Core\Transport\Proto\ProtoStream
      */
@@ -89,7 +88,7 @@ class ProtoClient
      * @param \Riak\Client\Core\Transport\Proto\ProtoStream $stream
      * @param integer                                       $messageCode
      *
-     * @return \DrSlump\Protobuf\Message
+     * @return \Protobuf\Message
      */
     public function receiveMessage(ProtoStream $stream, $messageCode)
     {
@@ -99,14 +98,18 @@ class ProtoClient
         $respBody = $response[1];
 
         if ($respCode != $messageCode) {
-            throw $this->createResponseException($respCode, $respBody);
+            throw $this->createResponseException($respCode, (string) $respBody);
         }
 
         if ($class == null) {
             return;
         }
 
-        return Protobuf::decode($class, (string) $respBody);
+        if ($respBody == null) {
+            return new $class();
+        }
+
+        return new $class($respBody->getResource());
     }
 
     /**
@@ -122,7 +125,7 @@ class ProtoClient
 
         if ($actualCode === RiakMessageCodes::ERROR_RESP) {
             $errorClass   = self::$respClassMap[$actualCode];
-            $errorMessage = Protobuf::decode($errorClass, (string) $respBody);
+            $errorMessage = new $errorClass($respBody);
 
             if ($errorMessage->hasErrmsg()) {
                 $exceptionMessage  = $errorMessage->getErrmsg();
@@ -137,14 +140,14 @@ class ProtoClient
     }
 
     /**
-     * @param \DrSlump\Protobuf\Message $message
-     * @param integer                   $code
+     * @param \Protobuf\Message $message
+     * @param integer           $code
      *
      * @return string
      */
     private function encodeMessage(Message $message, $code)
     {
-        return $this->connection->encode(Protobuf::encode($message), $code);
+        return $this->connection->encode($message->toStream()->__toString(), $code);
     }
 
     /**

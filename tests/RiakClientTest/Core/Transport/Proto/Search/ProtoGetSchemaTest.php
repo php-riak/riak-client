@@ -37,7 +37,7 @@ class ProtoGetSchemaTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$getRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchemaGetReq', $message);
-        $this->assertEquals('schema-name', $message->name);
+        $this->assertEquals('schema-name', $message->getName());
     }
 
     public function testGetMessageResponse()
@@ -46,7 +46,7 @@ class ProtoGetSchemaTest extends TestCase
         $request  = new GetSchemaRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchemaGetReq', $subject);
-            $this->assertEquals('schema-name', $subject->name);
+            $this->assertEquals('schema-name', $subject->getName());
 
             return true;
         };
@@ -70,7 +70,7 @@ class ProtoGetSchemaTest extends TestCase
         $request  = new GetSchemaRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchemaGetReq', $subject);
-            $this->assertEquals('schema-name', $subject->name);
+            $this->assertEquals('schema-name', $subject->getName());
 
             return true;
         };

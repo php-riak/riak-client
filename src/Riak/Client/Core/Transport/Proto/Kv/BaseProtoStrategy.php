@@ -20,37 +20,40 @@ abstract class BaseProtoStrategy extends ProtoStrategy
      */
     private function createContent(RpbContent $rpbcontent)
     {
-        $content = new Content();
+        $content  = new Content();
+        $indexes  = $rpbcontent->getIndexesList() ?: [];
+        $usermeta = $rpbcontent->getUsermetaList() ?: [];
+        $links    = $rpbcontent->getLinksList() ?: [];
 
-        $content->contentType  = $rpbcontent->getContentType()->get();
-        $content->lastModified = $rpbcontent->getLastMod()->get();
-        $content->vtag         = $rpbcontent->getVtag()->get();
+        $content->contentType  = $rpbcontent->getContentType();
+        $content->lastModified = $rpbcontent->getLastMod();
         $content->value        = $rpbcontent->getValue();
+        $content->vtag         = $rpbcontent->getVtag();
         $content->indexes      = [];
         $content->metas        = [];
 
         /** @var $index \Riak\Client\ProtoBuf\RpbPair */
-        foreach ($rpbcontent->getIndexesList() as $index) {
-            $key   = $index->getKey();
-            $value = $index->getValue()->get();
+        foreach ($indexes as $index) {
+            $key   = $index->getKey()->getContents();
+            $value = $index->getValue()->getContents();
 
             $content->indexes[$key][] = $value;
         }
 
         /** @var $index \Riak\Client\ProtoBuf\RpbPair */
-        foreach ($rpbcontent->getUsermetaList() as $meta) {
-            $key   = $meta->getKey();
-            $value = $meta->getValue()->get();
+        foreach ($usermeta as $meta) {
+            $key   = $meta->getKey()->getContents();
+            $value = $meta->getValue()->getContents();
 
             $content->metas[$key] = $value;
         }
 
         /** @var $index \Riak\Client\ProtoBuf\RpbLink */
-        foreach ($rpbcontent->getLinksList() as $link) {
+        foreach ($links as $link) {
             $content->links[] = [
-                'bucket' => $link->bucket,
-                'key'    => $link->key,
-                'tag'    => $link->tag,
+                'bucket' => $link->getBucket()->getContents(),
+                'key'    => $link->getKey()->getContents(),
+                'tag'    => $link->getTag()->getContents()
             ];
         }
 
@@ -62,8 +65,14 @@ abstract class BaseProtoStrategy extends ProtoStrategy
      *
      * @return \Riak\Client\Core\Message\Kv\Content[]
      */
-    protected function createContentList(array $contentList)
+    protected function createContentList($contentList)
     {
-        return array_map([$this, 'createContent'], $contentList);
+        $result = [];
+
+        foreach ($contentList as $value) {
+            $result[] = $this->createContent($value);
+        }
+
+        return $result;
     }
 }

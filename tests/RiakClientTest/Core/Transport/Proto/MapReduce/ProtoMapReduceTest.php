@@ -37,7 +37,7 @@ class ProtoMapReduceTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$request]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbMapRedReq', $message);
-        $this->assertEquals($mapred, $message->request);
+        $this->assertEquals($mapred, $message->getRequest());
     }
 
     public function testMapRedMessageResponse()
@@ -47,7 +47,7 @@ class ProtoMapReduceTest extends TestCase
         $rpbStream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $callback  = function($subject) use ($mapred) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbMapRedReq', $subject);
-            $this->assertEquals($mapred, $subject->request);
+            $this->assertEquals($mapred, $subject->getRequest());
 
             return true;
         };

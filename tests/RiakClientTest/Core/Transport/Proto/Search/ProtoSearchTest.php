@@ -40,8 +40,8 @@ class ProtoSearchTest extends TestCase
     {
         $pair = new RpbPair();
 
-        $pair->key   = $key;
-        $pair->value = $val;
+        $pair->setKey($key);
+        $pair->setValue($val);
 
         return $pair;
     }
@@ -64,18 +64,18 @@ class ProtoSearchTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$request]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSearchQueryReq', $message);
-        $this->assertEquals('age:[18 TO *]', $message->filter);
-        $this->assertEquals('index-name', $message->index);
-        $this->assertEquals('name:Fabio*', $message->q);
-        $this->assertEquals('score', $message->presort);
-        $this->assertEquals('name', $message->sort);
-        $this->assertEquals('name', $message->df);
-        $this->assertEquals('and', $message->op);
-        $this->assertEquals(10, $message->rows);
-        $this->assertEquals(1, $message->start);
-        $this->assertCount(2, $message->fl);
-        $this->assertContains('age', $message->fl);
-        $this->assertContains('name', $message->fl);
+        $this->assertEquals('age:[18 TO *]', $message->getFilter());
+        $this->assertEquals('index-name', $message->getIndex());
+        $this->assertEquals('name:Fabio*', $message->getQ());
+        $this->assertEquals('score', $message->getPresort());
+        $this->assertEquals('name', $message->getSort());
+        $this->assertEquals('name', $message->getDf());
+        $this->assertEquals('and', $message->getOp());
+        $this->assertEquals(10, $message->getRows());
+        $this->assertEquals(1, $message->getStart());
+        $this->assertCount(2, $message->getFlList());
+        $this->assertContains('age', $message->getFlList());
+        $this->assertContains('name', $message->getFlList());
     }
 
     public function testSearchMessageResponse()
@@ -86,8 +86,8 @@ class ProtoSearchTest extends TestCase
         $request  = new SearchRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSearchQueryReq', $subject);
-            $this->assertEquals('index-name', $subject->index);
-            $this->assertEquals('name:Fabio*', $subject->q);
+            $this->assertEquals('index-name', $subject->getIndex());
+            $this->assertEquals('name:Fabio*', $subject->getQ());
 
             return true;
         };
@@ -131,8 +131,8 @@ class ProtoSearchTest extends TestCase
         $request  = new SearchRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSearchQueryReq', $subject);
-            $this->assertEquals('index-name', $subject->index);
-            $this->assertEquals('name:Fabio*', $subject->q);
+            $this->assertEquals('index-name', $subject->getIndex());
+            $this->assertEquals('name:Fabio*', $subject->getQ());
 
             return true;
         };
@@ -157,8 +157,8 @@ class ProtoSearchTest extends TestCase
         $request  = new SearchRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSearchQueryReq', $subject);
-            $this->assertEquals('index-name', $subject->index);
-            $this->assertEquals('name:Fabio*', $subject->q);
+            $this->assertEquals('index-name', $subject->getIndex());
+            $this->assertEquals('name:Fabio*', $subject->getQ());
 
             return true;
         };

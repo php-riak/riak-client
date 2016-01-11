@@ -63,11 +63,11 @@ class ProtoGet extends BaseProtoStrategy
             return $response;
         }
 
-        if ( ! $rpbGetResp->hasContent()) {
+        if ( ! $rpbGetResp->hasContentList()) {
             return $response;
         }
 
-        $response->vClock      = $rpbGetResp->getVclock()->get();
+        $response->vClock      = $rpbGetResp->getVclock();
         $response->contentList = $this->createContentList($rpbGetResp->getContentList());
 
         return $response;

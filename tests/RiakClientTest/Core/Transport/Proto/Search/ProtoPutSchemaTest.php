@@ -38,9 +38,9 @@ class ProtoPutSchemaTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$request]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchemaPutReq', $message);
-        $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchema', $message->schema);
-        $this->assertEquals('schema-content', $message->schema->content);
-        $this->assertEquals('schema-name', $message->schema->name);
+        $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchema', $message->getSchema());
+        $this->assertEquals('schema-content', $message->getSchema()->getContent());
+        $this->assertEquals('schema-name', $message->getSchema()->getname());
     }
 
     public function testPutMessageResponse()
@@ -49,9 +49,9 @@ class ProtoPutSchemaTest extends TestCase
         $request  = new PutSchemaRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchemaPutReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchema', $subject->schema);
-            $this->assertEquals('schema-content', $subject->schema->content);
-            $this->assertEquals('schema-name', $subject->schema->name);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaSchema', $subject->getSchema());
+            $this->assertEquals('schema-content', $subject->getSchema()->getContent());
+            $this->assertEquals('schema-name', $subject->getSchema()->getname());
 
             return true;
         };

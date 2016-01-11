@@ -39,9 +39,9 @@ class ProtoPutTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$getRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSetBucketReq', $message);
-        $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbBucketProps', $message->props);
-        $this->assertEquals('test_bucket', $message->bucket);
-        $this->assertEquals('default', $message->type);
+        $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbBucketProps', $message->getProps());
+        $this->assertEquals('test_bucket', $message->getBucket());
+        $this->assertEquals('default', $message->getType());
     }
 
     public function testGetMessageResponse()
@@ -50,9 +50,9 @@ class ProtoPutTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbSetBucketReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbBucketProps', $subject->props);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbBucketProps', $subject->getProps());
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
 
             return true;
         };

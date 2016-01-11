@@ -3,7 +3,7 @@
 namespace Riak\Client\Core\Transport\Proto;
 
 use Riak\Client\Core\RiakIterator;
-use DrSlump\Protobuf\Message;
+use Protobuf\Message;
 
 /**
  * Iterates ofer a streaming iterator while is not "done"
@@ -13,7 +13,7 @@ use DrSlump\Protobuf\Message;
 abstract class ProtoStreamIteratorIterator extends RiakIterator
 {
     /**
-     * @var \DrSlump\Protobuf\Message
+     * @var \Protobuf\Message
      */
     protected $message;
 
@@ -73,7 +73,7 @@ abstract class ProtoStreamIteratorIterator extends RiakIterator
             return false;
         }
 
-        if ($this->message->hasDone() && $this->message->done) {
+        if ($this->message->hasDone() && $this->message->getDone()) {
             return true;
         }
 
@@ -81,7 +81,7 @@ abstract class ProtoStreamIteratorIterator extends RiakIterator
     }
 
     /**
-     * @param \DrSlump\Protobuf\Message $message
+     * @param \Protobuf\Message $message
      *
      * @return mixed
      */

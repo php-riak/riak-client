@@ -2,8 +2,9 @@
 
 namespace Riak\Client\Core\Transport\Proto\Index;
 
+use Traversable;
 use ArrayIterator;
-use DrSlump\Protobuf\Message;
+use Protobuf\Message;
 use Riak\Client\Core\RiakContinuableIterator;
 use Riak\Client\Core\Message\Index\IndexEntry;
 use Riak\Client\Core\Message\Index\IndexQueryRequest;
@@ -50,7 +51,7 @@ class ProtoIndexQueryResponseIterator extends ProtoStreamIteratorIterator implem
             return null;
         }
 
-        return $this->message->continuation;
+        return $this->message->getContinuation();
     }
 
     /**
@@ -58,31 +59,31 @@ class ProtoIndexQueryResponseIterator extends ProtoStreamIteratorIterator implem
      */
     protected function extract(Message $message)
     {
-        if ($message->hasResults()) {
-            return $this->iteratorFromResults($message->results);
+        if ($message->hasResultsList()) {
+            return $this->iteratorFromResults($message->getResultsList());
         }
 
-        if ($message->hasKeys()) {
-            return $this->iteratorFromKeys($message->keys);
+        if ($message->hasKeysList()) {
+            return $this->iteratorFromKeys($message->getKeysList());
         }
 
         return null;
     }
 
     /**
-     * @param array $results
+     * @param \Traversable|array $results
      *
-     * @return array
+     * @return Traversable
      */
-    private function iteratorFromResults(array $results)
+    private function iteratorFromResults($results)
     {
         $values = [];
 
         foreach ($results as $pair) {
             $entry = new IndexEntry();
 
-            $entry->indexKey  = $pair->key;
-            $entry->objectKey = $pair->value;
+            $entry->indexKey  = $pair->getKey()->getContents();
+            $entry->objectKey = $pair->getValue()->getContents();
 
             $values[] = $entry;
         }
@@ -91,11 +92,11 @@ class ProtoIndexQueryResponseIterator extends ProtoStreamIteratorIterator implem
     }
 
     /**
-     * @param array $keys
+     * @param \Traversable|array $keys
      *
-     * @return array
+     * @return Traversable
      */
-    private function iteratorFromKeys(array $keys)
+    private function iteratorFromKeys($keys)
     {
         $values = [];
         $key    = ($this->request->qtype === 'eq')

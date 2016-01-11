@@ -5,9 +5,9 @@ namespace RiakClientTest\Core\Transport\Proto;
 use Riak\Client\Core\Transport\Proto\ProtoClient;
 use Riak\Client\ProtoBuf\RiakMessageCodes;
 use Riak\Client\ProtoBuf\RpbErrorResp;
+use Riak\Client\ProtoBuf\RpbContent;
 use Riak\Client\ProtoBuf\RpbPutResp;
 use Riak\Client\ProtoBuf\RpbPutReq;
-use DrSlump\Protobuf\Protobuf;
 use RiakClientTest\TestCase;
 
 class ProtoClientTest extends TestCase
@@ -59,7 +59,7 @@ class ProtoClientTest extends TestCase
         $message->setErrmsg('Some Riak Error');
         $message->setErrcode(-10);
 
-        throw $this->invokeMethod($this->instance, 'createResponseException', [0, Protobuf::encode($message)]);
+        throw $this->invokeMethod($this->instance, 'createResponseException', [0, (string) $message->toStream()]);
     }
 
     public function testClassForCode()
@@ -81,10 +81,16 @@ class ProtoClientTest extends TestCase
     public function testSendMessage()
     {
         $message  = new RpbPutReq();
+        $content  = new RpbContent();
         $reqCode  = RiakMessageCodes::PUT_REQ;
         $respCode = RiakMessageCodes::PUT_RESP;
-        $respBody = Protobuf::encode(new RpbPutResp());
+        $respBody = (new RpbPutResp())->toStream()->__toString();
         $stream   = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
+
+        $content->setValue('');
+
+        $message->setBucket('foo');
+        $message->setContent($content);
 
         $this->connection->expects($this->once())
             ->method('send')

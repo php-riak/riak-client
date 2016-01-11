@@ -44,10 +44,10 @@ class ProtoIndexQueryIteratorTest extends TestCase
         $pairs[]  = new RpbPair();
         $pairs[]  = new RpbPair();
 
-        $pairs[0]->key   = 'index-key';
-        $pairs[1]->key   = 'index-key';
-        $pairs[0]->value = 'object-key1';
-        $pairs[1]->value = 'object-key2';
+        $pairs[0]->setKey('index-key');
+        $pairs[1]->setKey('index-key');
+        $pairs[0]->setValue('object-key1');
+        $pairs[1]->setValue('object-key2');
 
         $iterator = $this->invokeMethod($this->instance, 'iteratorFromResults', [$pairs]);
         $values   = iterator_to_array($iterator);

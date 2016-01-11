@@ -50,8 +50,8 @@ class ProtoGetSchema extends ProtoStrategy
             return $response;
         }
 
-        $response->name    = $rpbGetResp->schema->name;
-        $response->content = $rpbGetResp->schema->content;
+        $response->name    = $rpbGetResp->getSchema()->getName()->getContents();
+        $response->content = $rpbGetResp->getSchema()->getContent()->getContents();
 
         return $response;
     }

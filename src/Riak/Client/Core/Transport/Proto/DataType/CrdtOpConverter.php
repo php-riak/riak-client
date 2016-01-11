@@ -2,6 +2,7 @@
 
 namespace Riak\Client\Core\Transport\Proto\DataType;
 
+use Protobuf\Stream;
 use Riak\Client\ProtoBuf;
 use InvalidArgumentException;
 use Riak\Client\Core\Query\Crdt\Op;
@@ -25,7 +26,7 @@ class CrdtOpConverter
 
         foreach ($entries as $entry) {
             $field = $entry->getField();
-            $name  = $field->getName();
+            $name  = (string) $field->getName();
             $value = $this->convertMapEntry($entry);
 
             $values[$name] = $value;
@@ -44,24 +45,30 @@ class CrdtOpConverter
         $field = $entry->getField();
         $type  = $field->getType();
 
-        if ($type === MapFieldType::MAP) {
-            return $this->fromProtoBuf($entry->map_value);
+        if ($type === MapFieldType::MAP()) {
+            return $this->fromProtoBuf($entry->getMapValueList());
         }
 
-        if ($type === MapFieldType::SET) {
-            return $entry->set_value;
+        if ($type === MapFieldType::SET()) {
+            $set = [];
+
+            foreach ($entry->getSetValueList() as $val) {
+                $set[]  = $val->getContents();
+            }
+
+            return $set;
         }
 
-        if ($type === MapFieldType::FLAG) {
-            return ($entry->flag_value == ProtoBuf\MapUpdate\FlagOp::ENABLE);
+        if ($type === MapFieldType::FLAG()) {
+            return ($entry->getFlagValue() == ProtoBuf\MapUpdate\FlagOp::ENABLE());
         }
 
-        if ($type === MapFieldType::COUNTER) {
-            return $entry->counter_value;
+        if ($type === MapFieldType::COUNTER()) {
+            return $entry->getCounterValue();
         }
 
-        if ($type === MapFieldType::REGISTER) {
-            return $entry->register_value;
+        if ($type === MapFieldType::REGISTER()) {
+            return $entry->getRegisterValue()->getContents();
         }
 
         throw new InvalidArgumentException(sprintf('Unknown crdt field type : %s', $type));
@@ -121,8 +128,13 @@ class CrdtOpConverter
     {
         $setOp = new ProtoBuf\SetOp();
 
-        $setOp->setRemoves($op->getRemoves());
-        $setOp->setAdds($op->getAdds());
+        foreach ($op->getRemoves() as $value) {
+            $setOp->addRemoves((string) $value);
+        }
+
+        foreach ($op->getAdds() as $value) {
+            $setOp->addAdds((string) $value);
+        }
 
         return $setOp;
     }
@@ -135,8 +147,8 @@ class CrdtOpConverter
     protected function convertFlag(Op\FlagOp $op)
     {
         return $op->isEnabled()
-            ? ProtoBuf\MapUpdate\FlagOp::ENABLE
-            : ProtoBuf\MapUpdate\FlagOp::DISABLE;
+            ? ProtoBuf\MapUpdate\FlagOp::ENABLE()
+            : ProtoBuf\MapUpdate\FlagOp::DISABLE();
     }
     /**
      * @param \Riak\Client\Core\Query\Crdt\Op\MapOp $op
@@ -145,67 +157,62 @@ class CrdtOpConverter
      */
     protected function convertMap(Op\MapOp $op)
     {
-        $mapOp   = new ProtoBuf\MapOp();
-        $updates = [];
-        $removes = [];
+        $mapOp = new ProtoBuf\MapOp();
 
         foreach ($op->getMapUpdates() as $key => $value) {
             $map    = $this->convertMap($value);
-            $update = $this->createMapUpdate($key, MapFieldType::MAP, $map);
+            $update = $this->createMapUpdate($key, MapFieldType::MAP(), $map);
 
-            $updates[] = $update;
+            $mapOp->addUpdates($update);
         }
 
         foreach ($op->getSetUpdates() as $key => $value) {
             $set    = $this->convertSet($value);
-            $update = $this->createMapUpdate($key, MapFieldType::SET, $set);
+            $update = $this->createMapUpdate($key, MapFieldType::SET(), $set);
 
-            $updates[] = $update;
+            $mapOp->addUpdates($update);
         }
 
         foreach ($op->getFlagUpdates() as $key => $value) {
             $flag   = $this->convertFlag($value);
-            $update = $this->createMapUpdate($key, MapFieldType::FLAG, $flag);
+            $update = $this->createMapUpdate($key, MapFieldType::FLAG(), $flag);
 
-            $updates[] = $update;
+            $mapOp->addUpdates($update);
         }
 
         foreach ($op->getCounterUpdates() as $key => $value) {
             $counter = $this->convertCounter($value);
-            $update  = $this->createMapUpdate($key, MapFieldType::COUNTER, $counter);
+            $update  = $this->createMapUpdate($key, MapFieldType::COUNTER(), $counter);
 
-            $updates[] = $update;
+            $mapOp->addUpdates($update);
         }
 
         foreach ($op->getRegisterUpdates() as $key => $value) {
             $register = $value->getValue();
-            $update   = $this->createMapUpdate($key, MapFieldType::REGISTER, $register);
+            $update   = $this->createMapUpdate($key, MapFieldType::REGISTER(), $register);
 
-            $updates[] = $update;
+            $mapOp->addUpdates($update);
         }
 
         foreach ($op->getMapRemoves() as $key => $value) {
-            $removes[] = $this->createMapField($key, MapFieldType::MAP);
+            $mapOp->addRemoves($this->createMapField($key, MapFieldType::MAP()));
         }
 
         foreach ($op->getSetRemoves() as $key => $value) {
-            $removes[] = $this->createMapField($key, MapFieldType::SET);
+            $mapOp->addRemoves($this->createMapField($key, MapFieldType::SET()));
         }
 
         foreach ($op->getFlagRemoves() as $key => $value) {
-            $removes[] = $this->createMapField($key, MapFieldType::FLAG);
+            $mapOp->addRemoves($this->createMapField($key, MapFieldType::FLAG()));
         }
 
         foreach ($op->getCounterRemoves() as $key => $value) {
-            $removes[] = $this->createMapField($key, MapFieldType::COUNTER);
+            $mapOp->addRemoves($this->createMapField($key, MapFieldType::COUNTER()));
         }
 
         foreach ($op->getRegisterRemoves() as $key => $value) {
-            $removes[] = $this->createMapField($key, MapFieldType::REGISTER);
+            $mapOp->addRemoves($this->createMapField($key, MapFieldType::REGISTER()));
         }
-
-        $mapOp->setUpdates($updates);
-        $mapOp->setRemoves($removes);
 
         return $mapOp;
     }
@@ -224,23 +231,23 @@ class CrdtOpConverter
 
         $update->setField($field);
 
-        if ($fieldType === MapFieldType::MAP) {
+        if ($fieldType === MapFieldType::MAP()) {
             $update->setMapOp($value);
         }
 
-        if ($fieldType === MapFieldType::SET) {
+        if ($fieldType === MapFieldType::SET()) {
             $update->setSetOp($value);
         }
 
-        if ($fieldType === MapFieldType::FLAG) {
+        if ($fieldType === MapFieldType::FLAG()) {
             $update->setFlagOp($value);
         }
 
-        if ($fieldType === MapFieldType::COUNTER) {
+        if ($fieldType === MapFieldType::COUNTER()) {
             $update->setCounterOp($value);
         }
 
-        if ($fieldType === MapFieldType::REGISTER) {
+        if ($fieldType === MapFieldType::REGISTER()) {
             $update->setRegisterOp($value);
         }
 
@@ -248,12 +255,12 @@ class CrdtOpConverter
     }
 
     /**
-     * @param string  $fieldName
-     * @param integer $fieldType
+     * @param string       $fieldName
+     * @param MapFieldType $fieldType
      *
      * @return \Riak\Client\ProtoBuf\MapField
      */
-    protected function createMapField($fieldName, $fieldType)
+    protected function createMapField($fieldName, MapFieldType $fieldType)
     {
         $field = new ProtoBuf\MapField();
 

@@ -29,26 +29,26 @@ class ProtoPut extends ProtoStrategy
         $rpbPutReq = new RpbSetBucketReq();
         $rpbProps  = new RpbBucketProps();
 
-        $rpbProps->r               = $this->encodeQuorum($request->r);
-        $rpbProps->w               = $this->encodeQuorum($request->w);
-        $rpbProps->dw              = $this->encodeQuorum($request->dw);
-        $rpbProps->rw              = $this->encodeQuorum($request->rw);
-        $rpbProps->pr              = $this->encodeQuorum($request->pr);
-        $rpbProps->pw              = $this->encodeQuorum($request->pw);
-        $rpbProps->n_val           = $request->nVal;
-        $rpbProps->allow_mult      = $request->allowMult;
-        $rpbProps->last_write_wins = $request->lastWriteWins;
-        $rpbProps->old_vclock      = $request->oldVclock;
-        $rpbProps->young_vclock    = $request->youngVclock;
-        $rpbProps->big_vclock      = $request->bigVclock;
-        $rpbProps->small_vclock    = $request->smallVclock;
-        $rpbProps->basic_quorum    = $request->basicQuorum;
-        $rpbProps->notfound_ok     = $request->notfoundOk;
-        $rpbProps->backend         = $request->backend;
-        $rpbProps->search          = $request->search;
-        $rpbProps->search_index    = $request->searchIndex;
-        $rpbProps->datatype        = $request->datatype;
-        $rpbProps->consistent      = $request->consistent;
+        $rpbProps->setR($this->encodeQuorum($request->r));
+        $rpbProps->setW($this->encodeQuorum($request->w));
+        $rpbProps->setDw($this->encodeQuorum($request->dw));
+        $rpbProps->setRw($this->encodeQuorum($request->rw));
+        $rpbProps->setPr($this->encodeQuorum($request->pr));
+        $rpbProps->setPw($this->encodeQuorum($request->pw));
+        $rpbProps->setNVal($request->nVal);
+        $rpbProps->setAllowMult($request->allowMult);
+        $rpbProps->setLastWriteWins($request->lastWriteWins);
+        $rpbProps->setOldVclock($request->oldVclock);
+        $rpbProps->setYoungVclock($request->youngVclock);
+        $rpbProps->setBigVclock($request->bigVclock);
+        $rpbProps->setSmallVclock($request->smallVclock);
+        $rpbProps->setBasicQuorum($request->basicQuorum);
+        $rpbProps->setNotfoundOk($request->notfoundOk);
+        $rpbProps->setBackend($request->backend);
+        $rpbProps->setSearch($request->search);
+        $rpbProps->setSearchIndex($request->searchIndex);
+        $rpbProps->setDatatype($request->datatype);
+        $rpbProps->setConsistent($request->consistent);
 
         if ($request->linkwalkFunction) {
             $rpbProps->setLinkfun($this->createRpbModFun($request->linkwalkFunction));

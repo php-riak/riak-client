@@ -75,21 +75,28 @@ class ProtoPut extends BaseProtoStrategy
         }
 
         if ($rpbPutResp->hasContext()) {
-            $response->context = $rpbPutResp->context;
+            $response->context = $rpbPutResp->getContext()->getContents();
         }
 
         if ($rpbPutResp->hasCounterValue()) {
-            $response->value = $rpbPutResp->counter_value;
+            $response->value = $rpbPutResp->getCounterValue();
             $response->type  = 'counter';
+
+            return $response;
         }
 
-        if ($rpbPutResp->hasSetValue()) {
-            $response->value = $rpbPutResp->set_value;
-            $response->type  = 'set';
+        if ($rpbPutResp->hasSetValueList()) {
+            $response->type = 'set';
+
+            foreach ($rpbPutResp->getSetValueList() as $value) {
+                $response->value[] = $value->getContents();
+            }
+
+            return $response;
         }
 
-        if ($rpbPutResp->hasMapValue()) {
-            $response->value = $this->opConverter->fromProtoBuf($rpbPutResp->map_value);
+        if ($rpbPutResp->hasMapValueList()) {
+            $response->value = $this->opConverter->fromProtoBuf($rpbPutResp->getMapValueList());
             $response->type  = 'map';
         }
 

@@ -46,17 +46,16 @@ class ProtoGetIndex extends ProtoStrategy
             return $response;
         }
 
-        if ( ! $rpbGetResp->hasIndex()) {
+        if ( ! $rpbGetResp->hasIndexList()) {
             return $response;
         }
 
-        $rpbIndex = is_array($rpbGetResp->index)
-            ? reset($rpbGetResp->index)
-            : $rpbGetResp->index;
+        $rpbIndexes = $rpbGetResp->getIndexList();
+        $rpbIndex   = $rpbIndexes[0];
 
-        $response->nVal   = $rpbIndex->n_val;
-        $response->name   = $rpbIndex->name;
-        $response->schema = $rpbIndex->schema;
+        $response->nVal   = $rpbIndex->getNVal();
+        $response->name   = $rpbIndex->getName();
+        $response->schema = $rpbIndex->getSchema();
 
         return $response;
     }

@@ -53,11 +53,11 @@ class ProtoPutTest extends TestCase
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\DtUpdateReq', $message);
 
-        $this->assertEquals(3, $message->w);
-        $this->assertEquals(2, $message->pw);
-        $this->assertEquals(1, $message->dw);
-        $this->assertTrue($message->return_body);
-        $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $message->op);
+        $this->assertEquals(3, $message->getW());
+        $this->assertEquals(2, $message->getPw());
+        $this->assertEquals(1, $message->getDw());
+        $this->assertTrue($message->getReturnBody());
+        $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $message->getOp());
     }
 
     public function testPutMessageResponse()
@@ -66,10 +66,10 @@ class ProtoPutTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtUpdateReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->op);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->getOp());
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -97,10 +97,10 @@ class ProtoPutTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtUpdateReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->op);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->getOp());
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -135,10 +135,10 @@ class ProtoPutTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtUpdateReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->op);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->getOp());
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -148,7 +148,9 @@ class ProtoPutTest extends TestCase
         $request->type   = 'default';
         $request->key    = '1';
 
-        $rpbResp->setSetValue([1,2,3]);
+        $rpbResp->addSetValue('1');
+        $rpbResp->addSetValue('2');
+        $rpbResp->addSetValue('3');
 
         $this->client->expects($this->once())
             ->method('send')
@@ -173,10 +175,10 @@ class ProtoPutTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtUpdateReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->op);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\DtOp', $subject->getOp());
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -192,13 +194,13 @@ class ProtoPutTest extends TestCase
         $request->type   = 'default';
         $request->key    = '1';
 
-        $mapEntryValue[0] = new MapEntry();
-        $mapEntryValue[0]->setField(new MapField());
-        $mapEntryValue[0]->field->setName('registerField');
-        $mapEntryValue[0]->field->setType(MapFieldType::REGISTER);
-        $mapEntryValue[0]->setRegisterValue('Register Val');
+        $mapEntryValue = new MapEntry();
+        $mapEntryValue->setField(new MapField());
+        $mapEntryValue->getField()->setName('registerField');
+        $mapEntryValue->getField()->setType(MapFieldType::REGISTER());
+        $mapEntryValue->setRegisterValue('Register Val');
 
-        $rpbResp->setMapValue($mapEntryValue);
+        $rpbResp->addMapValue($mapEntryValue);
 
         $this->client->expects($this->once())
             ->method('send')

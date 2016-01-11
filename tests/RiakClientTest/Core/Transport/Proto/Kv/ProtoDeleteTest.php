@@ -47,17 +47,17 @@ class ProtoDeleteTest extends TestCase
         $result = $this->invokeMethod($this->instance, 'createRpbMessage', [$deleteRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbDelReq', $result);
-        $this->assertEquals('vclock-hash', $result->vclock);
-        $this->assertEquals('test_bucket', $result->bucket);
-        $this->assertEquals('default', $result->type);
-        $this->assertEquals('1', $result->key);
+        $this->assertEquals('vclock-hash', $result->getVclock());
+        $this->assertEquals('test_bucket', $result->getBucket());
+        $this->assertEquals('default', $result->getType());
+        $this->assertEquals('1', $result->getKey());
 
-        $this->assertEquals('1', $result->r);
-        $this->assertEquals('2', $result->pr);
-        $this->assertEquals('3', $result->rw);
-        $this->assertEquals('3', $result->w);
-        $this->assertEquals('2', $result->dw);
-        $this->assertEquals('1', $result->pw);
+        $this->assertEquals('1', $result->getR());
+        $this->assertEquals('2', $result->getPr());
+        $this->assertEquals('3', $result->getRw());
+        $this->assertEquals('3', $result->getW());
+        $this->assertEquals('2', $result->getDw());
+        $this->assertEquals('1', $result->getPw());
     }
 
     public function testSendDeleteRequest()
@@ -66,9 +66,9 @@ class ProtoDeleteTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbDelReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };

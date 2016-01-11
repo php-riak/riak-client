@@ -3,7 +3,7 @@
 namespace Riak\Client\Core\Transport\Proto\Kv;
 
 use ArrayIterator;
-use DrSlump\Protobuf\Message;
+use Protobuf\Message;
 use Riak\Client\Core\Transport\Proto\ProtoStreamIteratorIterator;
 
 /**
@@ -18,10 +18,10 @@ class ProtoListKeysResponseIterator extends ProtoStreamIteratorIterator
      */
     protected function extract(Message $message)
     {
-        if ( ! $message->hasKeys()) {
+        if ( ! $message->hasKeysList()) {
             return null;
         }
 
-        return new ArrayIterator($message->keys);
+        return new ArrayIterator($message->getKeysList());
     }
 }

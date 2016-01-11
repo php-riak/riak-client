@@ -43,43 +43,47 @@ class ProtoGet extends ProtoStrategy
     {
         $response = new GetResponse();
 
-        $response->r             = $this->decodeQuorum($props->r);
-        $response->rw            = $this->decodeQuorum($props->rw);
-        $response->w             = $this->decodeQuorum($props->w);
-        $response->dw            = $this->decodeQuorum($props->dw);
-        $response->pw            = $this->decodeQuorum($props->pw);
-        $response->pr            = $this->decodeQuorum($props->pr);
-        $response->nVal          = $props->n_val;
-        $response->allowMult     = $props->allow_mult;
-        $response->basicQuorum   = $props->basic_quorum;
-        $response->bigVclock     = $props->big_vclock;
-        $response->lastWriteWins = $props->last_write_wins;
-        $response->notfoundOk    = $props->notfound_ok;
-        $response->oldVclock     = $props->old_vclock;
-        $response->smallVclock   = $props->small_vclock;
-        $response->youngVclock   = $props->young_vclock;
+        $response->r             = $this->decodeQuorum($props->getR());
+        $response->rw            = $this->decodeQuorum($props->getRw());
+        $response->w             = $this->decodeQuorum($props->getW());
+        $response->dw            = $this->decodeQuorum($props->getDw());
+        $response->pw            = $this->decodeQuorum($props->getPw());
+        $response->pr            = $this->decodeQuorum($props->getPr());
+        $response->nVal          = $props->getNVal();
+        $response->allowMult     = $props->getAllowMult();
+        $response->basicQuorum   = $props->getBasicQuorum();
+        $response->bigVclock     = $props->getBigVclock();
+        $response->lastWriteWins = $props->getLastWriteWins();
+        $response->notfoundOk    = $props->getnotfoundOk();
+        $response->oldVclock     = $props->getOldVclock();
+        $response->smallVclock   = $props->getSmallVclock();
+        $response->youngVclock   = $props->getYoungVclock();
 
         // optional values
-        $response->search       = $props->search;
-        $response->searchIndex  = $props->search_index;
-        $response->backend      = $props->backend;
-        $response->consistent   = $props->consistent;
-        $response->datatype     = $props->datatype;
+        $response->search       = $props->getSearch();
+        $response->searchIndex  = $props->getSearchIndex();
+        $response->backend      = $props->getBackend();
+        $response->consistent   = $props->getConsistent();
+        $response->datatype     = $props->getDatatype();
 
         if ($props->hasLinkfun()) {
-            $response->linkwalkFunction = $this->parseRpbModFun($props->linkfun);
+            $response->linkwalkFunction = $this->parseRpbModFun($props->getLinkfun());
         }
 
         if ($props->hasChashKeyfun()) {
-            $response->chashKeyFunction = $this->parseRpbModFun($props->chash_keyfun);
+            $response->chashKeyFunction = $this->parseRpbModFun($props->getChashKeyfun());
         }
 
-        foreach ($props->getPrecommitList() as $hook) {
-            $response->precommitHooks[] = $this->parseRpbCommitHook($hook);
+        if ($props->hasPrecommitList()) {
+            foreach ($props->getPrecommitList() as $hook) {
+                $response->precommitHooks[] = $this->parseRpbCommitHook($hook);
+            }
         }
 
-        foreach ($props->getPostcommitList() as $hook) {
-            $response->postcommitHooks[] = $this->parseRpbCommitHook($hook);
+        if ($props->hasPostcommitList()) {
+            foreach ($props->getPostcommitList() as $hook) {
+                $response->postcommitHooks[] = $this->parseRpbCommitHook($hook);
+            }
         }
 
         return $response;
@@ -93,10 +97,10 @@ class ProtoGet extends ProtoStrategy
     private function parseRpbCommitHook(RpbCommitHook $hook)
     {
         if ($hook->hasName()) {
-            return ['name' => $hook->name];
+            return ['name' => $hook->getName()];
         }
 
-        return $this->parseRpbModFun($hook->modfun);
+        return $this->parseRpbModFun($hook->getModfun());
     }
 
     /**
@@ -107,8 +111,8 @@ class ProtoGet extends ProtoStrategy
     private function parseRpbModFun(RpbModFun $function)
     {
         return [
-            'module'   => $function->module,
-            'function' => $function->function
+            'module'   => $function->getModule(),
+            'function' => $function->getFunction()
         ];
     }
 

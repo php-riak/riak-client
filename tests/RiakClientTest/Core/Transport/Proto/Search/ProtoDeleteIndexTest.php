@@ -37,7 +37,7 @@ class ProtoDeleteIndexTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$getRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexDeleteReq', $message);
-        $this->assertEquals('index-name', $message->name);
+        $this->assertEquals('index-name', $message->getName());
     }
 
     public function testDeleteMessageResponse()
@@ -46,7 +46,7 @@ class ProtoDeleteIndexTest extends TestCase
         $request  = new DeleteIndexRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexDeleteReq', $subject);
-            $this->assertEquals('index-name', $subject->name);
+            $this->assertEquals('index-name', $subject->getName());
 
             return true;
         };

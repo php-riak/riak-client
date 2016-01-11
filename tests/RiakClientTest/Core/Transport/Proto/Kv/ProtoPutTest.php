@@ -50,16 +50,16 @@ class ProtoPutTest extends TestCase
         $result = $this->invokeMethod($this->instance, 'createRpbMessage', [$putRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbPutReq', $result);
-        $this->assertEquals('test_bucket', $result->bucket);
-        $this->assertEquals('default', $result->type);
-        $this->assertEquals('1', $result->key);
+        $this->assertEquals('test_bucket', $result->getBucket());
+        $this->assertEquals('default', $result->getType());
+        $this->assertEquals('1', $result->getKey());
 
-        $this->assertEquals(3, $result->w);
-        $this->assertEquals(2, $result->pw);
-        $this->assertEquals(1, $result->dw);
-        $this->assertEquals(true, $result->return_body);
-        $this->assertEquals('[1,1,1]', $result->content->value);
-        $this->assertEquals('application/json', $result->content->content_type);
+        $this->assertEquals(3, $result->getW());
+        $this->assertEquals(2, $result->getPw());
+        $this->assertEquals(1, $result->getDw());
+        $this->assertEquals(true, $result->getReturnBody());
+        $this->assertEquals('[1,1,1]', $result->getContent()->getValue());
+        $this->assertEquals('application/json', $result->getContent()->getContentType());
     }
 
     public function testSendPutMessage()
@@ -68,9 +68,9 @@ class ProtoPutTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbPutReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };

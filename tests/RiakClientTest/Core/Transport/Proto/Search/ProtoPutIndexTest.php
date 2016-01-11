@@ -38,9 +38,9 @@ class ProtoPutIndexTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$request]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexPutReq', $message);
-        $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndex', $message->index);
-        $this->assertEquals('schema-name', $message->index->schema);
-        $this->assertEquals('index-name', $message->index->name);
+        $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndex', $message->getIndex());
+        $this->assertEquals('schema-name', $message->getIndex()->getSchema());
+        $this->assertEquals('index-name', $message->getIndex()->getName());
     }
 
     public function testPutMessageResponse()
@@ -49,9 +49,9 @@ class ProtoPutIndexTest extends TestCase
         $request  = new PutIndexRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexPutReq', $subject);
-            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndex', $subject->index);
-            $this->assertEquals('schema-name', $subject->index->schema);
-            $this->assertEquals('index-name', $subject->index->name);
+            $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndex', $subject->getIndex());
+            $this->assertEquals('schema-name', $subject->getIndex()->getSchema());
+            $this->assertEquals('index-name', $subject->getIndex()->getName());
 
             return true;
         };

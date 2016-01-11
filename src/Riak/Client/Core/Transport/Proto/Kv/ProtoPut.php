@@ -71,7 +71,7 @@ class ProtoPut extends BaseProtoStrategy
                 $value = new RpbPair();
 
                 $value->setKey($name);
-                $value->setValue($v);
+                $value->setValue((string) $v);
 
                 $rpbContent->addIndexes($value);
             }
@@ -81,7 +81,7 @@ class ProtoPut extends BaseProtoStrategy
             $value = new RpbPair();
 
             $value->setKey($name);
-            $value->setValue($meta);
+            $value->setValue((string) $meta);
 
             $rpbContent->addUsermeta($value);
         }
@@ -116,15 +116,15 @@ class ProtoPut extends BaseProtoStrategy
             return $response;
         }
 
-        if ( ! $rpbPutResp->hasContent()) {
+        if ( ! $rpbPutResp->hasContentList()) {
             return $response;
         }
 
         if ($rpbPutResp->hasKey()) {
-            $response->key = $rpbPutResp->key;
+            $response->key = $rpbPutResp->getKey();
         }
 
-        $response->vClock      = $rpbPutResp->getVclock()->get();
+        $response->vClock      = $rpbPutResp->getVclock();
         $response->contentList = $this->createContentList($rpbPutResp->getContentList());
 
         return $response;

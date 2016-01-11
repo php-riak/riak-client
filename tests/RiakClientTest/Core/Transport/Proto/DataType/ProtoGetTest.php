@@ -49,10 +49,10 @@ class ProtoGetTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$getRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\DtFetchReq', $message);
-        $this->assertEquals(3, $message->r);
-        $this->assertEquals(2, $message->pr);
-        $this->assertTrue($message->notfound_ok);
-        $this->assertTrue($message->basic_quorum);
+        $this->assertEquals(3, $message->getR());
+        $this->assertEquals(2, $message->getPr());
+        $this->assertTrue($message->getNotfoundOk());
+        $this->assertTrue($message->getBasicQuorum());
     }
 
     public function testGetMessageResponse()
@@ -61,9 +61,9 @@ class ProtoGetTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtFetchReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -87,9 +87,9 @@ class ProtoGetTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtFetchReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -100,7 +100,7 @@ class ProtoGetTest extends TestCase
 
         $rpbDtVal->setCounterValue(10);
         $rpbResp->setValue($rpbDtVal);
-        $rpbResp->setType(DataType::COUNTER);
+        $rpbResp->setType(DataType::COUNTER());
 
         $this->client->expects($this->once())
             ->method('send')
@@ -126,9 +126,9 @@ class ProtoGetTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtFetchReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -137,9 +137,12 @@ class ProtoGetTest extends TestCase
         $request->type   = 'default';
         $request->key    = '1';
 
-        $rpbDtVal->setSetValue([1,2,3]);
+        $rpbDtVal->addSetValue('1');
+        $rpbDtVal->addSetValue('2');
+        $rpbDtVal->addSetValue('3');
+
         $rpbResp->setValue($rpbDtVal);
-        $rpbResp->setType(DataType::SET);
+        $rpbResp->setType(DataType::SET());
 
         $this->client->expects($this->once())
             ->method('send')
@@ -165,9 +168,9 @@ class ProtoGetTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\DtFetchReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };
@@ -176,15 +179,15 @@ class ProtoGetTest extends TestCase
         $request->type   = 'default';
         $request->key    = '1';
 
-        $mapEntryValue[0] = new MapEntry();
-        $mapEntryValue[0]->setField(new MapField());
-        $mapEntryValue[0]->field->setName('registerField');
-        $mapEntryValue[0]->field->setType(MapFieldType::REGISTER);
-        $mapEntryValue[0]->setRegisterValue('Register Val');
+        $mapEntryValue = new MapEntry();
+        $mapEntryValue->setField(new MapField());
+        $mapEntryValue->getField()->setName('registerField');
+        $mapEntryValue->getField()->setType(MapFieldType::REGISTER());
+        $mapEntryValue->setRegisterValue('Register Val');
 
-        $rpbDtVal->setMapValue($mapEntryValue);
+        $rpbDtVal->addMapValue($mapEntryValue);
         $rpbResp->setValue($rpbDtVal);
-        $rpbResp->setType(DataType::MAP);
+        $rpbResp->setType(DataType::MAP());
 
         $this->client->expects($this->once())
             ->method('send')

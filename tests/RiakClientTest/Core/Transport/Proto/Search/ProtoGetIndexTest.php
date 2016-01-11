@@ -38,7 +38,7 @@ class ProtoGetIndexTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$getRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexGetReq', $message);
-        $this->assertEquals('index-name', $message->name);
+        $this->assertEquals('index-name', $message->getName());
     }
 
     public function testGetMessageResponse()
@@ -48,16 +48,17 @@ class ProtoGetIndexTest extends TestCase
         $request  = new GetIndexRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexGetReq', $subject);
-            $this->assertEquals('index-name', $subject->name);
+            $this->assertEquals('index-name', $subject->getName());
 
             return true;
         };
 
-        $request->name    = 'index-name';
-        $rpbIndex->name   = 'index-name';
-        $rpbIndex->schema = 'index-schema';
+        $request->name = 'index-name';
 
-        $rpbResp->setIndex($rpbIndex);
+        $rpbIndex->setName('index-name');
+        $rpbIndex->setSchema('index-schema');
+
+        $rpbResp->addIndex($rpbIndex);
 
         $this->client->expects($this->once())
             ->method('send')
@@ -77,7 +78,7 @@ class ProtoGetIndexTest extends TestCase
         $request  = new GetIndexRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexGetReq', $subject);
-            $this->assertEquals('index-name', $subject->name);
+            $this->assertEquals('index-name', $subject->getName());
 
             return true;
         };
@@ -101,7 +102,7 @@ class ProtoGetIndexTest extends TestCase
         $request  = new GetIndexRequest();
         $callback = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbYokozunaIndexGetReq', $subject);
-            $this->assertEquals('index-name', $subject->name);
+            $this->assertEquals('index-name', $subject->getName());
 
             return true;
         };

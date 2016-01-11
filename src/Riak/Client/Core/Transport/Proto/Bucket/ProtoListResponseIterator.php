@@ -3,7 +3,7 @@
 namespace Riak\Client\Core\Transport\Proto\Bucket;
 
 use ArrayIterator;
-use DrSlump\Protobuf\Message;
+use Protobuf\Message;
 use Riak\Client\Core\Transport\Proto\ProtoStreamIteratorIterator;
 
 /**
@@ -18,10 +18,10 @@ class ProtoListResponseIterator extends ProtoStreamIteratorIterator
      */
     protected function extract(Message $message)
     {
-        if ( ! $message->hasBuckets()) {
+        if ( ! $message->hasBucketsList()) {
             return null;
         }
 
-        return new ArrayIterator($message->buckets);
+        return new ArrayIterator($message->getBucketsList());
     }
 }

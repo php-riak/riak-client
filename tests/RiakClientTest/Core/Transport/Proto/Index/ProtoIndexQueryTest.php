@@ -65,18 +65,18 @@ class ProtoIndexQueryTest extends TestCase
         $message = $this->invokeMethod($this->instance, 'createRpbMessage', [$request]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbIndexReq', $message);
-        $this->assertEquals(IndexQueryType::range, $message->qtype);
-        $this->assertEquals('bucket', $message->bucket);
-        $this->assertEquals('type', $message->type);
-        $this->assertEquals('regex', $message->term_regex);
-        $this->assertEquals('index', $message->index);
-        $this->assertEquals('arg1', $message->range_min);
-        $this->assertEquals('arg2', $message->range_max);
-        $this->assertEquals(999, $message->max_results);
-        $this->assertEquals(888, $message->timeout);
-        $this->assertEquals(true, $message->return_terms);
-        $this->assertEquals(true, $message->pagination_sort);
-        $this->assertEquals('continuation', $message->continuation);
+        $this->assertEquals(IndexQueryType::range(), $message->getQtype());
+        $this->assertEquals('bucket', $message->getBucket());
+        $this->assertEquals('type', $message->getType());
+        $this->assertEquals('regex', $message->getTermRegex());
+        $this->assertEquals('index', $message->getIndex());
+        $this->assertEquals('arg1', $message->getRangeMin());
+        $this->assertEquals('arg2', $message->getRangeMax());
+        $this->assertEquals(999, $message->getMaxResults());
+        $this->assertEquals(888, $message->getTimeout());
+        $this->assertEquals(true, $message->getReturnTerms());
+        $this->assertEquals(true, $message->getPaginationSort());
+        $this->assertEquals('continuation', $message->getContinuation());
     }
 
     public function testIndexQueryMessageResponse()
@@ -85,17 +85,17 @@ class ProtoIndexQueryTest extends TestCase
         $rpbStream = $this->getMock('Riak\Client\Core\Transport\Proto\ProtoStream', [], [], '', false);
         $callback  = function($subject) {
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbIndexReq', $subject);
-            $this->assertEquals(IndexQueryType::range, $subject->qtype);
-            $this->assertEquals('bucket', $subject->bucket);
-            $this->assertEquals('type', $subject->type);
-            $this->assertEquals('regex', $subject->term_regex);
-            $this->assertEquals('index', $subject->index);
-            $this->assertEquals('arg1', $subject->range_min);
-            $this->assertEquals('arg2', $subject->range_max);
-            $this->assertEquals(999, $subject->max_results);
-            $this->assertEquals(true, $subject->return_terms);
-            $this->assertEquals(true, $subject->pagination_sort);
-            $this->assertEquals('continuation', $subject->continuation);
+            $this->assertEquals(IndexQueryType::range(), $subject->getQtype());
+            $this->assertEquals('bucket', $subject->getBucket());
+            $this->assertEquals('type', $subject->getType());
+            $this->assertEquals('regex', $subject->getTermRegex());
+            $this->assertEquals('index', $subject->getIndex());
+            $this->assertEquals('arg1', $subject->getRangeMin());
+            $this->assertEquals('arg2', $subject->getRangeMax());
+            $this->assertEquals(999, $subject->getMaxResults());
+            $this->assertEquals(true, $subject->getReturnTerms());
+            $this->assertEquals(true, $subject->getPaginationSort());
+            $this->assertEquals('continuation', $subject->getContinuation());
 
             return true;
         };

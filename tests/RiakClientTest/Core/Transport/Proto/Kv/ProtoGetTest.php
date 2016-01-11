@@ -43,14 +43,14 @@ class ProtoGetTest extends TestCase
         $result = $this->invokeMethod($this->instance, 'createRpbMessage', [$getRequest]);
 
         $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbGetReq', $result);
-        $this->assertEquals('test_bucket', $result->bucket);
-        $this->assertEquals('default', $result->type);
-        $this->assertEquals('1', $result->key);
+        $this->assertEquals('test_bucket', $result->getBucket());
+        $this->assertEquals('default', $result->getType());
+        $this->assertEquals('1', $result->getKey());
 
-        $this->assertEquals(3, $result->r);
-        $this->assertEquals(2, $result->pr);
-        $this->assertEquals(true, $result->basic_quorum);
-        $this->assertEquals(true, $result->notfound_ok);
+        $this->assertEquals(3, $result->getR());
+        $this->assertEquals(2, $result->getPr());
+        $this->assertEquals(true, $result->getBasicQuorum());
+        $this->assertEquals(true, $result->getNotfoundOk());
     }
 
     public function testSendGetMessage()
@@ -59,9 +59,9 @@ class ProtoGetTest extends TestCase
         $callback = function($subject) {
 
             $this->assertInstanceOf('Riak\Client\ProtoBuf\RpbGetReq', $subject);
-            $this->assertEquals('test_bucket', $subject->bucket);
-            $this->assertEquals('default', $subject->type);
-            $this->assertEquals('1', $subject->key);
+            $this->assertEquals('test_bucket', $subject->getBucket());
+            $this->assertEquals('default', $subject->getType());
+            $this->assertEquals('1', $subject->getKey());
 
             return true;
         };

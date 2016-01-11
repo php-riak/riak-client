@@ -23,6 +23,14 @@ class ProtoStream
     }
 
     /**
+     * @return resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
      * Finds whether a resource is a resource
      *
      * @return boolean

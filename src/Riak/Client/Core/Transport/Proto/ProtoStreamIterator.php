@@ -41,7 +41,7 @@ class ProtoStreamIterator extends RiakIterator
     }
 
     /**
-     * @return \DrSlump\Protobuf\Message
+     * @return \Protobuf\Message
      */
     protected function readNext()
     {

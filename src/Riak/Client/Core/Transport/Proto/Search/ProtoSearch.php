@@ -51,7 +51,9 @@ class ProtoSearch extends ProtoStrategy
         }
 
         if ($request->fl != null) {
-            $rpbGetReq->setFl($request->fl);
+            foreach ($request->fl as $value) {
+                $rpbGetReq->addFl($value);
+            }
         }
 
         if ($request->df != null) {
@@ -72,14 +74,17 @@ class ProtoSearch extends ProtoStrategy
      */
     protected function docToArray(RpbSearchDoc $doc)
     {
-        if ( ! $doc->hasFields()) {
+        if ( ! $doc->hasFieldsList()) {
             return [];
         }
 
         $values = [];
 
-        foreach ($doc->fields as $pair) {
-            $values[$pair->key][] = $pair->value;
+        foreach ($doc->getFieldsList() as $pair) {
+            $key   = $pair->getKey()->getContents();
+            $value = $pair->getValue()->getContents();
+
+            $values[$key][] = $value;
         }
 
         return $values;
@@ -100,14 +105,18 @@ class ProtoSearch extends ProtoStrategy
             return $response;
         }
 
-        $response->numFound = $rpbResp->num_found;
-        $response->maxScore = $rpbResp->max_score;
+        $response->numFound = $rpbResp->getNumFound();
+        $response->maxScore = $rpbResp->getMaxScore();
 
-        if ( ! $rpbResp->hasDocs()) {
+        if ( ! $rpbResp->hasDocsList()) {
             return $response;
         }
 
-        $response->docs = array_map([$this, 'docToArray'], $rpbResp->docs);
+        $response->docs = [];
+
+        foreach ($rpbResp->getDocsList() as $doc) {
+            $response->docs[] = $this->docToArray($doc);
+        }
 
         return $response;
     }

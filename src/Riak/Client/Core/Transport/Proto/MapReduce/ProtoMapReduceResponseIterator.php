@@ -2,7 +2,7 @@
 
 namespace Riak\Client\Core\Transport\Proto\MapReduce;
 
-use DrSlump\Protobuf\Message;
+use Protobuf\Message;
 use Riak\Client\Core\Message\MapReduce\MapReduceEntry;
 use Riak\Client\Core\Transport\Proto\ProtoStreamIteratorIterator;
 
@@ -22,8 +22,8 @@ class ProtoMapReduceResponseIterator extends ProtoStreamIteratorIterator
             return null;
         }
 
-        $phase    = $message->hasPhase() ? $message->phase : 0;
-        $response = json_decode($message->response, true);
+        $phase    = $message->hasPhase() ? $message->getPhase() : 0;
+        $response = json_decode($message->getResponse(), true);
         $entry    = new MapReduceEntry();
 
         $entry->phase    = $phase;

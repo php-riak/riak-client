@@ -31,12 +31,12 @@ class ProtoStreamIteratorIteratorTest extends TestCase
 
         $this->assertFalse($this->invokeMethod($this->instance, 'isDone'));
 
-        $message->done = false;
+        $message->setDone(false);
         $this->setPropertyValue($this->instance, 'message', $message);
 
         $this->assertFalse($this->invokeMethod($this->instance, 'isDone'));
 
-        $message->done = true;
+        $message->setDone(true);
         $this->setPropertyValue($this->instance, 'message', $message);
 
         $this->assertTrue($this->invokeMethod($this->instance, 'isDone'));
@@ -66,7 +66,7 @@ class ProtoStreamIteratorIteratorTest extends TestCase
     {
         $message = new RpbListKeysResp();
 
-        $message->done = true;
+        $message->setDone(true);
         $this->setPropertyValue($this->instance, 'message', $message);
 
         $this->assertNull($this->invokeMethod($this->instance, 'readNext'));

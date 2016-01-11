@@ -34,14 +34,14 @@ class ProtoIndexQuery extends ProtoStrategy
         $rpbGetReq->setStream(true);
 
         if ($request->qtype === 'eq') {
-            $rpbGetReq->setKey($request->key);
-            $rpbGetReq->setQtype(IndexQueryType::eq);
+            $rpbGetReq->setKey((string) $request->key);
+            $rpbGetReq->setQtype(IndexQueryType::eq());
         }
 
         if ($request->qtype === 'range') {
-            $rpbGetReq->setRangeMin($request->rangeMin);
-            $rpbGetReq->setRangeMax($request->rangeMax);
-            $rpbGetReq->setQtype(IndexQueryType::range);
+            $rpbGetReq->setRangeMin((string) $request->rangeMin);
+            $rpbGetReq->setRangeMax((string) $request->rangeMax);
+            $rpbGetReq->setQtype(IndexQueryType::range());
         }
 
         if ($request->returnTerms !== null) {
