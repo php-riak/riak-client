@@ -61,7 +61,7 @@ class HttpGetTest extends TestCase
             ->method('setHeader')
             ->with(
                 $this->equalTo('Accept'),
-                $this->equalTo(['multipart/mixed', '*/*'])
+                $this->equalTo(['*/*', 'multipart/mixed'])
             );
 
         $request->expects($this->once())

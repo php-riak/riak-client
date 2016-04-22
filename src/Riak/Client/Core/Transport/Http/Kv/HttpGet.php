@@ -33,7 +33,7 @@ class HttpGet extends BaseHttpStrategy
         $request = $this->createRequest('GET', $getRequest->type, $getRequest->bucket, $getRequest->key);
         $query   = $request->getQuery();
 
-        $request->setHeader('Accept', ['multipart/mixed', '*/*']);
+        $request->setHeader('Accept', ['*/*', 'multipart/mixed']);
 
         if ($getRequest->r !== null) {
             $query->add('r', $getRequest->r);
