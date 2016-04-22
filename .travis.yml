@@ -13,7 +13,9 @@ install:
     - sudo sed -i -e "s/search = off/search = on/g" /etc/riak/riak.conf
     - sudo sed -i -e "s/storage_backend = .*/storage_backend = memory/g" /etc/riak/riak.conf
     - sudo service riak restart
-    - make composer-install create-data-types
+    - sudo make create-data-types
+    - composer self-update
+    - composer --prefer-source install
 
 script:
     - make phpcs phpunit-coverage-clover
