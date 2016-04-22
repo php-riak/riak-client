@@ -50,7 +50,7 @@ use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 
 $object    = new RiakObject();
-$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$namespace = new RiakNamespace('bucket_type', 'bucket_name');
 $location  = new RiakLocation($namespace, 'object_key');
 
 $object->setValue('[1,1,1]');
@@ -73,7 +73,7 @@ use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 
-$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$namespace = new RiakNamespace('bucket_type', 'bucket_name');
 $location  = new RiakLocation($namespace, 'object_key');
 
 // fetch object
@@ -94,7 +94,7 @@ use Riak\Client\Core\Query\RiakObject;
 use Riak\Client\Core\Query\RiakLocation;
 use Riak\Client\Core\Query\RiakNamespace;
 
-$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$namespace = new RiakNamespace('bucket_type', 'bucket_name');
 $location  = new RiakLocation($namespace, 'object_key');
 
 // delete object
@@ -147,7 +147,7 @@ $client = $builder
     ->build();
 
 // fetch the object and resolve any possible conflict
-$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$namespace = new RiakNamespace('bucket_type', 'bucket_name');
 $location  = new RiakLocation($namespace, 'object_key');
 $fetch     = FetchValue::builder($location)
     ->withNotFoundOk(true)
