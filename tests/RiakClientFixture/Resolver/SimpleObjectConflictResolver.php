@@ -14,7 +14,7 @@ class SimpleObjectConflictResolver implements ConflictResolver
     {
         /** @var $result \RiakClientFixture\Domain\SimpleObject */
         $result = clone $siblings->first();
-        $values = "";
+        $values = [];
 
         /** @var $object \RiakClientFixture\Domain\SimpleObject */
         foreach ($siblings as $object) {

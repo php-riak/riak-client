@@ -107,8 +107,11 @@ abstract class DataTypeSearchTest extends TestCase
 
         $this->assertCount(1, $results);
         $this->assertEquals(1, $numResults);
+
+        sort($results[0]['category_ss']);
+
         $this->assertEquals(['Riak for dummies'], $results[0]['name_s']);
-        $this->assertEquals(['it', 'comedy'], $results[0]['category_ss']);
+        $this->assertEquals(['comedy', 'it'], $results[0]['category_ss']);
         $this->assertEquals(['Fabio B. Silva'], $results[0]['author_name_s']);
         $this->assertEquals(['fabio.bat.silva@gmail.com'], $results[0]['author_email_s']);
     }
