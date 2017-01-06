@@ -35,8 +35,8 @@ class HttpMapReduceResponseIterator extends RiakIterator
             return null;
         }
 
-        $resonse = $this->iterator->current();
-        $json    = $resonse->json();
+        $response = $this->iterator->current();
+        $json     = $response->json();
 
         if ( ! isset($json['data'])) {
             return null;
