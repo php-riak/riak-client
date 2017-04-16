@@ -66,12 +66,17 @@ class FetchMap implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        $config    = $cluster->getRiakConfig();
-        $converter = $config->getCrdtResponseConverter();
-        $operation = new FetchMapOperation($converter, $this->location, $this->options);
+        $operation = $this->createOperation($cluster);
         $response  = $cluster->execute($operation);
 
         return $response;
+    }
+
+    public function createOperation(RiakCluster $cluster)
+    {
+        $config    = $cluster->getRiakConfig();
+        $converter = $config->getCrdtResponseConverter();
+        return new FetchMapOperation($converter, $this->location, $this->options);
     }
 
     /**

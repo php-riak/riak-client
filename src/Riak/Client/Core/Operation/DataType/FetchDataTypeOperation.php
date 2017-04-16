@@ -48,12 +48,9 @@ abstract class FetchDataTypeOperation implements RiakOperation
      */
     public function execute(RiakTransport $adapter)
     {
-        $getRequest  = $this->createGetRequest();
+        $getRequest  = $this->createRequest();
         $getResponse = $adapter->send($getRequest);
-        $datatype    = $this->converter->convert($getResponse);
-        $response    = $this->createDataTypeResponse($datatype, $getResponse->context);
-
-        return $response;
+        return $this->createResponse($getResponse);
     }
 
     /**
@@ -73,6 +70,19 @@ abstract class FetchDataTypeOperation implements RiakOperation
         }
 
         return $request;
+    }
+
+    public function createRequest()
+    {
+        return $this->createGetRequest();
+    }
+
+    public function createResponse($response)
+    {
+        $datatype    = $this->converter->convert($response);
+        $response    = $this->createDataTypeResponse($datatype, $response->context);
+
+        return $response;
     }
 
     /**

@@ -98,14 +98,24 @@ class RiakCluster
      */
     public function execute(RiakOperation $operation)
     {
+        $node = $this->selectNode();
+        return $node->execute($operation);
+    }
+
+    public function batch(array $operations)
+    {
+        $node = $this->selectNode();
+        return $node->batch($operations);
+    }
+
+    private function selectNode()
+    {
         if (empty($this->nodes)) {
             throw new RiakException('There are no nodes in the cluster.');
         }
 
         $size  = count($this->nodes);
         $index = mt_rand(0, $size - 1);
-        $node  = $this->nodes[$index];
-
-        return $node->execute($operation);
+        return $this->nodes[$index];
     }
 }
